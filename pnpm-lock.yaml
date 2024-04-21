@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@remix-run/node':
+    specifier: ^2.8.1
+    version: 2.8.1(typescript@5.4.5)
   '@remix-run/react':
     specifier: ^2.8.0
     version: 2.8.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.4.5)
@@ -23,6 +26,12 @@ dependencies:
   '@shopify/remix-oxygen':
     specifier: ^2.0.4
     version: 2.0.4(@remix-run/server-runtime@2.8.1)(@shopify/oxygen-workers-types@4.0.0)
+  content-security-policy-builder:
+    specifier: ^2.1.1
+    version: 2.1.1
+  cookie:
+    specifier: ^0.6.0
+    version: 0.6.0
   graphql:
     specifier: ^16.6.0
     version: 16.8.1
@@ -38,6 +47,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  set-cookie-parser:
+    specifier: ^2.6.0
+    version: 2.6.0
 
 devDependencies:
   '@graphql-codegen/cli':
