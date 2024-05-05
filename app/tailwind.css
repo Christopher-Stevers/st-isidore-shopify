@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .custom-list-bullet {
+    list-style: none;
+  }
+  .blog-post p {
+    padding: 0 0 2rem 0;
+  }
+  .blog-post a {
+    text-decoration: underline;
+  }
+  .blog-post a:hover {
+    color: #333;
+  }
+
+  .blog-post h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0 0 1rem 0;
+  }
+  .blog-post {
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+
+  .custom-list-bullet li::before {
+    content: '\2022'; /* Unicode character for bullet point (you can change this) */
+    color: #000000; /* Custom color for the bullet */
+    font-size: 1.5rem; /* Custom font size for the bullet */
+    margin-right: 0.5rem; /* Spacing between bullet and list item text */
+  }
+}

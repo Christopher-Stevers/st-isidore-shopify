@@ -1,4 +1,4 @@
-import {json, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {json, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useLoaderData, Link, type MetaFunction} from '@remix-run/react';
 import {
   Pagination,
@@ -8,31 +8,45 @@ import {
 } from '@shopify/hydrogen';
 import type {ProductItemFragment} from 'storefrontapi.generated';
 import {useVariantUrl} from '~/lib/variants';
+import {useState} from 'react';
 
-export const meta: MetaFunction<typeof loader> = () => {
-  return [{title: `Hydrogen | Procuts`}];
+import Search from '~/components/base/Search';
+import {COLLECTION_QUERY} from './collections.$handle';
+export const meta: MetaFunction<typeof loader> = ({data}) => {
+  return [{title: `Hydrogen | ${data?.collection.title ?? ''} Collection`}];
 };
 
-export async function loader({request, context}: LoaderFunctionArgs) {
+export async function loader({request, params, context}: LoaderFunctionArgs) {
+  const handle = 'bundles';
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 8,
   });
 
-  const {products} = await storefront.query(CATALOG_QUERY, {
-    variables: {...paginationVariables},
+  if (!handle) {
+    return redirect('/collections');
+  }
+
+  const {collection} = await storefront.query(COLLECTION_QUERY, {
+    variables: {handle, ...paginationVariables},
   });
 
-  return json({products});
+  if (!collection) {
+    throw new Response(`Collection ${handle} not found`, {
+      status: 404,
+    });
+  }
+  return json({collection});
 }
 
 export default function Collection() {
-  const {products} = useLoaderData<typeof loader>();
+  const {collection} = useLoaderData<typeof loader>();
 
   return (
     <div className="collection">
-      <h1>Products</h1>
-      <Pagination connection={products}>
+      <h1>{collection.title}</h1>
+      <p className="collection-description">{collection.description}</p>
+      <Pagination connection={collection.products}>
         {({nodes, isLoading, PreviousLink, NextLink}) => (
           <>
             <PreviousLink>
@@ -51,18 +65,50 @@ export default function Collection() {
 }
 
 function ProductsGrid({products}: {products: ProductItemFragment[]}) {
+  const [search, setSearch] = useState('');
   return (
-    <div className="products-grid">
-      {products.map((product, index) => {
-        return (
-          <ProductItem
-            key={product.id}
-            product={product}
-            loading={index < 8 ? 'eager' : undefined}
-          />
-        );
-      })}
-    </div>
+    <>
+      <div className="grid grid-cols-[320px] content-center justify-center justify-items-center gap-16 gap-y-4 pb-4 lg:grid-cols-[repeat(2,_320px)] xl:grid-cols-[repeat(3,_320px)] ">
+        <div className="flex w-full justify-between gap-4 justify-self-start pt-6 lg:col-span-2  xl:col-span-3">
+          <Search searchState={[search, setSearch]} />
+        </div>
+        <div className=" w-full bg-primary-500 px-4 font-bold text-white lg:col-span-2 xl:col-span-3">
+          <div className=" flex flex-col justify-between py-4 lg:flex-row">
+            <div className="flex gap-4">
+              <label htmlFor="steaks">Steaks</label>
+            </div>
+            <div className="flex gap-4">
+              <label htmlFor="roasts">Roasts</label>
+            </div>
+            <div className="flex gap-4">
+              <label htmlFor="pork">Ground & Stewing</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-[320px] content-center justify-center justify-items-center gap-16 gap-y-4 pb-4 lg:grid-cols-[repeat(2,_320px)] xl:grid-cols-[repeat(3,_320px)] ">
+        {products
+          .filter((product) => {
+            const lowerSearch = search.toLowerCase();
+            const lowerDescription = product.description?.toLowerCase();
+            const lowerTitle = product.title.toLowerCase();
+            return (
+              !lowerSearch ||
+              lowerDescription?.includes(search) ||
+              lowerTitle.includes(search)
+            );
+          })
+          .map((product, index) => {
+            return (
+              <ProductItem
+                key={product.id}
+                product={product}
+                loading={index < 8 ? 'eager' : undefined}
+              />
+            );
+          })}
+      </div>
+    </>
   );
 }
 
@@ -77,84 +123,33 @@ function ProductItem({
   const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
   return (
     <Link
-      className="product-item"
+      className="grid w-80 grid-rows-[180px_36px]  gap-x-16 px-4 gap-y-4 bg-backdrop-500 pb-8"
       key={product.id}
       prefetch="intent"
       to={variantUrl}
     >
       {product.featuredImage && (
         <Image
+          className="h-[180px] w-[320px] -mx-4  "
           alt={product.featuredImage.altText || product.title}
-          aspectRatio="1/1"
           data={product.featuredImage}
           loading={loading}
-          sizes="(min-width: 45em) 400px, 100vw"
+          sizes="320px"
         />
       )}
-      <h4>{product.title}</h4>
-      <small>
-        <Money data={product.priceRange.minVariantPrice} />
-      </small>
+      <div className="flex items-center justify-between">
+        <h3 className="whitespace-pre text-3xl font-semibold">
+          {product.title}
+        </h3>
+      </div>
+      <div className="text-lg">
+        <div className=" w-full">{product.description}</div>
+      </div>
+      <Link className="underline" to={`${variantUrl}`}>
+        more info
+      </Link>
     </Link>
   );
 }
 
-const PRODUCT_ITEM_FRAGMENT = `#graphql
-  fragment MoneyProductItem on MoneyV2 {
-    amount
-    currencyCode
-  }
-  fragment ProductItem on Product {
-    id
-    handle
-    title
-    featuredImage {
-      id
-      altText
-      url
-      width
-      height
-    }
-    priceRange {
-      minVariantPrice {
-        ...MoneyProductItem
-      }
-      maxVariantPrice {
-        ...MoneyProductItem
-      }
-    }
-    variants(first: 1) {
-      nodes {
-        selectedOptions {
-          name
-          value
-        }
-      }
-    }
-  }
-` as const;
-
-// NOTE: https://shopify.dev/docs/api/storefront/2024-01/objects/product
-const CATALOG_QUERY = `#graphql
-  query Catalog(
-    $country: CountryCode
-    $language: LanguageCode
-    $first: Int
-    $last: Int
-    $startCursor: String
-    $endCursor: String
-  ) @inContext(country: $country, language: $language) {
-    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {
-      nodes {
-        ...ProductItem
-      }
-      pageInfo {
-        hasPreviousPage
-        hasNextPage
-        startCursor
-        endCursor
-      }
-    }
-  }
-  ${PRODUCT_ITEM_FRAGMENT}
-` as const;
+// NOTE: https://shopify.dev/docs/api/storefront/2022-04/objects/collection

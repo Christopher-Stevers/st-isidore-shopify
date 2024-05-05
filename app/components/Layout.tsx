@@ -1,4 +1,4 @@
-import {Await} from '@remix-run/react';
+import {Await, useLocation} from '@remix-run/react';
 import {Suspense} from 'react';
 import type {
   CartApiQueryFragment,
@@ -6,7 +6,7 @@ import type {
   HeaderQuery,
 } from 'storefrontapi.generated';
 import {Aside} from '~/components/Aside';
-import {Footer} from '~/components/Footer';
+import Footer from './shared/Footer';
 import {Header, HeaderMenu} from '~/components/Header';
 import {CartMain} from '~/components/Cart';
 import {
@@ -17,6 +17,7 @@ import {
 export type LayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
   children?: React.ReactNode;
+
   footer: Promise<FooterQuery>;
   header: HeaderQuery;
   isLoggedIn: Promise<boolean>;
@@ -25,22 +26,24 @@ export type LayoutProps = {
 export function Layout({
   cart,
   children = null,
-  footer,
   header,
   isLoggedIn,
 }: LayoutProps) {
+  const location = useLocation();
   return (
     <>
       <CartAside cart={cart} />
       <SearchAside />
       <MobileMenuAside menu={header?.menu} shop={header?.shop} />
       {header && <Header header={header} cart={cart} isLoggedIn={isLoggedIn} />}
-      <main>{children}</main>
-      <Suspense>
-        <Await resolve={footer}>
-          {(footer) => <Footer menu={footer?.menu} shop={header?.shop} />}
-        </Await>
-      </Suspense>
+      <main
+        className={`min-h-[calc(100vh-128px)] ${
+          location.pathname !== '/' && 'lg:p-32 p-8'
+        }`}
+      >
+        {children}
+      </main>
+      <Footer />
     </>
   );
 }
