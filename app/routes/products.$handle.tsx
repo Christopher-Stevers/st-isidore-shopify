@@ -116,13 +116,13 @@ export default function Product() {
   const {product, variants} = useLoaderData<typeof loader>();
   const {selectedVariant} = product;
   return (
-    <div className="product">
-      <ProductImage image={selectedVariant?.image} />
+    <div className="flex md:flex-row flex-col gap-y-3 text-2xl md:gap-y-6">
       <ProductMain
         selectedVariant={selectedVariant}
         product={product}
         variants={variants}
       />
+      <ProductImage image={selectedVariant?.image} />
     </div>
   );
 }
@@ -132,13 +132,15 @@ function ProductImage({image}: {image: ProductVariantFragment['image']}) {
     return <div className="product-image" />;
   }
   return (
-    <div className="product-image">
+    <div>
       <Image
+        className="w-[720px] h-[405px] object-cover"
         alt={image.altText || 'Product Image'}
-        aspectRatio="1/1"
         data={image}
         key={image.id}
-        sizes="(min-width: 45em) 50vw, 100vw"
+        width="720"
+        height="405"
+        sizes="720px"
       />
     </div>
   );
@@ -155,8 +157,18 @@ function ProductMain({
 }) {
   const {title, descriptionHtml} = product;
   return (
-    <div className="product-main">
-      <h1>{title}</h1>
+    <div className="flex flex-col gap-y-3 text-2xl md:gap-y-6">
+      <h1 className="whitespace-pre font-display text-2xl lg:text-4xl">
+        {title}
+      </h1>
+      <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+
+      <p className="text-sm">
+        Since every animal is slightly different we can't guarantee exact
+        weights, but we do guarantee that you'll get at least the weight you
+        paid for over the entire bundle.
+      </p>
+
       <ProductPrice selectedVariant={selectedVariant} />
       <br />
       <Suspense
@@ -181,14 +193,6 @@ function ProductMain({
           )}
         </Await>
       </Suspense>
-      <br />
-      <br />
-      <p>
-        <strong>Description</strong>
-      </p>
-      <br />
-      <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-      <br />
     </div>
   );
 }
@@ -228,7 +232,7 @@ function ProductForm({
   variants: Array<ProductVariantFragment>;
 }) {
   return (
-    <div className="product-form">
+    <>
       <VariantSelector
         handle={product.handle}
         options={product.options}
@@ -255,7 +259,7 @@ function ProductForm({
       >
         {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
       </AddToCartButton>
-    </div>
+    </>
   );
 }
 
@@ -311,6 +315,7 @@ function AddToCartButton({
             value={JSON.stringify(analytics)}
           />
           <button
+            className="bg-primary-500 py-2 px-4 text-center font-semibold leading-loose text-white"
             type="submit"
             onClick={onClick}
             disabled={disabled ?? fetcher.state !== 'idle'}
