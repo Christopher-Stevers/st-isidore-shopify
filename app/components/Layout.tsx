@@ -27,9 +27,9 @@ function CartBadge({count}: {count: number}) {
   return (
     <a
       href="#cart-aside"
-      className="fixed bottom-6 right-6 rounded-full border-4 border-primary-500  bg-backdrop-700 p-3 text-primary-500"
+      className="fixed bottom-6 z-40 right-6 rounded-full border-4 border-primary-500  bg-backdrop-700 p-3 text-primary-500"
     >
-      <div className="absolute inset-x-7 top-2 bg-backdrop-700 font-sans font-bold">
+      <div className="absolute  inset-x-7 top-2 bg-backdrop-700 font-sans font-bold">
         {count}
       </div>
       <svg

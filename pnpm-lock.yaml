@@ -68,9 +68,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
-  react-hotjar:
-    specifier: ^6.3.1
-    version: 6.3.1
+  react-use-hotjar:
+    specifier: ^1.2.5
+    version: 1.2.5(react@18.2.0)
   set-cookie-parser:
     specifier: ^2.6.0
     version: 2.6.0
@@ -9961,10 +9961,6 @@ packages:
       scheduler: 0.23.0
     dev: false
 
-  /react-hotjar@6.3.1:
-    resolution: {integrity: sha512-EwMqL+ROSlKzatMhT/aqRq7XWWfzlnHynSBSTJh5M2O78mBiPohiSl4Ysls3HOQkkD9y6L22BW0c9bxK2JguwQ==}
-    dev: false
-
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
     dev: true
@@ -10008,6 +10004,15 @@ packages:
       react: '>=16.8'
     dependencies:
       '@remix-run/router': 1.15.3
+      react: 18.2.0
+    dev: false
+
+  /react-use-hotjar@1.2.5(react@18.2.0):
+    resolution: {integrity: sha512-r0rstKO7hc2icMdolhPwlwBXn/8B5JNW/DY1Ss+KaOwbV5FK39eKQDcjeq1Q+pT4XpqPHya66m8A4zql7rIQXg==}
+    engines: {node: '>=8', npm: '>=5'}
+    peerDependencies:
+      react: ^17.0.2 || ^18
+    dependencies:
       react: 18.2.0
     dev: false
 

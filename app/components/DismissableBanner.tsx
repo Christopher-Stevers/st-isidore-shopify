@@ -17,7 +17,7 @@ const DismissableBanner = () => {
     return null;
   }
   return (
-    <div className="bg-red-500 z-10 text-white p-8 fixed bottom-0 w-full">
+    <div className="bg-red-500 z-10 text-white p-8 fixed bottom-0 w-2/3">
       <div className="container mx-auto flex justify-between items-center">
         <p>
           🎉We are having a sale! Due to issues in our freezing/packaging
