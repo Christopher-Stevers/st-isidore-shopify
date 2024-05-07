@@ -1,5 +1,5 @@
 import {Await, type MetaFunction} from '@remix-run/react';
-import {Suspense} from 'react';
+import {Suspense, useEffect} from 'react';
 import type {CartQueryDataReturn} from '@shopify/hydrogen';
 import {CartForm} from '@shopify/hydrogen';
 import {json, type ActionFunctionArgs} from '@shopify/remix-oxygen';
@@ -23,7 +23,6 @@ export async function action({request, context}: ActionFunctionArgs) {
 
   let status = 200;
   let result: CartQueryDataReturn;
-
   switch (action) {
     case CartForm.ACTIONS.LinesAdd:
       result = await cart.addLines(inputs.lines);
@@ -85,6 +84,13 @@ export async function action({request, context}: ActionFunctionArgs) {
 export default function Cart() {
   const rootData = useRootLoaderData();
   const cartPromise = rootData.cart;
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log('fetching');
+      console.log(await cartPromise, 'my result');
+    };
+    fetchData();
+  }, [cartPromise]);
 
   return (
     <div className="cart">
@@ -95,6 +101,7 @@ export default function Cart() {
           errorElement={<div>An error occurred</div>}
         >
           {(cart) => {
+            console.log(cart, 'cart');
             return <CartMain layout="page" cart={cart} />;
           }}
         </Await>

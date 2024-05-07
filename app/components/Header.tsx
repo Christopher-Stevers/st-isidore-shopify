@@ -49,7 +49,7 @@ export function HeaderMenu({
   return (
     <nav
       className={`flex relative w-full py-4 z-20 content-center items-center font-display justify-between text-2xl ${
-        location.pathname !== '/' && 'bg-primary-500'
+        location.pathname !== '/' && 'bg-primary-700'
       }`}
       role="navigation"
     >
@@ -72,7 +72,6 @@ export function HeaderMenu({
           item.url.includes(primaryDomainUrl)
             ? new URL(currentUrl).pathname
             : currentUrl;
-        console.log(url, currentUrl);
         return (
           <NavLink
             className={`text-white ${
@@ -106,7 +105,6 @@ function HeaderCtas({cart}: Pick<HeaderProps, 'cart'>) {
       <HeaderMenuMobileToggle />
 
       <SearchToggle />
-      <CartToggle cart={cart} />
     </nav>
   );
 }
@@ -121,23 +119,6 @@ function HeaderMenuMobileToggle() {
 
 function SearchToggle() {
   return <a href="#search-aside">Search</a>;
-}
-
-function CartBadge({count}: {count: number}) {
-  return <a href="#cart-aside">Cart {count}</a>;
-}
-
-function CartToggle({cart}: Pick<HeaderProps, 'cart'>) {
-  return (
-    <Suspense fallback={<CartBadge count={0} />}>
-      <Await resolve={cart}>
-        {(cart) => {
-          if (!cart) return <CartBadge count={0} />;
-          return <CartBadge count={cart.totalQuantity || 0} />;
-        }}
-      </Await>
-    </Suspense>
-  );
 }
 
 const FALLBACK_HEADER_MENU = {

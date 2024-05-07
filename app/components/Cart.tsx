@@ -3,6 +3,11 @@ import type {CartLineUpdateInput} from '@shopify/hydrogen/storefront-api-types';
 import {Link} from '@remix-run/react';
 import type {CartApiQueryFragment} from 'storefrontapi.generated';
 import {useVariantUrl} from '~/lib/variants';
+import {
+  MinusCircleIcon,
+  PlusCircleIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/solid';
 
 type CartLine = CartApiQueryFragment['lines']['nodes'][0];
 
@@ -54,9 +59,13 @@ function CartLines({
   return (
     <div aria-labelledby="cart-lines">
       <ul>
-        {lines.nodes.map((line) => (
-          <CartLineItem key={line.id} line={line} layout={layout} />
-        ))}
+        {lines.nodes
+          .filter((line) => {
+            return line && line.id;
+          })
+          .map((line) => (
+            <CartLineItem key={line.id} line={line} layout={layout} />
+          ))}
       </ul>
     </div>
   );
@@ -102,17 +111,10 @@ function CartLineItem({
           </p>
         </Link>
         <CartLinePrice line={line} as="span" />
-        <ul>
-          {selectedOptions.map((option) => (
-            <li key={option.name}>
-              <small>
-                {option.name}: {option.value}
-              </small>
-            </li>
-          ))}
-        </ul>
         <CartLineQuantity line={line} />
       </div>
+
+      <CartLineRemoveButton lineIds={[line.id]} />
     </li>
   );
 }
@@ -167,7 +169,9 @@ function CartLineRemoveButton({lineIds}: {lineIds: string[]}) {
       action={CartForm.ACTIONS.LinesRemove}
       inputs={{lineIds}}
     >
-      <button type="submit">Remove</button>
+      <button type="submit">
+        <XMarkIcon className="stroke-red-500 h-6 w-6" />
+      </button>
     </CartForm>
   );
 }
@@ -179,30 +183,34 @@ function CartLineQuantity({line}: {line: CartLine}) {
   const nextQuantity = Number((quantity + 1).toFixed(0));
 
   return (
-    <div className="cart-line-quantity">
-      <small>Quantity: {quantity} &nbsp;&nbsp;</small>
-      <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
-        <button
-          aria-label="Decrease quantity"
-          disabled={quantity <= 1}
-          name="decrease-quantity"
-          value={prevQuantity}
-        >
-          <span>&#8722; </span>
-        </button>
-      </CartLineUpdateButton>
-      &nbsp;
-      <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
-        <button
-          aria-label="Increase quantity"
-          name="increase-quantity"
-          value={nextQuantity}
-        >
-          <span>&#43;</span>
-        </button>
-      </CartLineUpdateButton>
-      &nbsp;
-      <CartLineRemoveButton lineIds={[lineId]} />
+    <div className="flex flex-col gap-2">
+      <div className="flex gap-2">
+        <span>Quantity: {quantity} &nbsp;&nbsp;</span>
+
+        <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
+          <button
+            aria-label="Decrease quantity"
+            disabled={quantity <= 1}
+            name="decrease-quantity"
+            value={prevQuantity}
+          >
+            <span>
+              <MinusCircleIcon className="h-6 w-6" />
+            </span>
+          </button>
+        </CartLineUpdateButton>
+        <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
+          <button
+            aria-label="Increase quantity"
+            name="increase-quantity"
+            value={nextQuantity}
+          >
+            <span>
+              <PlusCircleIcon className="h-6 w-6" />
+            </span>
+          </button>
+        </CartLineUpdateButton>
+      </div>
     </div>
   );
 }

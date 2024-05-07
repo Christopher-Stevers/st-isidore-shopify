@@ -7,7 +7,7 @@ const Steak =
 
 export const HeaderMain: React.FC = () => {
   return (
-    <header className="relative h-screen w-full z-10  -mt-[160px]  ">
+    <header className="relative h-screen w-full z-10  -mt-[240px]  ">
       <Image
         className="absolute top-0 object-cover w-full h-full"
         alt="image of cows grazing"

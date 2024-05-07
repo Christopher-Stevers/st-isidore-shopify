@@ -69,12 +69,11 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
 
   if (firstVariantIsDefault) {
     product.selectedVariant = firstVariant;
-  } else {
+  } else if (!product.selectedVariant) {
     // if no selected variant was returned from the selected options,
     // we redirect to the first variant's url with it's selected options applied
-    if (!product.selectedVariant) {
-      throw redirectToFirstVariant({product, request});
-    }
+
+    throw redirectToFirstVariant({product, request});
   }
 
   // In order to show which variants are available in the UI, we need to query
@@ -116,7 +115,7 @@ export default function Product() {
   const {product, variants} = useLoaderData<typeof loader>();
   const {selectedVariant} = product;
   return (
-    <div className="flex md:flex-row flex-col gap-y-3 text-2xl md:gap-y-6">
+    <div className="mx-auto grid w-[1364px] max-w-fit justify-start justify-items-stretch gap-4  gap-y-16 px-8 lg:grid-cols-[2fr_3fr] lg:gap-24 lg:px-16">
       <ProductMain
         selectedVariant={selectedVariant}
         product={product}
@@ -164,8 +163,8 @@ function ProductMain({
       <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
 
       <p className="text-sm">
-        Since every animal is slightly different we can't guarantee exact
-        weights, but we do guarantee that you'll get at least the weight you
+        Since every animal is slightly different we can{"'"}t guarantee exact
+        weights, but we do guarantee that you{"'"}ll get at least the weight you
         paid for over the entire bundle.
       </p>
 
@@ -315,7 +314,7 @@ function AddToCartButton({
             value={JSON.stringify(analytics)}
           />
           <button
-            className="bg-primary-500 py-2 px-4 text-center font-semibold leading-loose text-white"
+            className="bg-primary-500 py-2 px-4 text-center font-semibold leading-loose w-full text-white"
             type="submit"
             onClick={onClick}
             disabled={disabled ?? fetcher.state !== 'idle'}
