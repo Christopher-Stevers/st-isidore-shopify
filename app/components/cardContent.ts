@@ -20,7 +20,7 @@ export default [
     direction: 'left',
     title: 'Our Vision',
     text: 'We believe that grassfed beef should play an integral part of any farm that is committed to sustainability. Far from harming the environment, cattle raised exclusively on grass can help rebuild our soils and our world.',
-    link: '/blog/organic-to-regenerative',
+
     video:
       'https://www.youtube.com/embed/sJ3cAfW39yU?si=pH3IMQhcvfv98-4p?rel=0&controls=0&showinfo=0&modestbranding=1',
     src: '',

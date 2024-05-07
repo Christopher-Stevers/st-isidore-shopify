@@ -3,7 +3,7 @@ import {useLoaderData, type MetaFunction} from '@remix-run/react';
 import {Image} from '@shopify/hydrogen';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return [{title: `Hydrogen | ${data?.article.title ?? ''} article`}];
+  return [{title: `St Isidore Ranch | ${data?.article.title ?? ''} article`}];
 };
 
 export async function loader({params, context}: LoaderFunctionArgs) {
@@ -37,13 +37,13 @@ export default function Article() {
   }).format(new Date(article.publishedAt));
 
   return (
-    <div className="article">
-      <h1>
-        {title}
+    <div className="article px-8">
+      <div className="py-4">
+        <h1 className="font-display text-3xl">{title}</h1>
         <span>
           {publishedDate} &middot; {author?.name}
         </span>
-      </h1>
+      </div>
 
       {image && <Image data={image} sizes="90vw" loading="eager" />}
       <div

@@ -27,7 +27,7 @@ import type {
 import {getVariantUrl} from '~/lib/variants';
 
 export const meta: MetaFunction<typeof loader> = ({data, location}) => {
-  return [{title: `Hydrogen | ${data?.product.title ?? ''}`}];
+  return [{title: `St Isidore Ranch | ${data?.product.title ?? ''}`}];
 };
 
 export async function loader({params, request, context}: LoaderFunctionArgs) {
@@ -160,7 +160,10 @@ function ProductMain({
       <h1 className="whitespace-pre font-display text-2xl lg:text-4xl">
         {title}
       </h1>
-      <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+      <div
+        className="product-item"
+        dangerouslySetInnerHTML={{__html: descriptionHtml}}
+      />
 
       <p className="text-sm">
         Since every animal is slightly different we can{"'"}t guarantee exact
@@ -196,7 +199,7 @@ function ProductMain({
   );
 }
 
-function ProductPrice({
+export function ProductPrice({
   selectedVariant,
 }: {
   selectedVariant: ProductFragment['selectedVariant'];

@@ -5,6 +5,7 @@
   --grid-item-width: 355px;
   --color-dark: #000;
   --color-light: #fff;
+  background: hsl(36 62% 94%);
 }
 
 img {
@@ -378,6 +379,11 @@ aside li {
   height: auto;
   width: 100%;
 }
+.product-item ul {
+  list-style: inside;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
 
 /*
 * --------------------------------------------------
@@ -455,6 +461,15 @@ aside li {
 .article img {
   height: auto;
   width: 100%;
+}
+
+.article h2 {
+  font-weight: 600;
+}
+
+.article a {
+  color: #0c2c15;
+  text-decoration: underline;
 }
 
 /*

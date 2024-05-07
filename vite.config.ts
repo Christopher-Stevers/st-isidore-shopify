@@ -5,11 +5,13 @@ import {vitePlugin as remix} from '@remix-run/dev';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
+import mdx from '@mdx-js/rollup';
 
 export default defineConfig({
   plugins: [
     hydrogen(),
     oxygen(),
+    mdx(),
     remix({
       presets: [hydrogen.preset()],
       future: {

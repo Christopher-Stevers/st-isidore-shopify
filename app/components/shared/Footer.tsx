@@ -29,11 +29,11 @@ const Footer: React.FC = () => {
   const websiteLinks: WebsiteLink[] = [
     {
       name: 'Contact',
-      link: '/contact',
+      link: '/pages/contact',
     },
     {
       name: 'Shop',
-      link: '/collections/bundles',
+      link: '/shop',
     },
   ];
   return (

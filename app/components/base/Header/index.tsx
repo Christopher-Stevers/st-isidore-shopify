@@ -34,7 +34,7 @@ export const HeaderMain: React.FC = () => {
 
         <HeroButton
           text="Shop"
-          link="/collections/bundles"
+          link="/shop"
           className="flex items-center justify-center font-sans font-bold row-start-3 min-w-[200px] border-4 border-white bg-primary-500 text-white md:row-start-3 md:justify-self-start h-16 w-32 text-2xl md:h-20 md:w-40 md:text-3xl lg:h-24 lg:w-60"
         />
       </div>

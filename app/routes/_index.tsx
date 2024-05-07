@@ -1,26 +1,20 @@
-import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {Await, useLoaderData, Link, type MetaFunction} from '@remix-run/react';
-import {Suspense} from 'react';
-import {Image, Money} from '@shopify/hydrogen';
+import {type MetaFunction} from '@remix-run/react';
+
 import {HeaderMain} from '~/components/base/Header';
-import type {
-  FeaturedCollectionFragment,
-  RecommendedProductsQuery,
-} from 'storefrontapi.generated';
-import {Header} from '~/components/Header';
+
 import TranslateAndFade from '~/components/shared/TranslateAndFade';
 import AboutCard from '~/components/AboutCard';
 import cardContent from '~/components/cardContent';
 
 export const meta: MetaFunction = () => {
-  return [{title: 'Hydrogen | Home'}];
+  return [{title: 'St Isidore Ranch | Home'}];
 };
 
 export default function Homepage() {
   return (
     <>
       <HeaderMain />
-      <div className="grid content-center justify-center justify-items-center gap-24 bg-backdrop-500 px-4 py-24 sm:px-16 md:grid-cols-2 md:justify-between  lg:py-32 lg:px-24 xl:grid-cols-1">
+      <div className="grid content-center justify-center justify-items-center gap-24 bg-backdrop-700 px-4 py-24 sm:px-16 md:grid-cols-2 md:justify-between  lg:py-32 lg:px-24 xl:grid-cols-1">
         {cardContent.map((props, index) => {
           const {title, text, link, video, src, btnText} = props;
           const direction = index % 2 === 0 ? 'left' : 'right';

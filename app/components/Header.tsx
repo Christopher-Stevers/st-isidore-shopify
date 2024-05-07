@@ -63,8 +63,7 @@ export function HeaderMenu({
       </Link>
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
-        const currentUrl =
-          item.url === '/collections/all' ? '/collections/bundles' : item.url;
+        const currentUrl = item.url === '/collections/all' ? '/shop' : item.url;
         // if the url is internal, we strip the domain
         const url =
           item.url.includes('myshopify.com') ||
@@ -157,7 +156,7 @@ const FALLBACK_HEADER_MENU = {
       tags: [],
       title: 'Shop',
       type: 'PAGE',
-      url: '/collections/bundles',
+      url: '/shop',
       items: [],
     },
   ],

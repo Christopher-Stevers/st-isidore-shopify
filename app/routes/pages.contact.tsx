@@ -38,7 +38,7 @@ const Index = ({
   };
 
   return (
-    <div className="grow">
+    <div className="grow max-w-2xl mx-auto">
       {!toggleOpen && (
         <h3 className="text-3xl font-semibold ">{title ?? 'Contact me'}</h3>
       )}
