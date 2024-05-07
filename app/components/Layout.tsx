@@ -40,7 +40,7 @@ function CartBadge({count}: {count: number}) {
         stroke="currentColor"
         aria-hidden="true"
         data-slot="icon"
-        className="h-10 w-10"
+        className="h-10 w-10 z-40"
       >
         <path
           strokeLinecap="round"
