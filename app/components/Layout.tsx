@@ -13,6 +13,7 @@ import {
   PredictiveSearchForm,
   PredictiveSearchResults,
 } from '~/components/Search';
+import DismissableBanner from '../components/DismissableBanner';
 
 export type LayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
@@ -82,6 +83,7 @@ export function Layout({
 
       <CartToggle cart={cart} />
       <Footer />
+      <DismissableBanner />
     </>
   );
 }
