@@ -1,4 +1,5 @@
 import {useNonce} from '@shopify/hydrogen';
+import {hotjar} from 'react-hotjar';
 import {
   defer,
   type SerializeFrom,
@@ -21,6 +22,7 @@ import resetStyles from './styles/reset.css?url';
 import appStyles from './styles/app.css?url';
 import stylesheet from './styles/tailwind.css?url';
 import {Layout} from './components/Layout';
+import {useEffect} from 'react';
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
  */
@@ -124,6 +126,10 @@ export async function loader({context}: LoaderFunctionArgs) {
 export default function App() {
   const nonce = useNonce();
   const data = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    hotjar.initialize(3197536, 6);
+  }, []);
 
   return (
     <html lang="en">
