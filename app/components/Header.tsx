@@ -7,7 +7,7 @@ import {useRootLoaderData} from '~/root';
 import {Image} from '@shopify/hydrogen';
 
 const Logo =
-  'https://cdn.shopify.com/s/files/1/0626/1991/0197/files/logo_white_transparent.png?v=1713986377';
+  'https://cdn.shopify.com/s/files/1/0626/1991/0197/files/canvas_image.png?v=1715807518';
 
 type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
 
