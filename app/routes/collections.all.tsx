@@ -1,11 +1,6 @@
 import {json, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useLoaderData, Link, type MetaFunction} from '@remix-run/react';
 import {Pagination, getPaginationVariables, Image} from '@shopify/hydrogen';
-import type {ProductItemFragment} from 'storefrontapi.generated';
-import {useVariantUrl} from '~/lib/variants';
-import {useState} from 'react';
-
-import Search from '~/components/base/Search';
 import {COLLECTION_QUERY} from './collections.$handle';
 import {ProductsGrid} from '~/routes/shop._index';
 
@@ -16,10 +11,10 @@ export const meta: MetaFunction<typeof loader> = ({data}) => {
 };
 
 export async function loader({request, params, context}: LoaderFunctionArgs) {
-  const handle = 'bundles';
+  const handle = 'main';
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 20,
+    pageBy: 50,
   });
 
   if (!handle) {

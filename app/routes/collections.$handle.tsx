@@ -13,7 +13,7 @@ export async function loader({request, params, context}: LoaderFunctionArgs) {
   const handle = params.handle;
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 20,
+    pageBy: 50,
   });
 
   if (!handle) {

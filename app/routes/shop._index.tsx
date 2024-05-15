@@ -19,10 +19,10 @@ export const meta: MetaFunction<typeof loader> = ({data}) => {
 };
 
 export async function loader({request, params, context}: LoaderFunctionArgs) {
-  const handle = 'bundles';
+  const handle = 'main';
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 20,
+    pageBy: 50,
   });
 
   if (!handle) {
@@ -79,6 +79,9 @@ export function ProductsGrid({products}: {products: ProductItemFragment[]}) {
               <Link to="/shop">All</Link>
             </div>
             <div className="flex gap-4">
+              <Link to="/collections/bundles">Bundles</Link>
+            </div>
+            <div className="flex gap-4">
               <Link to="/collections/steak">Steaks</Link>
             </div>
             <div className="flex gap-4">
@@ -127,14 +130,14 @@ function ProductItem({
   const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
   return (
     <Link
-      className="grid w-80 grid-rows-[180px_36px_120px]  gap-x-16 gap-y-4 bg-backdrop-500 pb-8"
+      className="grid w-80 grid-rows-[320px_36px]  gap-x-16 gap-y-4 bg-backdrop-500 pb-8"
       key={product.id}
       prefetch="intent"
       to={variantUrl}
     >
       {product.featuredImage && (
         <Image
-          className="h-[180px] w-[320px]  "
+          className="h-[320px] w-[320px] object-cover"
           alt={product.featuredImage.altText || product.title}
           data={product.featuredImage}
           loading={loading}
@@ -147,20 +150,25 @@ function ProductItem({
         </h3>
       </div>
       <div className="text-lg px-4">
-        <div
-          className="product-item"
-          dangerouslySetInnerHTML={{
-            __html: (product.descriptionHtml || '').replace(
-              /<ul[^>]*>(.*?)<\/ul>/gs,
-              '',
-            ),
-          }}
-        />
+        {product.description !== '' && (
+          <div
+            className="product-item"
+            dangerouslySetInnerHTML={{
+              __html: (product.descriptionHtml || '').replace(
+                /<ul[^>]*>(.*?)<\/ul>/gs,
+                '',
+              ),
+            }}
+          />
+        )}
+        <Link className="underline items-start" to={`${variantUrl}`}>
+          more info
+        </Link>
       </div>
-      <Link className="underline px-4" to={`${variantUrl}`}>
-        more info
-      </Link>
-      <Money className="px-4" data={product.priceRange.minVariantPrice} />
+      <Money
+        className="px-4 self-end"
+        data={product.priceRange.minVariantPrice}
+      />
     </Link>
   );
 }
