@@ -124,22 +124,6 @@ export async function loader({context}: LoaderFunctionArgs) {
   );
 }
 
-export const meta: MetaFunction = () => {
-  return [
-    {
-      'og:description': '100% Grass-finished beef',
-    },
-    {
-      'og:image':
-        'https://cdn.shopify.com/s/files/1/0626/1991/0197/files/canvas_image.png?v=1715807518',
-    },
-    {
-      'twitter:image':
-        'https://cdn.shopify.com/s/files/1/0626/1991/0197/files/canvas_image.png?v=1715807518',
-    },
-  ];
-};
-
 export default function App() {
   const nonce = useNonce();
   const data = useLoaderData<typeof loader>();
@@ -154,6 +138,19 @@ export default function App() {
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
+        <meta
+          property="og:description"
+          content="100% Grass-finished beef delivered straight to your home."
+        />
+        <meta
+          property="og:image"
+          content="https://cdn.shopify.com/s/files/1/0626/1991/0197/files/canvas_image.png?v=1715807518"
+        />
+        <meta
+          name="twitter:image"
+          content="https://cdn.shopify.com/s/files/1/0626/1991/0197/files/canvas_image.png?v=1715807518"
+        />
+
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
