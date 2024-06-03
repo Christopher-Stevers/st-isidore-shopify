@@ -12,6 +12,7 @@ import {useState} from 'react';
 
 import Search from '~/components/base/Search';
 import {COLLECTION_QUERY} from './collections.$handle';
+import {AddToCartButton} from './products.$handle';
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return [
     {title: `St Isidore Ranch | ${data?.collection.title ?? ''} Collection`},
@@ -130,7 +131,7 @@ function ProductItem({
   const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
   return (
     <Link
-      className="grid w-80 grid-rows-[320px_36px]  gap-x-16 gap-y-4 bg-backdrop-500 pb-8"
+      className="grid w-80 grid-rows-[320px_36px]  gap-x-16 gap-y-4 bg-backdrop-500"
       key={product.id}
       prefetch="intent"
       to={variantUrl}
@@ -154,10 +155,12 @@ function ProductItem({
           <div
             className="product-item"
             dangerouslySetInnerHTML={{
-              __html: (product.descriptionHtml || '').replace(
-                /<ul[^>]*>(.*?)<\/ul>/gs,
-                '',
-              ),
+              __html: (product.descriptionHtml || '')
+                .replace(/<ul[^>]*>(.*?)<\/ul>/gs, '')
+                .replace(
+                  "Note, I can't guarantee the individual weights of the cuts, however overall weight should be the same.",
+                  '',
+                ),
             }}
           />
         )}
@@ -169,6 +172,26 @@ function ProductItem({
         className="px-4 self-end"
         data={product.priceRange.minVariantPrice}
       />
+      <div className="content-end">
+        <AddToCartButton
+          disabled={!variant || !variant.availableForSale}
+          onClick={() => {
+            window.location.href = window.location.href + '#cart-aside';
+          }}
+          lines={
+            product
+              ? [
+                  {
+                    merchandiseId: variant.id,
+                    quantity: 1,
+                  },
+                ]
+              : []
+          }
+        >
+          {variant?.availableForSale ? 'Add to cart' : 'Sold out'}
+        </AddToCartButton>
+      </div>
     </Link>
   );
 }

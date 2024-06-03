@@ -86,6 +86,8 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
     }
     variants(first: 1) {
       nodes {
+        availableForSale
+        id
         selectedOptions {
           name
           value
