@@ -123,6 +123,16 @@ export async function loader({context}: LoaderFunctionArgs) {
   );
 }
 
+export const MetaFunction = ({data}: {data: SerializeFrom<typeof loader>}) => {
+  return {
+    'og:description': '100% Grass-finished beef',
+    'og:image':
+      'https://cdn.shopify.com/s/files/1/0626/1991/0197/files/canvas_image.png?v=1715807518',
+    'twitter:image':
+      'https://cdn.shopify.com/s/files/1/0626/1991/0197/files/canvas_image.png?v=1715807518',
+  };
+};
+
 export default function App() {
   const nonce = useNonce();
   const data = useLoaderData<typeof loader>();
