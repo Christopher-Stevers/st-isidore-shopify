@@ -144,11 +144,11 @@ export default function App() {
         />
         <meta
           property="og:image"
-          content="https://cdn.shopify.com/s/files/1/0626/1991/0197/files/canvas_image.png?v=1715807518"
+          content="https://cdn.shopify.com/s/files/1/0626/1991/0197/files/St_Isidore_Ranch_Logo_1.png?v=1715056106"
         />
         <meta
           name="twitter:image"
-          content="https://cdn.shopify.com/s/files/1/0626/1991/0197/files/canvas_image.png?v=1715807518"
+          content="https://cdn.shopify.com/s/files/1/0626/1991/0197/files/St_Isidore_Ranch_Logo_1.png?v=1715056106"
         />
 
         <meta name="viewport" content="width=device-width,initial-scale=1" />

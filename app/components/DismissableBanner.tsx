@@ -20,11 +20,10 @@ const DismissableBanner = () => {
     <div className="bg-red-500 z-10 text-white p-8 fixed bottom-0 w-2/3">
       <div className="container mx-auto flex justify-between items-center">
         <p>
-          🎉We are having a sale! Due to issues in our freezing/packaging
-          process we currently have meat in stock that needs to be moved as it
-          is at greater risk of freezer burn long term. If you are looking for
-          meat and will be eating it in the next 2 to 3 months, now is your
-          chance to get some great beef at a 25% discount! 🎉
+          🎉Due to issues in our freezing/packaging process we have beef that
+          needs to be moved. If you are looking for meat and will be eating it
+          in the next 2 to 3 months, now is your chance to get some great beef
+          at a 15% discount! 🎉
         </p>
         <button onClick={handleDismiss}>
           <XMarkIcon className="w-6 h-6" />
