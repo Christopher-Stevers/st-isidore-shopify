@@ -43,6 +43,7 @@ export default {
       /**
        * Create Hydrogen's Storefront client.
        */
+      console.log(env.PRIVATE_STOREFRONT_API_TOKEN, 'my env');
       const {storefront} = createStorefrontClient({
         cache,
         waitUntil,

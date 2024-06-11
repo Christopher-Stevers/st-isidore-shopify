@@ -31,10 +31,10 @@ dependencies:
     version: 3.58.0(@types/node@20.12.7)(@types/react@18.2.79)(typescript@5.4.5)(zod@3.22.5)
   '@shopify/cli-hydrogen':
     specifier: ^8.0.0
-    version: 8.0.0(@graphql-codegen/cli@5.0.2)(@remix-run/dev@2.8.1)(@shopify/hydrogen-codegen@0.3.0)(@shopify/mini-oxygen@3.0.0)(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)(vite@5.2.10)
+    version: 8.0.0(@graphql-codegen/cli@5.0.2)(@remix-run/dev@2.8.1)(@shopify/hydrogen-codegen@0.3.1)(@shopify/mini-oxygen@3.0.3)(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)(vite@5.2.10)
   '@shopify/hydrogen':
-    specifier: 2024.4.0
-    version: 2024.4.0(@remix-run/react@2.8.1)(@remix-run/server-runtime@2.8.1)(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)(vite@5.2.10)
+    specifier: 2024.4.3
+    version: 2024.4.3(@remix-run/react@2.8.1)(@remix-run/server-runtime@2.8.1)(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)(vite@5.2.10)
   '@shopify/remix-oxygen':
     specifier: ^2.0.4
     version: 2.0.4(@remix-run/server-runtime@2.8.1)(@shopify/oxygen-workers-types@4.0.0)
@@ -98,11 +98,11 @@ devDependencies:
     specifier: ^2.8.0
     version: 2.8.1(eslint@8.57.0)(react@18.2.0)(typescript@5.4.5)
   '@shopify/hydrogen-codegen':
-    specifier: ^0.3.0
-    version: 0.3.0(graphql@16.8.1)
+    specifier: ^0.3.1
+    version: 0.3.1(graphql@16.8.1)
   '@shopify/mini-oxygen':
-    specifier: ^3.0.0
-    version: 3.0.0(vite@5.2.10)
+    specifier: ^3.0.3
+    version: 3.0.3(vite@5.2.10)
   '@shopify/oxygen-workers-types':
     specifier: ^4.0.0
     version: 4.0.0
@@ -921,40 +921,40 @@ packages:
     resolution: {integrity: sha512-htzFO1Zc57S8kgdRK9mLcPVTW1BY2ijfH7Dk2CeZmspTWKdKqSo1iwmqrq2WtRjFlo8aRZYgLX0wFrDXF/9DLA==}
     dev: false
 
-  /@cloudflare/workerd-darwin-64@1.20240129.0:
-    resolution: {integrity: sha512-DfVVB5IsQLVcWPJwV019vY3nEtU88c2Qu2ST5SQxqcGivZ52imagLRK0RHCIP8PK4piSiq90qUC6ybppUsw8eg==}
+  /@cloudflare/workerd-darwin-64@1.20240304.0:
+    resolution: {integrity: sha512-rfHlvsWzkqEEQNvm14AOE/BYHYzB9wxQHCaZZEgwOuTl5KpDcs9La0N0LaDTR78ESumIWOcifVmko2VTrZb7TQ==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     optional: true
 
-  /@cloudflare/workerd-darwin-arm64@1.20240129.0:
-    resolution: {integrity: sha512-t0q8ABkmumG1zRM/MZ/vIv/Ysx0vTAXnQAPy/JW5aeQi/tqrypXkO9/NhPc0jbF/g/hIPrWEqpDgEp3CB7Da7Q==}
+  /@cloudflare/workerd-darwin-arm64@1.20240304.0:
+    resolution: {integrity: sha512-IXGOxHsPdRYfAzcY6IroI1PDvx3hhXf18qFCloHp8Iw5bzLgq/PTjcp10Z/2xedZ2hVlfpHy1eEptsTmi9YeNw==}
     engines: {node: '>=16'}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     optional: true
 
-  /@cloudflare/workerd-linux-64@1.20240129.0:
-    resolution: {integrity: sha512-sFV1uobHgDI+6CKBS/ZshQvOvajgwl6BtiYaH4PSFSpvXTmRx+A9bcug+6BnD+V4WgwxTiEO2iR97E1XuwDAVw==}
+  /@cloudflare/workerd-linux-64@1.20240304.0:
+    resolution: {integrity: sha512-G1BEzbw9TFIeMvc425F145IetC7fuH4KOkGhseLq9y/mt5PfDWkghwmXSK+q0BiMwm0XAobtzVlHcEr2u4WlRQ==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@cloudflare/workerd-linux-arm64@1.20240129.0:
-    resolution: {integrity: sha512-O7q7htHaFRp8PgTqNJx1/fYc3+LnvAo6kWWB9a14C5OWak6AAZk42PNpKPx+DXTmGvI+8S1+futBGUeJ8NPDXg==}
+  /@cloudflare/workerd-linux-arm64@1.20240304.0:
+    resolution: {integrity: sha512-LLk/d/y77TRu6QOG3CJUI2cD3Ff2lSg0ts6G83bsm9ZK+WKObWFFSPBy9l81m3EnlKFh7RZCzxN4J10kuDaO8w==}
     engines: {node: '>=16'}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@cloudflare/workerd-windows-64@1.20240129.0:
-    resolution: {integrity: sha512-YqGno0XSqqqkDmNoGEX6M8kJlI2lEfWntbTPVtHaZlaXVR9sWfoD7TEno0NKC95cXFz+ioyFLbgbOdnfWwmVAA==}
+  /@cloudflare/workerd-windows-64@1.20240304.0:
+    resolution: {integrity: sha512-I/j6nVpM+WDPg+bYUAiKLkwQsjrXFjpOGHvwYmcM44hnDjgODzk7AbVssEIXnhEO3oupBeuKvffr0lvX0Ngmpw==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [win32]
@@ -3072,7 +3072,7 @@ packages:
     resolution: {integrity: sha512-hw437iINopmQuxWPSUEvqE56NCPsiU8N4AYtfHmJFckclktzK9YQJieD3XkDCDH4OjL+C7zgPUh73R/nrcHrqw==}
     dev: true
 
-  /@shopify/cli-hydrogen@8.0.0(@graphql-codegen/cli@5.0.2)(@remix-run/dev@2.8.1)(@shopify/hydrogen-codegen@0.3.0)(@shopify/mini-oxygen@3.0.0)(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)(vite@5.2.10):
+  /@shopify/cli-hydrogen@8.0.0(@graphql-codegen/cli@5.0.2)(@remix-run/dev@2.8.1)(@shopify/hydrogen-codegen@0.3.1)(@shopify/mini-oxygen@3.0.3)(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)(vite@5.2.10):
     resolution: {integrity: sha512-o6dyHFdmTRqZTPGOKX5FcjNkq8baKIaFShmimOd7djclTUEvSblgVydk9yaaQhIbnIyt6pfDw9NRD/zCXiiMqA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
@@ -3102,8 +3102,8 @@ packages:
       '@oclif/core': 3.19.6
       '@remix-run/dev': 2.8.1(@types/node@20.12.7)(typescript@5.4.5)(vite@5.2.10)
       '@shopify/cli-kit': 3.58.0(@types/react@18.2.79)
-      '@shopify/hydrogen-codegen': 0.3.0(graphql@16.8.1)
-      '@shopify/mini-oxygen': 3.0.0(vite@5.2.10)
+      '@shopify/hydrogen-codegen': 0.3.1(graphql@16.8.1)
+      '@shopify/mini-oxygen': 3.0.3(vite@5.2.10)
       '@shopify/oxygen-cli': 4.4.2(@oclif/core@3.19.6)(@shopify/cli-kit@3.58.0)
       '@shopify/plugin-cloudflare': 3.58.0(@types/react@18.2.79)
       ansi-escapes: 6.2.1
@@ -3239,8 +3239,8 @@ packages:
       - zod
     dev: false
 
-  /@shopify/graphql-codegen@0.0.1(graphql@16.8.1):
-    resolution: {integrity: sha512-A6LwdihfS0DzfiwwFcSC4CSG5laTwEyVySqYlf1uvo2G9fuxb79FjhmO6WY0kP3P1/Ktg/w3H1w6muzOv2n3qA==}
+  /@shopify/graphql-codegen@0.0.2(graphql@16.8.1):
+    resolution: {integrity: sha512-DScSpsQ+ucv6Y4cujXa5ye9r4lZ6Jl7S+90iyfxEgeTW6HVh/0b9PDcSCJ4T1EONc7kmvCx1dd83tTvCmc7X7A==}
     engines: {node: '>=18'}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
@@ -3254,17 +3254,17 @@ packages:
       - encoding
       - supports-color
 
-  /@shopify/hydrogen-codegen@0.3.0(graphql@16.8.1):
-    resolution: {integrity: sha512-FTmneSIEF6wPcVBzSLvqFKTHaI5rwcBAm9PKHVUg1ETNM6X220l5aSMkZDqXt8NNjRmPaVSkhZg0EUV5BsJcAg==}
+  /@shopify/hydrogen-codegen@0.3.1(graphql@16.8.1):
+    resolution: {integrity: sha512-9tf6WA04Ldu/E/OZ2r7ZJuJXKxZnbOH/JJ30YabqmdCvEXbec9Do8Qb0zWVB/YR/Npy4LJYKeu2xDlUjetdrtA==}
     dependencies:
-      '@shopify/graphql-codegen': 0.0.1(graphql@16.8.1)
+      '@shopify/graphql-codegen': 0.0.2(graphql@16.8.1)
     transitivePeerDependencies:
       - encoding
       - graphql
       - supports-color
 
-  /@shopify/hydrogen-react@2024.4.0(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-CmOIftVO7DRdcs8dzU0DC6je8/lzM+YEuxRmmvlXSgrKvHTKEPToipUaZTHQi3DaZvThw06ZNjYQi5x2RGz57A==}
+  /@shopify/hydrogen-react@2024.4.3(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-6NKTO/amL5AXQNiAiKy434mQq58ZHp7pcDaycPujsi2H55j/TVRtnRAbk8ku/z4pBL7Rk8yXiv+HRNDmW2c3qQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^18.0.0
@@ -3283,8 +3283,8 @@ packages:
       - xstate
     dev: false
 
-  /@shopify/hydrogen@2024.4.0(@remix-run/react@2.8.1)(@remix-run/server-runtime@2.8.1)(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)(vite@5.2.10):
-    resolution: {integrity: sha512-1ewHT6gN77br76KdnTZFWK1GBria/p7qllO/FjpSKaaYJeUgYyAUDxAq5mJUBslYPUH2jXgJnkCpGGKnwAoONA==}
+  /@shopify/hydrogen@2024.4.3(@remix-run/react@2.8.1)(@remix-run/server-runtime@2.8.1)(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)(vite@5.2.10):
+    resolution: {integrity: sha512-mPzD1zPewMR90A/i9SLe1UHecgWWWKzUrhM0LopfqYqdt+yVLF5qAxOoFv7JT6rewXFVyFPb4/x/yKef+56paQ==}
     peerDependencies:
       '@remix-run/react': ^2.1.0
       '@remix-run/server-runtime': ^2.1.0
@@ -3296,21 +3296,23 @@ packages:
     dependencies:
       '@remix-run/react': 2.8.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.4.5)
       '@remix-run/server-runtime': 2.8.1(typescript@5.4.5)
-      '@shopify/hydrogen-react': 2024.4.0(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)
-      content-security-policy-builder: 2.1.1
+      '@shopify/hydrogen-react': 2024.4.3(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)
+      content-security-policy-builder: 2.2.0
       react: 18.2.0
       source-map-support: 0.5.21
+      tiny-invariant: 1.3.3
       type-fest: 4.15.0
       use-resize-observer: 9.1.0(react-dom@18.2.0)(react@18.2.0)
       vite: 5.2.10(@types/node@20.12.7)
+      worktop: 0.7.3
     transitivePeerDependencies:
       - '@types/react'
       - react-dom
       - xstate
     dev: false
 
-  /@shopify/mini-oxygen@3.0.0(vite@5.2.10):
-    resolution: {integrity: sha512-j5hMKfIw0S/J6T3csluU2MeVc2toT9KiqfK4DOqdwJRZ59ycOiJpXdqElpkPYsvkpoxuRtsgd1BA/C7DPHlI2g==}
+  /@shopify/mini-oxygen@3.0.3(vite@5.2.10):
+    resolution: {integrity: sha512-66HPatRPh8II3JMXEv2yk2wmIo7IWoio2McBKNb3VQjlTtuOw8TE398dX3alGcX7LI3utxqRSvuayY8RKT3ofQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       vite: ^5.1.0
@@ -3328,11 +3330,12 @@ packages:
       body-parser: 1.20.2
       connect: 3.7.0
       get-port: 7.1.0
-      miniflare: 3.20240129.0
+      miniflare: 3.20240304.2
       mrmime: 1.0.1
       source-map: 0.7.4
       source-map-support: 0.5.21
       stack-trace: 1.0.0-pre2
+      undici: 5.28.4
       vite: 5.2.10(@types/node@20.12.7)
       ws: 8.16.0
     transitivePeerDependencies:
@@ -4835,7 +4838,7 @@ packages:
       dot-prop: 7.2.0
       env-paths: 3.0.0
       json-schema-typed: 8.0.1
-      semver: 7.5.4
+      semver: 7.6.0
     dev: false
 
   /confbox@0.1.7:
@@ -4875,6 +4878,11 @@ packages:
   /content-security-policy-builder@2.1.1:
     resolution: {integrity: sha512-Bga6d4W37VMAeu3QQOorIbfEr16CIUuC8ZzKz+GecFfnBUWoU2RUdk8DTeb+ihe2BeDCs6T4PRAxFKU7lLh0mA==}
     engines: {node: '>=4.0.0'}
+    dev: false
+
+  /content-security-policy-builder@2.2.0:
+    resolution: {integrity: sha512-IZhbHYV3O6xBpbvuMJz0FP8s79aTz7ymq4JQVC8TMzTdRToxrupCY1C/GlzC6GaDfKvD7AceewH+LsTV5OO/Kg==}
+    engines: {node: '>=18.0.0'}
     dev: false
 
   /content-type@1.0.5:
@@ -6717,6 +6725,7 @@ packages:
 
   /glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6
@@ -7135,6 +7144,7 @@ packages:
 
   /inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
+    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
     dependencies:
       once: 1.4.0
       wrappy: 1.0.2
@@ -8831,8 +8841,8 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: false
 
-  /miniflare@3.20240129.0:
-    resolution: {integrity: sha512-27pDhlP2G/4gXmvnSt6LjMQ8KrkmbJElIQmn+BLjdiyIx+zXY4E8MSPJmi9flgf0dn3wtjuHO2ASenuopqqxrw==}
+  /miniflare@3.20240304.2:
+    resolution: {integrity: sha512-yQ5TBKv7TlvF8khFvvH+1WWk8cBnaLgNzcbJ5DLQOdecxdDxUCVlN38HThd6Nhcz6EY+ckDkww8FkugUbSSpIQ==}
     engines: {node: '>=16.13'}
     hasBin: true
     dependencies:
@@ -8844,7 +8854,7 @@ packages:
       glob-to-regexp: 0.4.1
       stoppable: 1.1.0
       undici: 5.28.4
-      workerd: 1.20240129.0
+      workerd: 1.20240304.0
       ws: 8.16.0
       youch: 3.3.3
       zod: 3.22.5
@@ -9446,7 +9456,7 @@ packages:
       got: 12.6.1
       registry-auth-token: 5.0.2
       registry-url: 6.0.1
-      semver: 7.5.4
+      semver: 7.6.0
     dev: false
 
   /pako@0.2.9:
@@ -11865,17 +11875,17 @@ packages:
     resolution: {integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==}
     dev: false
 
-  /workerd@1.20240129.0:
-    resolution: {integrity: sha512-t4pnsmjjk/u+GdVDgH2M1AFmJaBUABshYK/vT/HNrAXsHSwN6VR8Yqw0JQ845OokO34VLkuUtYQYyxHHKpdtsw==}
+  /workerd@1.20240304.0:
+    resolution: {integrity: sha512-/tYxdypPh9NKQje9r7bgBB73vAQfCQZbEPjNlxE/ml7jNKMHnRZv/D+By4xO0IPAifa37D0sJFokvYOahz1Lqw==}
     engines: {node: '>=16'}
     hasBin: true
     requiresBuild: true
     optionalDependencies:
-      '@cloudflare/workerd-darwin-64': 1.20240129.0
-      '@cloudflare/workerd-darwin-arm64': 1.20240129.0
-      '@cloudflare/workerd-linux-64': 1.20240129.0
-      '@cloudflare/workerd-linux-arm64': 1.20240129.0
-      '@cloudflare/workerd-windows-64': 1.20240129.0
+      '@cloudflare/workerd-darwin-64': 1.20240304.0
+      '@cloudflare/workerd-darwin-arm64': 1.20240304.0
+      '@cloudflare/workerd-linux-64': 1.20240304.0
+      '@cloudflare/workerd-linux-arm64': 1.20240304.0
+      '@cloudflare/workerd-windows-64': 1.20240304.0
 
   /worktop@0.7.3:
     resolution: {integrity: sha512-WBHP1hk8pLP7ahAw13fugDWcO0SUAOiCD6DHT/bfLWoCIA/PL9u7GKdudT2nGZ8EGR1APbGCAI6ZzKG1+X+PnQ==}

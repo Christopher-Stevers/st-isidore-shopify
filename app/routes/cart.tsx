@@ -12,7 +12,6 @@ export const meta: MetaFunction = () => {
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {cart} = context;
-
   const formData = await request.formData();
 
   const {action, inputs} = CartForm.getFormInput(formData);

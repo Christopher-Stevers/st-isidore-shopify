@@ -168,7 +168,7 @@ function ProductMain({
       <p className="text-sm">
         Since every animal is slightly different we can{"'"}t guarantee exact
         weights, but we do guarantee that you{"'"}ll get at least the weight you
-        paid for over the entire bundle.
+        paid for your entire order.
       </p>
 
       <ProductPrice selectedVariant={selectedVariant} />
@@ -270,24 +270,28 @@ function ProductOptions({option}: {option: VariantOption}) {
     <div className="product-options" key={option.name}>
       <h5>{option.name}</h5>
       <div className="product-options-grid">
-        {option.values.map(({value, isAvailable, isActive, to}) => {
-          return (
-            <Link
-              className="product-options-item"
-              key={option.name + value}
-              prefetch="intent"
-              preventScrollReset
-              replace
-              to={to}
-              style={{
-                border: isActive ? '1px solid black' : '1px solid transparent',
-                opacity: isAvailable ? 1 : 0.3,
-              }}
-            >
-              {value}
-            </Link>
-          );
-        })}
+        {option.values
+          .filter(({isAvailable}) => isAvailable === true)
+          .map(({value, isAvailable, isActive, to}) => {
+            return (
+              <Link
+                className="product-options-item"
+                key={option.name + value}
+                prefetch="intent"
+                preventScrollReset
+                replace
+                to={to}
+                style={{
+                  border: isActive
+                    ? '1px solid black'
+                    : '1px solid transparent',
+                  opacity: isAvailable ? 1 : 0.3,
+                }}
+              >
+                {value}
+              </Link>
+            );
+          })}
       </div>
       <br />
     </div>

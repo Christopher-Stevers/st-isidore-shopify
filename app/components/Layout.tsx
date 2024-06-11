@@ -70,7 +70,6 @@ export function Layout({
   header,
   isLoggedIn,
 }: LayoutProps) {
-  const location = useLocation();
   return (
     <>
       <CartAside cart={cart} />

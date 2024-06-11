@@ -129,27 +129,32 @@ function ProductItem({
 }) {
   const variant = product.variants.nodes[0];
   const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
+
   return (
-    <Link
-      className="grid w-80 grid-rows-[320px_36px]  gap-x-16 gap-y-4 bg-backdrop-500"
+    <div
+      className="grid w-80 grid-rows-[356px]  gap-x-16 gap-y-4 bg-backdrop-500"
       key={product.id}
-      prefetch="intent"
-      to={variantUrl}
     >
-      {product.featuredImage && (
-        <Image
-          className="h-[320px] w-[320px] object-cover"
-          alt={product.featuredImage.altText || product.title}
-          data={product.featuredImage}
-          loading={loading}
-          sizes="320px"
-        />
-      )}
-      <div className="flex items-center justify-between px-4">
-        <h3 className="whitespace-pre text-3xl font-semibold">
-          {product.title}
-        </h3>
-      </div>
+      <Link
+        className="grid grid-rows-[320px_48px]"
+        prefetch="intent"
+        to={variantUrl}
+      >
+        {product.featuredImage && (
+          <Image
+            className="h-[320px] w-[320px] object-cover"
+            alt={product.featuredImage.altText || product.title}
+            data={product.featuredImage}
+            loading={loading}
+            sizes="320px"
+          />
+        )}
+        <div className="flex items-center justify-between px-4">
+          <h3 className="whitespace-pre text-3xl font-semibold">
+            {product.title}
+          </h3>
+        </div>
+      </Link>
       <div className="text-lg px-4">
         {product.description !== '' && (
           <div
@@ -192,7 +197,7 @@ function ProductItem({
           {variant?.availableForSale ? 'Add to cart' : 'Sold out'}
         </AddToCartButton>
       </div>
-    </Link>
+    </div>
   );
 }
 

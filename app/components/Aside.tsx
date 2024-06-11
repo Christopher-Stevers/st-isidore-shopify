@@ -1,3 +1,5 @@
+import {useLocation} from '@remix-run/react';
+
 /**
  * A side bar component with Overlay that works without JavaScript.
  * @example
@@ -17,12 +19,15 @@ export function Aside({
   heading: React.ReactNode;
   id?: string;
 }) {
+  const location = useLocation();
   return (
     <div aria-modal className="overlay" id={id} role="dialog">
       <button
         className="close-outside"
         onClick={() => {
-          window.location.hash = '';
+          if (typeof location.pathname === 'string') {
+            window.location = location.pathname as unknown as Location;
+          }
         }}
       />
       <aside>
@@ -39,7 +44,13 @@ export function Aside({
 function CloseAside() {
   return (
     /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
-    <a className="close" href="#" onChange={() => history.go(-1)}>
+    <a
+      className="close"
+      href=""
+      onChange={() =>
+        (window.location = location.pathname as unknown as Location)
+      }
+    >
       &times;
     </a>
   );
