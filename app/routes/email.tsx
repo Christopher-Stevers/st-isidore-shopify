@@ -12,7 +12,7 @@ export const action = async ({request, context}: ActionFunctionArgs) => {
       {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${context.env.MAILCHIMP_API_KEY}`,
+          Authorization: `Bearer ${'6ec565744f5cf1ce45f8fc6870e1d9ce-us14'}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
