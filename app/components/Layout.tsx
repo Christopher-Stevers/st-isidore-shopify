@@ -13,7 +13,8 @@ import {
   PredictiveSearchForm,
   PredictiveSearchResults,
 } from '~/components/Search';
-import DismissableBanner from '../components/DismissableBanner';
+import DismissableBanner from '../Marketing/DismissableBanner';
+import EmailGrabber from '~/Marketing/EmailGrabber';
 
 export type LayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
@@ -72,17 +73,23 @@ export function Layout({
 }: LayoutProps) {
   return (
     <>
+      <div
+        className={`inset-0 fixed opacity-[0.075] bg-[url('https://cdn.shopify.com/s/files/1/0626/1991/0197/files/4002470.jpg?v=1720557749')]`}
+      ></div>
       <CartAside cart={cart} />
       <SearchAside />
       <MobileMenuAside menu={header?.menu} shop={header?.shop} />
       {header && <Header header={header} cart={cart} isLoggedIn={isLoggedIn} />}
-      <main className={`min-h-[calc(100vh-340px)] pt-8 pb-48 md:pt-16`}>
+      <main
+        className={`min-h-[calc(100vh-340px)] pt-8 pb-48 md:pt-16 relative z-10`}
+      >
         {children}
       </main>
 
       <CartToggle cart={cart} />
       <Footer />
       <DismissableBanner />
+      <EmailGrabber />
     </>
   );
 }
@@ -156,3 +163,11 @@ function MobileMenuAside({
     )
   );
 }
+export const Attributions = () => (
+  <>
+    Image by{' '}
+    <a href="https://www.freepik.com/free-vector/topographic-map-background_8967819.htm#page=2&query=topographic%20background&position=0&from_view=keyword&track=ais_hybrid&uuid=b2300715-cfe1-472b-812d-f1e92e5b96e8">
+      Freepik
+    </a>
+  </>
+);

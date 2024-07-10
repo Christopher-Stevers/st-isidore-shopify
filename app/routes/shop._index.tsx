@@ -1,5 +1,10 @@
 import {json, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {useLoaderData, Link, type MetaFunction} from '@remix-run/react';
+import {
+  useLoaderData,
+  Link,
+  type MetaFunction,
+  useLocation,
+} from '@remix-run/react';
 import {
   Pagination,
   getPaginationVariables,
@@ -13,6 +18,7 @@ import {useState} from 'react';
 import Search from '~/components/base/Search';
 import {COLLECTION_QUERY} from './collections.$handle';
 import {AddToCartButton} from './products.$handle';
+import {FunnelIcon} from '@heroicons/react/24/solid';
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return [
     {title: `St Isidore Ranch | ${data?.collection.title ?? ''} Collection`},
@@ -20,7 +26,7 @@ export const meta: MetaFunction<typeof loader> = ({data}) => {
 };
 
 export async function loader({request, params, context}: LoaderFunctionArgs) {
-  const handle = 'main';
+  const handle = 'bundles';
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 50,
@@ -68,29 +74,44 @@ export default function Shop() {
 
 export function ProductsGrid({products}: {products: ProductItemFragment[]}) {
   const [search, setSearch] = useState('');
+  const categories = [
+    {to: '/collections/main', name: 'All', rounded: true},
+    {to: '/shop', name: 'Bundles'},
+    {to: '/collections/steak', name: 'Steaks'},
+    {to: '/collections/roast', name: 'Roasts'},
+    {
+      to: '/collections/ground-and-stewing',
+      name: 'Other',
+      last: true,
+    },
+  ];
+  const currentPath = useLocation().pathname;
+
   return (
     <>
       <div className="grid grid-cols-[320px] content-center justify-center justify-items-center gap-16 gap-y-4 pb-4 lg:grid-cols-[repeat(2,_320px)] xl:grid-cols-[repeat(3,_320px)] ">
         <div className="flex w-full justify-between gap-4 justify-self-start pt-6 lg:col-span-2  xl:col-span-3">
           <Search searchState={[search, setSearch]} />
         </div>
-        <div className=" w-full bg-primary-500 px-4 font-bold text-white lg:col-span-2 xl:col-span-3">
-          <div className=" flex flex-col justify-between py-4 lg:flex-row">
-            <div className="flex gap-4">
-              <Link to="/shop">All</Link>
-            </div>
-            <div className="flex gap-4">
-              <Link to="/collections/bundles">Bundles</Link>
-            </div>
-            <div className="flex gap-4">
-              <Link to="/collections/steak">Steaks</Link>
-            </div>
-            <div className="flex gap-4">
-              <Link to="/collections/roast">Roasts</Link>
-            </div>
-            <div className="flex gap-4">
-              <Link to="/collections/ground-and-stewing">Ground & Stewing</Link>
-            </div>
+        <div className=" w-full bg-primary-500 font-bold rounded-md text-white lg:col-span-2 xl:col-span-3 text-xl">
+          <div className=" flex flex-col justify-items-stretch justify-between lg:flex-row">
+            {categories.map((category, index) => {
+              return (
+                <Link
+                  key={category.to}
+                  className={`flex-1 px-4 py-4  border-4 border-primary-500  ${
+                    category.to === currentPath
+                      ? 'bg-backdrop-700 text-black hover:bg-backdrop-500 py-2'
+                      : 'hover:bg-black'
+                  } ${category.rounded ? 'rounded-l-md' : ''} ${
+                    index === categories.length - 1 ? 'rounded-r-md' : ''
+                  }`}
+                  to={category.to}
+                >
+                  {category.name}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -132,7 +153,7 @@ function ProductItem({
 
   return (
     <div
-      className="grid w-80 grid-rows-[356px]  gap-x-16 gap-y-4 bg-backdrop-500"
+      className="grid w-80 grid-rows-[356px] gap-x-16 gap-y-4 bg-backdrop-500 hover:translate-y-[-2px] transition-transform duration-250"
       key={product.id}
     >
       <Link
@@ -162,6 +183,7 @@ function ProductItem({
             dangerouslySetInnerHTML={{
               __html: (product.descriptionHtml || '')
                 .replace(/<ul[^>]*>(.*?)<\/ul>/gs, '')
+                .replace(/<br><br>[\s\S]*/g, '')
                 .replace(
                   "Note, I can't guarantee the individual weights of the cuts, however overall weight should be the same.",
                   '',
