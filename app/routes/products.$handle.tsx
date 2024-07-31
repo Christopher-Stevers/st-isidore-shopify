@@ -133,12 +133,10 @@ function ProductImage({image}: {image: ProductVariantFragment['image']}) {
   return (
     <div>
       <Image
-        className="w-[720px] h-[405px] object-cover"
+        className="w-full object-cover"
         alt={image.altText || 'Product Image'}
         data={image}
         key={image.id}
-        width="720"
-        height="405"
         sizes="720px"
       />
     </div>
@@ -164,12 +162,6 @@ function ProductMain({
         className="product-item"
         dangerouslySetInnerHTML={{__html: descriptionHtml}}
       />
-
-      <p className="text-sm">
-        Since every animal is slightly different we can{"'"}t guarantee exact
-        weights, but we do guarantee that you{"'"}ll get at least the weight you
-        paid for your entire order.
-      </p>
 
       <ProductPrice selectedVariant={selectedVariant} />
       <br />
@@ -206,7 +198,9 @@ export function ProductPrice({
 }) {
   return (
     <div className="product-price">
-      {selectedVariant?.compareAtPrice ? (
+      {selectedVariant?.compareAtPrice &&
+      (selectedVariant?.compareAtPrice?.amount ?? 0) >
+        (selectedVariant?.price?.amount ?? 0) ? (
         <>
           <p>Sale</p>
           <br />

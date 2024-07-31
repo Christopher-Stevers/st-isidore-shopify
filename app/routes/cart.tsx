@@ -85,7 +85,6 @@ export default function Cart() {
   const cartPromise = rootData.cart;
   useEffect(() => {
     const fetchData = async () => {
-      console.log('fetching');
       console.log(await cartPromise, 'my result');
     };
     fetchData();
@@ -100,7 +99,6 @@ export default function Cart() {
           errorElement={<div>An error occurred</div>}
         >
           {(cart) => {
-            console.log(cart, 'cart');
             return <CartMain layout="page" cart={cart} />;
           }}
         </Await>

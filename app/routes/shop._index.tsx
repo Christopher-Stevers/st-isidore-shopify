@@ -153,53 +153,56 @@ function ProductItem({
 
   return (
     <div
-      className="grid w-80 grid-rows-[356px] gap-x-16 gap-y-4 bg-backdrop-500 hover:translate-y-[-2px] transition-transform duration-250"
+      className="grid w-80 gap-x-16 gap-y-4 bg-backdrop-500 hover:translate-y-[-2px] transition-transform duration-250"
       key={product.id}
     >
       <Link
-        className="grid grid-rows-[320px_48px]"
+        className="grid w-80 grid-rows-[356px] gap-x-16 gap-y-4"
         prefetch="intent"
         to={variantUrl}
       >
-        {product.featuredImage && (
-          <Image
-            className="h-[320px] w-[320px] object-cover"
-            alt={product.featuredImage.altText || product.title}
-            data={product.featuredImage}
-            loading={loading}
-            sizes="320px"
-          />
-        )}
-        <div className="flex items-center justify-between px-4">
-          <h3 className="whitespace-pre text-3xl font-semibold">
-            {product.title}
-          </h3>
+        <div className="grid grid-rows-[320px_48px]">
+          {product.featuredImage && (
+            <Image
+              className="h-[320px] w-[320px] object-cover"
+              alt={product.featuredImage.altText || product.title}
+              data={product.featuredImage}
+              loading={loading}
+              sizes="320px"
+            />
+          )}
+          <div className="flex items-center justify-between px-4">
+            <h3 className="whitespace-pre text-3xl font-semibold">
+              {product.title}
+            </h3>
+          </div>
         </div>
+        <div className="text-lg px-4">
+          {product.description !== '' && (
+            <div
+              className="product-item"
+              dangerouslySetInnerHTML={{
+                __html: (product.descriptionHtml || '')
+                  .replace(/<ul[^>]*>(.*?)<\/ul>/gs, '')
+                  .replace(/<br><br>[\s\S]*/g, '')
+                  .replace(
+                    "Note, I can't guarantee the individual weights of the cuts, however overall weight should be the same.",
+                    '',
+                  )
+                  .replace(/(<p>.*?<\/p>)[\s\S]*/g, '$1'),
+              }}
+            />
+          )}
+          <Link className="underline items-start" to={`${variantUrl}`}>
+            more info
+          </Link>
+        </div>
+        <Money
+          className="px-4 self-end"
+          data={product.priceRange.minVariantPrice}
+        />
       </Link>
-      <div className="text-lg px-4">
-        {product.description !== '' && (
-          <div
-            className="product-item"
-            dangerouslySetInnerHTML={{
-              __html: (product.descriptionHtml || '')
-                .replace(/<ul[^>]*>(.*?)<\/ul>/gs, '')
-                .replace(/<br><br>[\s\S]*/g, '')
-                .replace(
-                  "Note, I can't guarantee the individual weights of the cuts, however overall weight should be the same.",
-                  '',
-                ),
-            }}
-          />
-        )}
-        <Link className="underline items-start" to={`${variantUrl}`}>
-          more info
-        </Link>
-      </div>
-      <Money
-        className="px-4 self-end"
-        data={product.priceRange.minVariantPrice}
-      />
-      <div className="content-end">
+      <div className="content-end" style={{pointerEvents: 'none'}}>
         <AddToCartButton
           disabled={!variant || !variant.availableForSale}
           onClick={() => {
