@@ -88,7 +88,7 @@ export function Layout({
 
       <CartToggle cart={cart} />
       <Footer />
-      <DismissableBanner />
+      {/*}  <DismissableBanner />*/}
       <EmailGrabber />
     </>
   );

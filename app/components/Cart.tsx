@@ -181,11 +181,14 @@ function CartLineQuantity({line}: {line: CartLine}) {
   const {id: lineId, quantity} = line;
   const prevQuantity = Number(Math.max(0, quantity - 1).toFixed(0));
   const nextQuantity = Number((quantity + 1).toFixed(0));
-
+  const isFree = parseInt(line.cost.totalAmount?.amount || '0') === 0;
   return (
     <div className="flex flex-col gap-2">
       <div className="flex gap-2">
-        <span>Quantity: {quantity} &nbsp;&nbsp;</span>
+        <span>
+          Quantity: {isFree ? (quantity > 2 ? 2 : quantity) : quantity}{' '}
+          &nbsp;&nbsp;
+        </span>
 
         <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
           <button
@@ -199,17 +202,20 @@ function CartLineQuantity({line}: {line: CartLine}) {
             </span>
           </button>
         </CartLineUpdateButton>
-        <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
-          <button
-            aria-label="Increase quantity"
-            name="increase-quantity"
-            value={nextQuantity}
-          >
-            <span>
-              <PlusCircleIcon className="h-6 w-6" />
-            </span>
-          </button>
-        </CartLineUpdateButton>
+        {isFree && (
+          <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
+            <button
+              aria-label="Increase quantity"
+              name="increase-quantity"
+              value={nextQuantity}
+              disabled={quantity >= 1}
+            >
+              <span>
+                <PlusCircleIcon className="h-6 w-6" />
+              </span>
+            </button>
+          </CartLineUpdateButton>
+        )}
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ const Footer: React.FC = () => {
   ];
   return (
     <footer
-      className="center grid w-full grid-cols-2 content-center items-center gap-y-8 
+      className="center grid w-full grid-cols-2 z-40 content-center items-center gap-y-8 
        gap-x-16 bg-primary-500 py-8 px-8  text-backdrop-500 
         sm:px-16 md:grid-cols-[320px_320px]
          lg:justify-center lg:px-32 xl:grid-cols-[480px_480px] xl:justify-center"

@@ -5,7 +5,10 @@ import {type ActionFunctionArgs} from '@remix-run/node'; // or cloudflare/deno
 // Note the "action" export name, this will handle our form POST
 export const action = async ({request, context}: ActionFunctionArgs) => {
   try {
-    const email = (await request.formData()).get('email');
+    const formData = await request.formData();
+    const email = formData.get('email') as string;
+    const name = formData.get('name') as string;
+    const emailSource = formData.get('emailSource') as string;
 
     const response = await fetch(
       `https://us14.api.mailchimp.com/3.0/lists/${'1e39a5fddd'}/members`,
@@ -17,6 +20,7 @@ export const action = async ({request, context}: ActionFunctionArgs) => {
         },
         body: JSON.stringify({
           email_address: email,
+          name,
           status: 'subscribed',
         }),
       },

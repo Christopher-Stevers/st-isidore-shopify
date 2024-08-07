@@ -69,7 +69,7 @@ const EmailGrabber: React.FC = () => {
           <h2 className="text-2xl font-bold">Win 10 lbs of Ground Beef</h2>
           <p className="text-lg">
             Want access to our newsletter to receive exclusive sales and more?
-            Subscribe now for a chance to win 10 lbs of ground beef!
+            Subscribe now for a chance to win 5 lbs of ground beef!
           </p>
           <form
             ref={formRef}

@@ -11,7 +11,13 @@ export const meta: MetaFunction = () => {
 };
 
 export async function action({request, context}: ActionFunctionArgs) {
+  const freeId = 'gid://shopify/ProductVariant/43831597137973';
   const {cart} = context;
+  const cartData = await cart.get();
+  const freeLine = cartData?.lines.nodes?.find(
+    (line) => line.merchandise.id === freeId,
+  );
+
   const formData = await request.formData();
 
   const {action, inputs} = CartForm.getFormInput(formData);
@@ -23,9 +29,17 @@ export async function action({request, context}: ActionFunctionArgs) {
   let status = 200;
   let result: CartQueryDataReturn;
   switch (action) {
-    case CartForm.ACTIONS.LinesAdd:
-      result = await cart.addLines(inputs.lines);
+    case CartForm.ACTIONS.LinesAdd: {
+      const newFreeLine = inputs.lines.find(
+        (line) => line.merchandiseId === freeId,
+      );
+      if (newFreeLine?.quantity && freeLine?.quantity) {
+        result = await cart.updateLines([]);
+      } else {
+        result = await cart.addLines(inputs.lines);
+      }
       break;
+    }
     case CartForm.ACTIONS.LinesUpdate:
       result = await cart.updateLines(inputs.lines);
       break;
@@ -56,8 +70,8 @@ export async function action({request, context}: ActionFunctionArgs) {
       throw new Error(`${action} cart action is not defined`);
   }
 
-  const cartId = result.cart.id;
-  const headers = cart.setCartId(result.cart.id);
+  const cartId = result?.cart.id;
+  const headers = cart.setCartId(result?.cart.id);
   const {cart: cartResult, errors} = result;
 
   const redirectTo = formData.get('redirectTo') ?? null;
