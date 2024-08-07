@@ -2,18 +2,22 @@
 // should show up as a dialog only if the user has never subscribed before
 import {Dialog} from '@headlessui/react';
 import {XMarkIcon} from '@heroicons/react/24/solid';
+import {useLocation} from '@remix-run/react';
 import {useEffect, useRef, useState} from 'react';
 
 const EmailGrabber: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const location = useLocation();
   //only set open first time, use local storage to track if user has subscribed
   useEffect(() => {
     const hasSubscribed = localStorage.getItem('subscribed') === 'true';
-    if (!hasSubscribed) {
+
+    if (location.pathname.includes('promotion')) {
+      setIsOpen(false);
+    } else if (!hasSubscribed) {
       setIsOpen(true);
     }
-  }, []);
+  }, [location.pathname]);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -66,7 +70,7 @@ const EmailGrabber: React.FC = () => {
           >
             <XMarkIcon className="w-6 h-6" />
           </button>
-          <h2 className="text-2xl font-bold">Win 10 lbs of Ground Beef</h2>
+          <h2 className="text-2xl font-bold">Win 5 lbs of Ground Beef</h2>
           <p className="text-lg">
             Want access to our newsletter to receive exclusive sales and more?
             Subscribe now for a chance to win 5 lbs of ground beef!
