@@ -1,4 +1,4 @@
-import {useNonce} from '@shopify/hydrogen';
+import {Script, useNonce} from '@shopify/hydrogen';
 import {
   defer,
   type SerializeFrom,
@@ -152,6 +152,23 @@ export default function App() {
         />
 
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=TAG_ID"
+        />
+        <Script>
+          {`
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){dataLayer.push(arguments);}
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-SVLRM790DN');
+      `}
+        </Script>
+
         <Meta />
         <Links />
       </head>
