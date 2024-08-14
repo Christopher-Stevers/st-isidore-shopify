@@ -203,7 +203,7 @@ export default function Promotion() {
               </p>
 
               <p>
-                "The kids love your ground beef!""
+                "The kids love your ground beef!"
                 <span className="font-bold">- Dawn</span>
               </p>
             </div>

@@ -202,7 +202,7 @@ function ProductItem({
           data={product.priceRange.minVariantPrice}
         />
       </Link>
-      <div className="content-end" style={{pointerEvents: 'none'}}>
+      <div className="content-end">
         <AddToCartButton
           disabled={!variant || !variant.availableForSale}
           onClick={() => {
