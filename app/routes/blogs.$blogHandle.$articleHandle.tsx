@@ -44,12 +44,20 @@ export default function Article() {
           {publishedDate} &middot; {author?.name}
         </span>
       </div>
-
-      {image && <Image data={image} sizes="90vw" loading="eager" />}
-      <div
-        dangerouslySetInnerHTML={{__html: contentHtml}}
-        className="article"
-      />
+      <div className="flex gap-2 flex-wrap">
+        <div
+          dangerouslySetInnerHTML={{__html: contentHtml}}
+          className="max-w-[1000px]"
+        />
+        {image && (
+          <Image
+            className="max-w-[240px]"
+            data={image}
+            sizes="90vw"
+            loading="eager"
+          />
+        )}
+      </div>
     </div>
   );
 }

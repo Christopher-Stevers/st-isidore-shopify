@@ -2,6 +2,7 @@ import {json, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Link, useLoaderData, type MetaFunction} from '@remix-run/react';
 import {Image, Pagination, getPaginationVariables} from '@shopify/hydrogen';
 import type {ArticleItemFragment} from 'storefrontapi.generated';
+import {useEffect} from 'react';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return [{title: `St Isidore Ranch | ${data?.blog.title ?? ''} blog`}];
@@ -9,20 +10,15 @@ export const meta: MetaFunction<typeof loader> = ({data}) => {
 
 export const loader = async ({
   request,
-  params,
   context: {storefront},
 }: LoaderFunctionArgs) => {
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 4,
   });
 
-  if (!params.blogHandle) {
-    throw new Response(`blog not found`, {status: 404});
-  }
-
   const {blog} = await storefront.query(BLOGS_QUERY, {
     variables: {
-      blogHandle: params.blogHandle,
+      blogHandle: 'news',
       ...paginationVariables,
     },
   });
@@ -40,7 +36,7 @@ export default function Blog() {
 
   return (
     <div className="blog px-8">
-      <h1>{blog.title}</h1>
+      <h1 className="text-4xl font-display text-center pb-16">Blog</h1>
       <div className="blog-grid">
         <Pagination connection={articles}>
           {({nodes, isLoading, PreviousLink, NextLink}) => {
@@ -82,6 +78,7 @@ function ArticleItem({
     month: 'long',
     day: 'numeric',
   }).format(new Date(article.publishedAt!));
+
   return (
     <div className="blog-article" key={article.id}>
       <Link to={`/blogs/${article.blog.handle}/${article.handle}`}>
@@ -96,8 +93,11 @@ function ArticleItem({
             />
           </div>
         )}
-        <h3>{article.title}</h3>
+        <h3 className="text-xl font-semibold">{article.title}</h3>
         <small>{publishedAt}</small>
+        <p>
+          <small>{article.author?.name}</small>
+        </p>
       </Link>
     </div>
   );
