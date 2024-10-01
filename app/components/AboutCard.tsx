@@ -4,17 +4,15 @@ import AboutButton from './base/FancyButton';
 export type AboutCardProps = {
   direction: 'left' | 'right';
   title: string;
-  text: string;
   src?: string;
   link?: string;
-  video: string;
+  text: string;
   btnText?: string;
 };
 const AboutCard = ({
   direction,
   title,
   text,
-  video,
   src,
   link,
   btnText,
@@ -33,25 +31,14 @@ const AboutCard = ({
         />
       )}
       <div className={`${colStart} row-start-1 xl:row-end-4`}>
-        {src ? (
-          <Image
-            alt="some cows"
-            className="relative mt-0 h-[180px] w-[320px] object-cover object-top xl:h-[270px] xl:w-[480px]"
-            width="480"
-            height="270"
-            crop="top"
-            src={src}
-          />
-        ) : (
-          <iframe
-            className="h-[180px] w-[320px] xl:h-[270px] xl:w-[480px]"
-            width="480"
-            height="279"
-            src={video}
-            title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          ></iframe>
-        )}
+        <Image
+          alt="some cows"
+          className="relative mt-0 h-[180px] w-[320px] object-cover object-top xl:h-[270px] xl:w-[480px]"
+          width="480"
+          height="270"
+          crop="top"
+          src={src}
+        />
       </div>
     </div>
   );
