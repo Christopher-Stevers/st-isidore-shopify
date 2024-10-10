@@ -208,7 +208,6 @@ function CartLineQuantity({line}: {line: CartLine}) {
               aria-label="Increase quantity"
               name="increase-quantity"
               value={nextQuantity}
-              disabled={quantity >= 1}
             >
               <span>
                 <PlusCircleIcon className="h-6 w-6" />
