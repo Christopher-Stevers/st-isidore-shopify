@@ -202,7 +202,7 @@ function CartLineQuantity({line}: {line: CartLine}) {
             </span>
           </button>
         </CartLineUpdateButton>
-        {isFree && (
+        {!isFree && (
           <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
             <button
               aria-label="Increase quantity"
