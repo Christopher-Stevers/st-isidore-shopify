@@ -401,12 +401,6 @@ const Recipes = () => {
               key={index}
               className="recipe-item flex flex-col gap-4"
             >
-              <img
-                className="rounded-md"
-                src={recipe.image}
-                alt={recipe.title}
-                loading={index < 8 ? 'eager' : undefined}
-              />
               <h2 className="font-display text-xl">{recipe.title}</h2>
             </Link>
           );
@@ -449,9 +443,6 @@ const RecipeItem = ({
           })}
         </ol>
       </div>
-      <a href={'asdfasdf'} target="_blank" rel="noopener noreferrer">
-        <img className="max-w-[400px]" src={recipe.image} alt={recipe.title} />
-      </a>
     </div>
   );
 };
