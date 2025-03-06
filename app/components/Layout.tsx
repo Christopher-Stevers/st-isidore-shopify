@@ -15,6 +15,7 @@ import {
 } from '~/components/Search';
 import DismissableBanner from '../Marketing/DismissableBanner';
 import EmailGrabber from '~/Marketing/EmailGrabber';
+import SalesCentral from '~/Marketing/SaleCentral';
 
 export type LayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
@@ -88,7 +89,7 @@ export function Layout({
 
       <CartToggle cart={cart} />
       <Footer />
-      {/*}  <DismissableBanner />*/}
+      <SalesCentral />
     </>
   );
 }
