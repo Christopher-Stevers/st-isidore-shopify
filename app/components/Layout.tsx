@@ -89,7 +89,7 @@ export function Layout({
 
       <CartToggle cart={cart} />
       <Footer />
-      <SalesCentral />
+      <EmailGrabber />
     </>
   );
 }

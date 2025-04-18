@@ -32,7 +32,11 @@ const EmailGrabber: React.FC = () => {
       // Perform your form submission logic here, for example using fetch or an API call
       const response = await fetch('/email', {
         method: 'POST',
-        body: new FormData(formRef.current),
+        body: (() => {
+          const formData = new FormData(formRef.current);
+          formData.append('contest', '5 lbs');
+          return formData;
+        })(),
       });
 
       if (response.ok && formRef.current) {
@@ -60,7 +64,7 @@ const EmailGrabber: React.FC = () => {
         className="p-4 inset-0 fixed flex justify-center content-center items-center  z-20 "
       >
         <div className="opacity-50 bg-black inset-0 fixed pointer-events-none"></div>
-        <div className="flex flex-col items-center w-96 h-96 z-30 bg-backdrop-500 gap-4 p-4 opacity-100 rounded-md">
+        <div className="flex flex-col items-center md:w-[680px] md:h-96 h-auto z-30 bg-backdrop-500 gap-4 p-4 opacity-100 rounded-md">
           <button
             className="self-end"
             onClick={() => {
@@ -72,8 +76,11 @@ const EmailGrabber: React.FC = () => {
           </button>
           <h2 className="text-2xl font-bold">Win 5 lbs of Ground Beef</h2>
           <p className="text-lg">
-            Want access to our newsletter to receive exclusive sales and more?
-            Subscribe now for a chance to win 5 lbs of ground beef!
+            {' '}
+            I{"'"}m Chris Stevers, and I{"'"}d like to deliver my ranch{"'"}s
+            100% grass-fed and grass-finished beef to your door. Want access to
+            our newsletter to receive exclusive sales and more? Subscribe now
+            for a chance to win 5 lbs of ground beef!
           </p>
           <form
             ref={formRef}
