@@ -4,16 +4,20 @@ import {Dialog} from '@headlessui/react';
 import {XMarkIcon} from '@heroicons/react/24/solid';
 import {useLocation} from '@remix-run/react';
 import {useEffect, useRef, useState} from 'react';
+const colourLogo = `https://cdn.shopify.com/s/files/1/0626/1991/0197/files/St_Isidore_Ranch_Logo_1.png?v=1715056106`;
 
 const EmailGrabber: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false); // Default to false, let useEffect handle initial opening
+
+  // Use mock location if useLocation from '@remix-run/react' is not available or throws error
+
   const location = useLocation();
   //only set open first time, use local storage to track if user has subscribed
   useEffect(() => {
     const hasSubscribed = localStorage.getItem('subscribed') === 'true';
 
     if (location.pathname.includes('promotion')) {
-      setIsOpen(true);
+      setIsOpen(false);
     } else if (!hasSubscribed) {
       setIsOpen(true);
     }
@@ -21,8 +25,12 @@ const EmailGrabber: React.FC = () => {
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const toggleModal = (toggler: boolean) => {
-    setIsOpen(toggler);
+  const handleCloseModal = () => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      // Optionally, mark as "seen" or "closed without subscribing" to prevent immediate re-opening
+      // localStorage.setItem('dialogClosedOnce', 'true');
+    }
+    setIsOpen(false);
   };
 
   const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,7 +51,7 @@ const EmailGrabber: React.FC = () => {
         // Handle successful submission
         formRef.current.reset();
         localStorage.setItem('subscribed', 'true');
-        toggleModal(false);
+        setIsOpen(false);
 
         // Redirect back to the current page
       } else {
@@ -58,59 +66,102 @@ const EmailGrabber: React.FC = () => {
   };
 
   return (
-    <>
-      <Dialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        aria-label="Subscribe to our newsletter"
-        className="p-4 inset-0 fixed flex justify-center content-center items-center  z-20 "
-      >
-        <div className="opacity-50 bg-black inset-0 fixed pointer-events-none"></div>
-        <div className="flex flex-col items-center md:w-[680px] md:h-96 h-auto z-30 bg-backdrop-500 gap-4 p-4 opacity-100 rounded-md">
-          <button
-            className="self-end"
-            onClick={() => {
-              localStorage.setItem('subscribed', 'true');
-              setIsOpen(false);
-            }}
-          >
-            <XMarkIcon className="w-6 h-6" />
-          </button>
-          <h2 className="text-2xl font-bold">Win 5 lbs of Ground Beef</h2>
-          <p className="text-lg">
-            I{"'"}m Chris Stevers, and I{"'"}d like to deliver my ranch{"'"}s
-            100% grass-fed and grass-finished beef to your door. Subscribe now
-            for a chance to win 5 lbs of ground beef!
+    <Dialog
+      open={isOpen}
+      onClose={handleCloseModal} // Use the new handler
+      className="fixed inset-0 z-50 flex items-center justify-center p-4" // Increased z-index
+    >
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black/50 pointer-events-auto"
+        aria-hidden="true"
+        onClick={handleCloseModal}
+      />
+
+      {/* Modal Content */}
+      <Dialog.Panel className="relative flex w-full max-w-3xl overflow-hidden rounded-lg bg-white shadow-xl">
+        {/* Left Column: Content & Form */}
+        <div className="flex flex-col justify-center w-full p-8 space-y-6 md:w-1/2">
+          {/* Logo Placeholder */}
+          <div className="mx-auto">
+            {/* Replace with your actual logo */}
+            <img src={colourLogo} alt="Your Company Logo" className="h-16 " />
+          </div>
+
+          <h2 className="text-3xl font-bold text-center text-gray-800">
+            ENTER TO WIN!
+          </h2>
+          <p className="text-center text-gray-600">
+            Subscribe to our newsletter for a chance to win
+            <span className="font-semibold">
+              {' '}
+              5 lbs of our 100% grass-fed ground beef!
+            </span>{' '}
+            Plus, get updates on new products and special offers.
           </p>
+
           <form
             ref={formRef}
             method="post"
-            action="/email"
-            id="subscribe-form-footer"
+            action="/email" // This action might not be hit if JS handles it fully
+            id="subscribe-form-modal"
             className="flex flex-col space-y-4"
             onSubmit={handleSubscribe}
           >
-            <input
-              type="email"
-              placeholder="Email address"
-              name="email"
-              id="email"
-              required
-              className="p-2 border border-gray-300 rounded"
-            />
+            <div>
+              <label htmlFor="email-modal" className="sr-only">
+                Email address
+              </label>
+              <input
+                type="email"
+                placeholder="Enter your best email here..."
+                name="email"
+                id="email-modal"
+                required
+                className="w-full p-3 text-gray-700 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              />
+            </div>
             <button
               type="submit"
-              value="subscribe"
-              className={`bg-primary-500 text-white font-bold rounded-md h-10 px-2
-
-           `}
+              // Use a color that matches the "brownish-orange" from the image, e.g., bg-orange-600
+              // Or, if your `bg-primary-500` is intended for this, you can use that.
+              className="w-full px-4 py-3 font-semibold text-white bg-amber-500 rounded-md h-12 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors duration-150"
             >
-              Subscribe
+              SUBSCRIBE
             </button>
           </form>
+          <p className="text-xs text-center text-gray-500">
+            We respect your privacy. Unsubscribe at any time.
+          </p>
         </div>
-      </Dialog>
-    </>
+
+        {/* Right Column: Image */}
+        <div className="relative hidden w-1/2 md:block">
+          {/* Placeholder for the beef image. Replace with your actual image. */}
+          <img
+            src="https://cdn.shopify.com/s/files/1/0626/1991/0197/files/grilledBeef.webp?v=1715067070" // Adjusted placeholder
+            alt="Giveaway prize - delicious beef"
+            className="object-cover w-full h-full"
+          />
+          {/* Close Button - Positioned over the image panel */}
+          <button
+            onClick={handleCloseModal} // Use the new handler
+            className="absolute top-4 right-4 text-gray-700 hover:text-black bg-white/70 hover:bg-white/90 rounded-full p-1 transition-colors"
+            aria-label="Close dialog"
+          >
+            <XMarkIcon className="w-6 h-6" />
+          </button>
+        </div>
+        {/* Close Button for mobile - visible when image column is hidden */}
+        <button
+          onClick={handleCloseModal}
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 md:hidden bg-white/50 rounded-full p-1" // Show only on small screens
+          aria-label="Close dialog"
+        >
+          <XMarkIcon className="w-7 h-7" />
+        </button>
+      </Dialog.Panel>
+    </Dialog>
   );
 };
 

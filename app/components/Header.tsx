@@ -3,7 +3,7 @@ import {Await, Link, NavLink, useLocation} from '@remix-run/react';
 import {Image} from '@shopify/hydrogen';
 import type {EnhancedMenu} from '~/lib/utils';
 
-const Logo =
+export const Logo =
   'https://cdn.shopify.com/s/files/1/0626/1991/0197/files/canvas_image.png?v=1715807518';
 
 type HeaderProps = {

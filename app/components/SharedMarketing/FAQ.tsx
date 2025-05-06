@@ -26,7 +26,7 @@ const faqs = [
   {
     question: 'Do you offer bulk purchases?',
     answer:
-      'Yes! We offer various bundle options and a bulk order service that can save you money while ensuring regular deliveries of your favorite cuts. Check out our <a class="text-blue-500 hover:underline font-bold" href="/collections">bundles page</a> or <a class="text-blue-500 hover:underline font-bold" href="/contact">contact us</a> to learn more.',
+      'Yes! We offer various bundle options and a bulk order service that can save you money while ensuring regular deliveries of your favorite cuts. Check out our <a class="text-blue-500 hover:underline font-bold" href="/collections">bundles page</a> or <a class="text-blue-500 hover:underline font-bold" href="/pages/contact">contact us</a> to learn more.',
   },
 ];
 
