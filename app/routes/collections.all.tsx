@@ -1,13 +1,12 @@
 import {json, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {useLoaderData, Link, type MetaFunction} from '@remix-run/react';
-import {Pagination, getPaginationVariables, Image} from '@shopify/hydrogen';
+import {useLoaderData, type MetaFunction} from '@remix-run/react';
+import {getPaginationVariables} from '@shopify/hydrogen';
 import {COLLECTION_QUERY} from './collections.$handle';
-import {ProductsGrid} from '~/routes/shop._index';
+import {seoPayload} from '~/lib/seo.server';
+import CollectionDisplay from '~/components/CollectionPage/CollectionDisplay';
 
-export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return [
-    {title: `St Isidore Ranch | ${data?.collection.title ?? ''} Collection`},
-  ];
+export const meta: MetaFunction<typeof loader> = () => {
+  return [{title: `St Isidore Ranch | Bulk & Bundles`}];
 };
 
 export async function loader({request, params, context}: LoaderFunctionArgs) {
@@ -20,41 +19,65 @@ export async function loader({request, params, context}: LoaderFunctionArgs) {
   if (!handle) {
     return redirect('/collections');
   }
+  const bulkHandle = 'bulk';
+  const bundleHandle = 'bundles';
 
-  const {collection} = await storefront.query(COLLECTION_QUERY, {
-    variables: {handle, ...paginationVariables},
-  });
+  const {collection: bundleCollection} = await storefront.query(
+    COLLECTION_QUERY,
+    {
+      variables: {handle: bundleHandle, ...paginationVariables},
+    },
+  );
 
-  if (!collection) {
+  const {collection: bulkCollection} = await storefront.query(
+    COLLECTION_QUERY,
+    {
+      variables: {handle: bulkHandle, ...paginationVariables},
+    },
+  );
+
+  if (!bulkCollection || !bundleCollection) {
     throw new Response(`Collection ${handle} not found`, {
       status: 404,
     });
   }
-  return json({collection});
+
+  const filteredCollections = {nodes: [bulkCollection, bundleCollection]};
+
+  const seo = seoPayload.listCollections({
+    collections: {
+      nodes: [
+        {
+          ...bulkCollection,
+          seo: {
+            title: bulkCollection.title,
+            description: bulkCollection.description,
+          },
+        },
+        {
+          ...bundleCollection,
+          seo: {
+            title: bundleCollection.title,
+            description: bundleCollection.description,
+          },
+        },
+      ],
+    },
+    url: request.url,
+  });
+
+  return json({collections: filteredCollections, seo});
 }
 
 export default function Collection() {
-  const {collection} = useLoaderData<typeof loader>();
+  const {collections} = useLoaderData<typeof loader>();
 
   return (
     <div className="collection">
-      <p className="collection-description">{collection.description}</p>
-      <Pagination connection={collection.products}>
-        {({nodes, isLoading, PreviousLink, NextLink}) => (
-          <>
-            <PreviousLink>
-              {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
-            </PreviousLink>
-            <ProductsGrid products={nodes} />
-            <br />
-            <NextLink>
-              {isLoading ? 'Loading...' : <span>Load more ↓</span>}
-            </NextLink>
-          </>
-        )}
-      </Pagination>
+      <h1 className="hidden">Shop</h1>
+      {collections.nodes.map((elem) => {
+        return <CollectionDisplay key={elem.id} collection={elem} />;
+      })}
     </div>
   );
 }
-
-// NOTE: https://shopify.dev/docs/api/storefront/2022-04/objects/collection

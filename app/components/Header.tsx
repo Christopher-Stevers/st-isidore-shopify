@@ -1,26 +1,38 @@
 import {Await, Link, NavLink, useLocation} from '@remix-run/react';
-import {Suspense} from 'react';
-import type {HeaderQuery} from 'storefrontapi.generated';
-import type {LayoutProps} from './Layout';
-import {useRootLoaderData} from '~/root';
 
 import {Image} from '@shopify/hydrogen';
+import type {EnhancedMenu} from '~/lib/utils';
 
 const Logo =
   'https://cdn.shopify.com/s/files/1/0626/1991/0197/files/canvas_image.png?v=1715807518';
 
-type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
+type HeaderProps = {
+  header: {
+    menu: EnhancedMenu;
+    shop: {
+      primaryDomain: {
+        url: string;
+      };
+    };
+  };
+  cart?: unknown;
+  isLoggedIn?: boolean;
+};
 
 type Viewport = 'desktop' | 'mobile';
 
-export function Header({header, isLoggedIn, cart}: HeaderProps) {
-  const {shop, menu} = header;
+type HeaderMenuProps = {
+  menu: EnhancedMenu;
+  primaryDomainUrl: string;
+  viewport: Viewport;
+};
+export function Header({menu, primaryDomainUrl}: HeaderMenuProps) {
   return (
     <header className="header">
       <HeaderMenu
         menu={menu}
         viewport="desktop"
-        primaryDomainUrl={header.shop.primaryDomain.url}
+        primaryDomainUrl={primaryDomainUrl}
       />
     </header>
   );
@@ -30,13 +42,7 @@ export function HeaderMenu({
   menu,
   primaryDomainUrl,
   viewport,
-}: {
-  menu: HeaderProps['header']['menu'];
-  primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url'];
-  viewport: Viewport;
-}) {
-  const {publicStoreDomain} = useRootLoaderData();
-
+}: HeaderMenuProps) {
   function closeAside(event: React.MouseEvent<HTMLAnchorElement>) {
     if (viewport === 'mobile') {
       event.preventDefault();
@@ -48,14 +54,14 @@ export function HeaderMenu({
 
   return (
     <nav
-      className={`flex relative w-full py-4 z-20 content-center items-center font-display justify-between text-2xl ${
+      className={`flex relative w-full py-4 z-20 content-center md:px-0 px-4 items-center font-display justify-between text-2xl ${
         location.pathname !== '/' && 'bg-primary-700'
       }`}
       role="navigation"
     >
-      <Link to="/">
+      <Link className="w-8 md:w-auto" to="/">
         <Image
-          className="object-fit w-16 rounded-full sm:w-auto sm:px-6"
+          className="object-fit w-16  rounded-full md:w-auto md:px-6 "
           alt="products"
           src={Logo}
           sizes="128px"
@@ -63,11 +69,11 @@ export function HeaderMenu({
       </Link>
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
-        const currentUrl = item.url === '/collections/all' ? '/shop' : item.url;
+        const currentUrl =
+          item.url === '/collections/all' ? '/collections' : item.url;
         // if the url is internal, we strip the domain
         const url =
           item.url.includes('myshopify.com') ||
-          item.url.includes(publicStoreDomain) ||
           item.url.includes(primaryDomainUrl)
             ? new URL(currentUrl).pathname
             : currentUrl;
@@ -75,7 +81,7 @@ export function HeaderMenu({
           <NavLink
             className={`text-white ${
               url !== location?.pathname ? 'opacity-70' : ''
-            }`}
+            } ${url === '/' ? 'hidden md:block' : ''}`}
             end
             key={item.id}
             onClick={closeAside}
@@ -86,24 +92,14 @@ export function HeaderMenu({
           </NavLink>
         );
       })}
-      <Link to="/">
+      <Link className="hidden md:block" to="/">
         <Image
-          className="object-fit w-16 rounded-full px-2  sm:w-auto sm:px-6"
+          className="object-fit w-16 rounded-full px-2  md:w-auto md:px-6"
           alt="products"
           src={Logo}
           sizes="128px"
         />
       </Link>
-    </nav>
-  );
-}
-
-function HeaderCtas({cart}: Pick<HeaderProps, 'cart'>) {
-  return (
-    <nav className="header-ctas" role="navigation">
-      <HeaderMenuMobileToggle />
-
-      <SearchToggle />
     </nav>
   );
 }
@@ -156,7 +152,16 @@ const FALLBACK_HEADER_MENU = {
       tags: [],
       title: 'Shop',
       type: 'PAGE',
-      url: '/shop',
+      url: '/collections',
+      items: [],
+    },
+    {
+      id: 'gid://shopify/MenuItem/461609599032',
+      resourceId: 'gid://shopify/Page/92591030328',
+      tags: [],
+      title: 'About us',
+      type: 'PAGE',
+      url: '/pages/our-story',
       items: [],
     },
   ],

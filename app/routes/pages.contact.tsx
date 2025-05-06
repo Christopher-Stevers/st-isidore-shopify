@@ -5,6 +5,12 @@ import {init, send} from '@emailjs/browser';
 import StyledInput from '~/components/base/StyledInput';
 
 import {PaperAirplaneIcon} from '@heroicons/react/24/solid';
+import type {MetaFunction} from '@shopify/remix-oxygen';
+
+export const meta: MetaFunction = () => [
+  {title: 'Contact us'},
+  {name: 'description', content: 'Contact us page'},
+];
 
 const Index = ({
   title,
@@ -25,9 +31,9 @@ const Index = ({
     };
 
     init({
-      publicKey: 'MOKnvox8qYOr6OFQi',
+      publicKey: 'TGRpFqeZKFbGA6xs6',
     });
-    send('service_bbf5o0p', 'template_ivcn8m9', templateParams).finally(() => {
+    send('service_m4c8dsf', 'template_50o5top', templateParams).finally(() => {
       setName('');
       setEmail('');
       setMessage('');

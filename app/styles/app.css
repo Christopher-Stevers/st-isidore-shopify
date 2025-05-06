@@ -481,3 +481,21 @@ aside li {
 .account-logout {
   display: inline-block;
 }
+
+section > h2 {
+  font-size: 4rem;
+  font-family: 'Rye';
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+section > h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+section > p {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}

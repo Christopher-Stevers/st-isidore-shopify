@@ -30,7 +30,7 @@ const CallToAction = ({
             value={JSON.stringify(analytics)}
           />
           <button
-            className="bg-primary-500 py-2 px-4 text-center font-semibold leading-loose w-full text-white rounded-md"
+            className="w-full"
             type="submit"
             onClick={onClick}
             disabled={disabled ?? fetcher.state !== 'idle'}

@@ -398,7 +398,7 @@ const Recipes = () => {
                 'https://recipemate.app/recipe/',
                 '',
               )}`}
-              key={index}
+              key={recipe.source}
               className="recipe-item flex flex-col gap-4"
             >
               <h2 className="font-display text-xl">{recipe.title}</h2>
@@ -407,7 +407,9 @@ const Recipes = () => {
         })}
         <div className="md:col-span-3 flex-col gap-32 py-32 flex w-full">
           {recipeJSON.map((recipe, index) => {
-            return <RecipeItem key={index} index={index} recipe={recipe} />;
+            return (
+              <RecipeItem key={recipe.source} index={index} recipe={recipe} />
+            );
           })}
         </div>
         <div></div>
@@ -432,14 +434,14 @@ const RecipeItem = ({
           {recipe.title}
         </h2>
         <ul className="list-disc list-inside">
-          {recipe.ingredients.map((ingredient, index) => {
-            return <li key={index}>{ingredient}</li>;
+          {recipe.ingredients.map((ingredient) => {
+            return <li key={recipe.source + ingredient}>{ingredient}</li>;
           })}
         </ul>
         <h3 className="font-bold">Instructions</h3>
         <ol className="list-decimal list-inside">
-          {recipe.instructions.map((instruction, index) => {
-            return <li key={index}>{instruction}</li>;
+          {recipe.instructions.map((instruction) => {
+            return <li key={recipe.source + instruction}>{instruction}</li>;
           })}
         </ol>
       </div>

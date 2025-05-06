@@ -1,5 +1,11 @@
 {
-  "include": ["./**/*.d.ts", "./**/*.ts", "./**/*.tsx", "app/routes/emailtsx"],
+  "include": [
+    "./**/*.d.ts",
+    "./**/*.ts",
+    "./**/*.tsx",
+    "app/routes/emailtsx",
+    "app/components/CollectionPage"
+  ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,

@@ -17,29 +17,45 @@ const AboutCard = ({
   link,
   btnText,
 }: AboutCardProps) => {
-  const colStart = direction === 'left' ? 'xl:col-start-1' : 'xl:col-start-2';
+  const firstCardOrder = direction === 'left' ? 'order-2' : 'order-1';
+  const secondCardOrder = direction === 'left' ? 'order-1' : 'order-2';
 
   return (
-    <div className="grid-rows grid w-80 grid-rows-[209px_48px_auto_48px] gap-x-16 gap-y-4 xl:w-min xl:grid-cols-[480px_480px] xl:grid-rows-[auto_auto_48px]">
-      <h3 className="text-3xl font-semibold leading-none">{title}</h3>
-      <p className="w-full font-text text-xl">{text} </p>
-      {link && (
-        <AboutButton
-          text={btnText ?? 'Learn More'}
-          link={link}
-          className="h-12 w-40 bg-primary-500 text-white xl:row-start-3"
-        />
-      )}
-      <div className={`${colStart} row-start-1 xl:row-end-4`}>
+    <div className="flex flex-col sm:flex-row gap-8">
+      <div
+        className={`flex flex-col gap-4 flex-1 ${firstCardOrder} ${secondCardOrder}`}
+      >
+        <h3 className="text-3xl font-semibold leading-none">{title}</h3>
+        <p className="w-full font-text text-xl">{text} </p>
+        {link && (
+          <AboutButton
+            text={btnText ?? 'Learn More'}
+            link={link}
+            className="h-12 w-40 bg-primary-500 text-white xl:row-start-3"
+          />
+        )}
+      </div>
+      <div className={`${secondCardOrder} flex-1`}>
         <Image
           alt="some cows"
-          className="relative mt-0 h-[180px] w-[320px] object-cover object-top xl:h-[270px] xl:w-[480px]"
+          className="relative mt-0  object-cover object-top h-[270px] w-[480px]"
           width="480"
           height="270"
           crop="top"
           src={src}
         />
       </div>
+    </div>
+  );
+};
+
+export const AboutCardLayout = ({children}: {children: React.ReactNode}) => {
+  return (
+    <div
+      className="flex flex-col content-center justify-center justify-items-center gap-24
+   px-4 py-24 sm:px-16  md:justify-between lg:py-32 lg:px-24 bg-cover"
+    >
+      {children}
     </div>
   );
 };

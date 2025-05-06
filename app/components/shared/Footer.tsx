@@ -13,7 +13,7 @@ type WebsiteLink = {
   link: string;
 };
 
-const Footer: React.FC = () => {
+export const Footer: React.FC = () => {
   const socials: SocialType[] = [
     {
       name: 'Instagram',
@@ -33,7 +33,7 @@ const Footer: React.FC = () => {
     },
     {
       name: 'Shop',
-      link: '/shop',
+      link: '/collections',
     },
   ];
   return (
@@ -77,4 +77,3 @@ const Footer: React.FC = () => {
     </footer>
   );
 };
-export default Footer;

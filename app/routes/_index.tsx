@@ -3,9 +3,15 @@ import {type MetaFunction} from '@remix-run/react';
 import {HeaderMain} from '~/components/base/Header';
 
 import TranslateAndFade from '~/components/shared/TranslateAndFade';
-import AboutCard from '~/components/AboutCard';
+import AboutCard, {AboutCardLayout} from '~/components/AboutCard';
 import cardContent from '~/components/cardContent';
-
+import Claims from '~/components/SharedMarketing/Claims';
+import GoToShop from '~/components/SharedMarketing/GoToShop';
+import PopularBundles from '~/components/SharedMarketing/PopularBundles';
+import OurStory from '~/components/SharedMarketing/OurStory';
+import FeaturedProduct from '~/components/SharedMarketing/FeaturedProduct';
+import Testimonials from '~/components/SharedMarketing/Testimonials';
+import FAQ from '~/components/SharedMarketing/FAQ';
 export const meta: MetaFunction = () => {
   return [{title: 'St Isidore Ranch | Home'}];
 };
@@ -14,15 +20,15 @@ export default function Homepage() {
   return (
     <>
       <HeaderMain />
-      <div
-        id="#about"
-        className="grid content-center justify-center justify-items-center gap-24 px-4 py-24 sm:px-16 md:grid-cols-2 md:justify-between lg:py-32 lg:px-24 xl:grid-cols-1 bg-cover"
-      >
+      <GoToShop />
+      <PopularBundles />
+      <Claims />
+      <AboutCardLayout>
         {cardContent.map((props, index) => {
           const {title, text, link, src, btnText} = props;
           const direction = index % 2 === 0 ? 'left' : 'right';
           return (
-            <TranslateAndFade key={index} direction={direction}>
+            <TranslateAndFade key={title} direction={direction}>
               <AboutCard
                 direction={direction}
                 title={title}
@@ -34,7 +40,11 @@ export default function Homepage() {
             </TranslateAndFade>
           );
         })}
-      </div>
+      </AboutCardLayout>
+      <OurStory />
+      <FeaturedProduct />
+      <Testimonials />
+      <FAQ />
     </>
   );
 }

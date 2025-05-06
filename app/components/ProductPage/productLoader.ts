@@ -1,6 +1,6 @@
 import {defer, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {type MetaFunction} from '@remix-run/react';
-import type {ProductFragment} from 'storefrontapi.generated';
+import type {ProductVariantsQuery} from 'storefrontapi.generated';
 import {getSelectedProductOptions} from '@shopify/hydrogen';
 import type {SelectedOption} from '@shopify/hydrogen/storefront-api-types';
 import {getVariantUrl} from '~/lib/variants';
@@ -9,21 +9,29 @@ export const meta: MetaFunction<typeof productLoader> = ({data}) => {
   return [{title: `St Isidore Ranch | ${data?.product.title ?? ''}`}];
 };
 
-const redirectToFirstVariant = ({
-  product,
+export const redirectToFirstVariant = ({
+  data,
   request,
+  handle,
 }: {
-  product: ProductFragment;
+  data: ProductVariantsQuery;
   request: Request;
+  handle: string;
 }) => {
   const url = new URL(request.url);
-  const firstVariant = product.variants.nodes[0];
-
+  const firstAvailableVariant = data?.product?.variants.nodes.find((variant) =>
+    variant.selectedOptions.find(
+      (option) => option.name === 'Title' && option.value === 'Default Title',
+    ),
+  );
+  const firstVariant =
+    firstAvailableVariant ?? data?.product?.variants.nodes[0];
+  const targetVariant = firstAvailableVariant ?? firstVariant;
   return redirect(
     getVariantUrl({
       pathname: url.pathname,
-      handle: product.handle,
-      selectedOptions: firstVariant.selectedOptions,
+      handle,
+      selectedOptions: targetVariant?.selectedOptions ?? [],
       searchParams: new URLSearchParams(url.search),
     }),
     {
@@ -32,7 +40,7 @@ const redirectToFirstVariant = ({
   );
 };
 
-const PRODUCT_VARIANT_FRAGMENT = `#graphql
+export const PRODUCT_VARIANT_FRAGMENT = `#graphql
   fragment ProductVariant on ProductVariant {
     availableForSale
     compareAtPrice {
@@ -69,13 +77,30 @@ const PRODUCT_VARIANT_FRAGMENT = `#graphql
   }
 ` as const;
 
-const PRODUCT_FRAGMENT = `#graphql
+export const PRODUCT_FRAGMENT = `#graphql
   fragment Product on Product {
     id
     title
     vendor
     handle
     descriptionHtml
+    
+    metafields(identifiers:[{
+        namespace: "custom",
+        key: "cta"
+      }]){
+      value    
+      key
+    }
+    images(first:6) {
+      nodes {
+        id
+        url
+        altText
+        width
+        height
+      }
+    }
     description
     options {
       name
@@ -97,7 +122,7 @@ const PRODUCT_FRAGMENT = `#graphql
   ${PRODUCT_VARIANT_FRAGMENT}
 ` as const;
 
-const PRODUCT_QUERY = `#graphql
+export const PRODUCT_QUERY = `#graphql
   query Product(
     $country: CountryCode
     $handle: String!
@@ -111,7 +136,7 @@ const PRODUCT_QUERY = `#graphql
   ${PRODUCT_FRAGMENT}
 ` as const;
 
-const PRODUCT_VARIANTS_FRAGMENT = `#graphql
+export const PRODUCT_VARIANTS_FRAGMENT = `#graphql
   fragment ProductVariants on Product {
     variants(first: 250) {
       nodes {
@@ -122,7 +147,7 @@ const PRODUCT_VARIANTS_FRAGMENT = `#graphql
   ${PRODUCT_VARIANT_FRAGMENT}
 ` as const;
 
-const VARIANTS_QUERY = `#graphql
+export const VARIANTS_QUERY = `#graphql
   ${PRODUCT_VARIANTS_FRAGMENT}
   query ProductVariants(
     $country: CountryCode
@@ -175,14 +200,16 @@ export const productLoader = async ({
         option.name === 'Title' && option.value === 'Default Title',
     ),
   );
-
+  const variants = await storefront.query(VARIANTS_QUERY, {
+    variables: {handle},
+  });
   if (firstVariantIsDefault) {
     product.selectedVariant = firstVariant;
   } else if (!product.selectedVariant) {
     // if no selected variant was returned from the selected options,
     // we redirect to the first variant's url with it's selected options applied
 
-    throw redirectToFirstVariant({product, request});
+    throw redirectToFirstVariant({data: variants, request, handle});
   }
 
   // In order to show which variants are available in the UI, we need to query
@@ -190,10 +217,8 @@ export const productLoader = async ({
   // into it's own separate query that is deferred. So there's a brief moment
   // where variant options might show as available when they're not, but after
   // this deffered query resolves, the UI will update.
-  const variants = storefront.query(VARIANTS_QUERY, {
-    variables: {handle},
-  });
 
+  console.log(product.selectedVariant, 'selectedVariant');
   return defer({product, variants});
 };
 

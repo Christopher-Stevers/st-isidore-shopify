@@ -1,3 +1,5 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable react/no-unescaped-entities */
 import {json, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {
   useLoaderData,
@@ -8,11 +10,11 @@ import {useEffect, useRef, useState} from 'react';
 import {CartForm} from '@shopify/hydrogen';
 import HeroButton from '~/components/base/FancyButton';
 
-export const meta: MetaFunction<typeof loader> = ({data}) => {
+export const meta: MetaFunction<typeof loader> = () => {
   return [{title: `St Isidore Ranch`}];
 };
 
-export async function loader({request, params, context}: LoaderFunctionArgs) {
+export async function loader({params, context}: LoaderFunctionArgs) {
   const handle = params.handle;
 
   if (!handle) {
@@ -50,7 +52,6 @@ export default function Promotion() {
       });
 
       if (response.ok && formRef.current) {
-        console.log('success');
         // Handle successful submission
         formRef.current.reset();
         localStorage.setItem('subscribed', 'true');
@@ -59,9 +60,11 @@ export default function Promotion() {
         // Redirect back to the current page
       } else {
         // Handle submission errors
+        // eslint-disable-next-line no-console
         console.error('Submission failed');
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error during form submission:', error);
     }
 
@@ -88,7 +91,7 @@ export default function Promotion() {
               <HeroButton
                 className="flex items-center justify-center font-sans font-bold min-w-[200px] justify-self-center bg-primary-700 text-white md:row-start-3 md:justify-self-end h-12 w-16 text-2xl md:h-16"
                 text="Shop"
-                link="/shop"
+                link="/collections"
               />
               <p>Questions about shipping?</p>
               <HeroButton

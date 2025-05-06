@@ -8,7 +8,6 @@ export const action = async ({request, context}: ActionFunctionArgs) => {
     const formData = await request.formData();
     const email = formData.get('email') as string;
     const name = formData.get('name') as string;
-    const emailSource = formData.get('emailSource') as string;
 
     const response = await fetch(
       `https://us14.api.mailchimp.com/3.0/lists/${'1e39a5fddd'}/members`,
@@ -31,7 +30,6 @@ export const action = async ({request, context}: ActionFunctionArgs) => {
     // throw new Error('test error');
     // return redirect(request.url, {status: 303});
   } catch (error) {
-    console.error('Error during form submission:', error);
     return {error: true, status: 500};
   }
 };

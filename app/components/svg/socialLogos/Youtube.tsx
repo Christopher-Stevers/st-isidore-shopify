@@ -1,4 +1,4 @@
-const YouTube = ({ className }: { className?: string }) => {
+const YouTube = ({className}: {className?: string}) => {
   return (
     <svg
       className={className}

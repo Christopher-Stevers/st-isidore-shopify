@@ -3,15 +3,11 @@ import {hydrogen} from '@shopify/hydrogen/vite';
 import {oxygen} from '@shopify/mini-oxygen/vite';
 import {vitePlugin as remix} from '@remix-run/dev';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
-import mdx from '@mdx-js/rollup';
 
 export default defineConfig({
   plugins: [
     hydrogen(),
     oxygen(),
-    mdx(),
     remix({
       presets: [hydrogen.preset()],
       future: {
@@ -22,9 +18,25 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
-  css: {
-    postcss: {
-      plugins: [tailwindcss(), autoprefixer()],
+  ssr: {
+    optimizeDeps: {
+      include: ['typographic-base'],
     },
+  },
+  optimizeDeps: {
+    include: [
+      'clsx',
+      '@headlessui/react',
+      'typographic-base',
+      'react-intersection-observer',
+      'react-use/esm/useScroll',
+      'react-use/esm/useDebounce',
+      'react-use/esm/useWindowScroll',
+    ],
+  },
+  build: {
+    // Allow a strict Content-Security-Policy
+    // withtout inlining assets as base64:
+    assetsInlineLimit: 0,
   },
 });

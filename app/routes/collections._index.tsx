@@ -1,60 +1,90 @@
 import {json, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useLoaderData, Link, type MetaFunction} from '@remix-run/react';
-import {Pagination, getPaginationVariables, Image} from '@shopify/hydrogen';
+import {Pagination, getPaginationVariables} from '@shopify/hydrogen';
 import {COLLECTION_QUERY} from './collections.$handle';
-import {ProductsGrid} from '~/routes/shop._index';
-
-export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return [
-    {title: `St Isidore Ranch | ${data?.collection.title ?? ''} Collection`},
-  ];
+import {seoPayload} from '~/lib/seo.server';
+import {FeaturedBundle} from '~/components/CollectionPage/FeaturedBundle';
+import {PRODUCT_QUERY} from '~/components/ProductPage/productLoader';
+import type {SelectedOptionInput} from '@shopify/hydrogen/storefront-api-types';
+import CollectionDisplay from '~/components/CollectionPage/CollectionDisplay';
+export const meta: MetaFunction<typeof loader> = () => {
+  return [{title: `St Isidore Ranch | Bulk & Bundles`}];
 };
 
-export async function loader({request, params, context}: LoaderFunctionArgs) {
-  const handle = 'shop';
+export async function loader({request, context}: LoaderFunctionArgs) {
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 50,
   });
 
-  if (!handle) {
-    return redirect('/collections');
-  }
+  const bulkHandle = 'bulk';
+  const bundleHandle = 'bundles';
 
-  const {collection} = await storefront.query(COLLECTION_QUERY, {
-    variables: {handle, ...paginationVariables},
+  const featuredProductHandle = 'quarter-beef-1';
+  const selectedOptions: SelectedOptionInput[] = [];
+  const {product: featuredProduct} = await storefront.query(PRODUCT_QUERY, {
+    variables: {handle: featuredProductHandle, selectedOptions},
   });
 
-  if (!collection) {
-    throw new Response(`Collection ${handle} not found`, {
-      status: 404,
-    });
+  const {collection: bundleCollection} = await storefront.query(
+    COLLECTION_QUERY,
+    {
+      variables: {handle: bundleHandle, ...paginationVariables},
+    },
+  );
+
+  const {collection: bulkCollection} = await storefront.query(
+    COLLECTION_QUERY,
+    {
+      variables: {handle: bulkHandle, ...paginationVariables},
+    },
+  );
+
+  if (!bulkCollection || !bundleCollection) {
+    throw new Response(
+      `Collection ${bulkHandle} or ${bundleHandle} not found`,
+      {
+        status: 404,
+      },
+    );
   }
-  return json({collection});
+
+  const filteredCollections = {nodes: [bulkCollection, bundleCollection]};
+
+  const seo = seoPayload.listCollections({
+    collections: {
+      nodes: [
+        {
+          ...bulkCollection,
+          seo: {
+            title: bulkCollection.title,
+            description: bulkCollection.description,
+          },
+        },
+        {
+          ...bundleCollection,
+          seo: {
+            title: bundleCollection.title,
+            description: bundleCollection.description,
+          },
+        },
+      ],
+    },
+    url: request.url,
+  });
+
+  return json({collections: filteredCollections, seo, featuredProduct});
 }
 
 export default function Collection() {
-  const {collection} = useLoaderData<typeof loader>();
-
+  const {collections, featuredProduct} = useLoaderData<typeof loader>();
   return (
     <div className="collection">
-      <p className="collection-description">{collection.description}</p>
-      <Pagination connection={collection.products}>
-        {({nodes, isLoading, PreviousLink, NextLink}) => (
-          <>
-            <PreviousLink>
-              {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
-            </PreviousLink>
-            <ProductsGrid products={nodes} />
-            <br />
-            <NextLink>
-              {isLoading ? 'Loading...' : <span>Load more ↓</span>}
-            </NextLink>
-          </>
-        )}
-      </Pagination>
+      <h1 className="hidden">Shop</h1>
+      <FeaturedBundle featuredProduct={featuredProduct} />
+      {collections.nodes.map((elem) => {
+        return <CollectionDisplay key={elem.id} collection={elem} />;
+      })}
     </div>
   );
 }
-
-// NOTE: https://shopify.dev/docs/api/storefront/2022-04/objects/collection

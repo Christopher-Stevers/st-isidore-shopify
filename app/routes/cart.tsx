@@ -1,52 +1,37 @@
-import {Await, type MetaFunction} from '@remix-run/react';
-import {Suspense, useEffect} from 'react';
-import type {CartQueryDataReturn} from '@shopify/hydrogen';
-import {CartForm} from '@shopify/hydrogen';
-import {json, type ActionFunctionArgs} from '@shopify/remix-oxygen';
-import {CartMain} from '~/components/Cart';
-import {useRootLoaderData} from '~/root';
+import {useLoaderData} from '@remix-run/react';
+import invariant from 'tiny-invariant';
+import {
+  type LoaderFunctionArgs,
+  type ActionFunctionArgs,
+  json,
+} from '@shopify/remix-oxygen';
+import {CartForm, type CartQueryDataReturn, Analytics} from '@shopify/hydrogen';
 
-export const meta: MetaFunction = () => {
-  return [{title: `St Isidore Ranch | Cart`}];
-};
+import {isLocalPath} from '~/lib/utils';
+import {Cart} from '~/components/Cart';
 
 export async function action({request, context}: ActionFunctionArgs) {
-  const freeId = 'gid://shopify/ProductVariant/43831597137973';
   const {cart} = context;
-  const cartData = await cart.get();
-  const freeLine = cartData?.lines.nodes?.find(
-    (line) => line.merchandise.id === freeId,
-  );
 
   const formData = await request.formData();
 
   const {action, inputs} = CartForm.getFormInput(formData);
-
-  if (!action) {
-    throw new Error('No action provided');
-  }
+  invariant(action, 'No cartAction defined');
 
   let status = 200;
   let result: CartQueryDataReturn;
+
   switch (action) {
-    case CartForm.ACTIONS.LinesAdd: {
-      const newFreeLine = inputs.lines.find(
-        (line) => line.merchandiseId === freeId,
-      );
-      if (newFreeLine?.quantity && freeLine?.quantity) {
-        result = await cart.updateLines([]);
-      } else {
-        result = await cart.addLines(inputs.lines);
-      }
+    case CartForm.ACTIONS.LinesAdd:
+      result = await cart.addLines(inputs.lines);
       break;
-    }
     case CartForm.ACTIONS.LinesUpdate:
       result = await cart.updateLines(inputs.lines);
       break;
     case CartForm.ACTIONS.LinesRemove:
       result = await cart.removeLines(inputs.lineIds);
       break;
-    case CartForm.ACTIONS.DiscountCodesUpdate: {
+    case CartForm.ACTIONS.DiscountCodesUpdate:
       const formDiscountCode = inputs.discountCode;
 
       // User inputted discount code
@@ -59,64 +44,52 @@ export async function action({request, context}: ActionFunctionArgs) {
 
       result = await cart.updateDiscountCodes(discountCodes);
       break;
-    }
-    case CartForm.ACTIONS.BuyerIdentityUpdate: {
+    case CartForm.ACTIONS.BuyerIdentityUpdate:
       result = await cart.updateBuyerIdentity({
         ...inputs.buyerIdentity,
       });
       break;
-    }
     default:
-      throw new Error(`${action} cart action is not defined`);
+      invariant(false, `${action} cart action is not defined`);
   }
 
-  const cartId = result?.cart.id;
-  const headers = cart.setCartId(result?.cart.id);
-  const {cart: cartResult, errors} = result;
+  /**
+   * The Cart ID may change after each mutation. We need to update it each time in the session.
+   */
+  const cartId = result.cart.id;
+  const headers = cart.setCartId(result.cart.id);
 
   const redirectTo = formData.get('redirectTo') ?? null;
-  if (typeof redirectTo === 'string') {
+  if (typeof redirectTo === 'string' && isLocalPath(redirectTo)) {
     status = 303;
     headers.set('Location', redirectTo);
   }
 
-  headers.append('Set-Cookie', await context.session.commit());
+  const {cart: cartResult, errors, userErrors} = result;
 
   return json(
     {
       cart: cartResult,
+      userErrors,
       errors,
-      analytics: {
-        cartId,
-      },
     },
     {status, headers},
   );
 }
 
-export default function Cart() {
-  const rootData = useRootLoaderData();
-  const cartPromise = rootData.cart;
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log(await cartPromise, 'my result');
-    };
-    fetchData();
-  }, [cartPromise]);
+export async function loader({context}: LoaderFunctionArgs) {
+  const {cart} = context;
+  return json(await cart.get());
+}
+
+export default function CartRoute() {
+  const cart = useLoaderData<typeof loader>();
 
   return (
     <div className="cart">
       <h1>Cart</h1>
-      <Suspense fallback={<p>Loading cart ...</p>}>
-        <Await
-          resolve={cartPromise}
-          errorElement={<div>An error occurred</div>}
-        >
-          {(cart) => {
-            return <CartMain layout="page" cart={cart} />;
-          }}
-        </Await>
-      </Suspense>
+      <Cart layout="page" cart={cart} />
+      <Analytics.CartView />
     </div>
   );
 }

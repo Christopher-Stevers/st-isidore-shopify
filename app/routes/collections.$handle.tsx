@@ -1,7 +1,8 @@
 import {json, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useLoaderData, type MetaFunction} from '@remix-run/react';
 import {Pagination, getPaginationVariables} from '@shopify/hydrogen';
-import {ProductsGrid} from '~/routes/shop._index';
+import {CollectionGrid} from '~/components/CollectionPage/CollectionGrid';
+import type {ProductItemFragment} from 'storefrontapi.generated';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return [
@@ -44,7 +45,7 @@ export default function Collection() {
             <PreviousLink>
               {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
             </PreviousLink>
-            <ProductsGrid products={nodes} />
+            <CollectionGrid products={nodes as ProductItemFragment[]} />
             <br />
             <NextLink>
               {isLoading ? 'Loading...' : <span>Load more ↓</span>}
@@ -84,7 +85,7 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
         ...MoneyProductItem
       }
     }
-    variants(first: 1) {
+    variants(first: 5) {
       nodes {
         availableForSale
         id
