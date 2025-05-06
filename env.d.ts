@@ -32,6 +32,8 @@ declare global {
     PUBLIC_CUSTOMER_ACCOUNT_API_CLIENT_ID: string;
     PUBLIC_CUSTOMER_ACCOUNT_API_URL: string;
     MAILCHIMP_API_KEY: string;
+    DRIP_API_KEY: string;
+    DRIP_ACCOUNT_ID: string;
   }
 }
 

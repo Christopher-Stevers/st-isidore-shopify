@@ -6,14 +6,14 @@ import {useLocation} from '@remix-run/react';
 import {useEffect, useRef, useState} from 'react';
 
 const EmailGrabber: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
   //only set open first time, use local storage to track if user has subscribed
   useEffect(() => {
     const hasSubscribed = localStorage.getItem('subscribed') === 'true';
 
     if (location.pathname.includes('promotion')) {
-      setIsOpen(false);
+      setIsOpen(true);
     } else if (!hasSubscribed) {
       setIsOpen(true);
     }
