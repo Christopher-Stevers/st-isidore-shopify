@@ -48,9 +48,11 @@ const EmailGrabber: React.FC = () => {
         // Redirect back to the current page
       } else {
         // Handle submission errors
+        // eslint-disable-next-line no-console
         console.error('Submission failed');
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error during form submission:', error);
     }
   };
@@ -76,10 +78,8 @@ const EmailGrabber: React.FC = () => {
           </button>
           <h2 className="text-2xl font-bold">Win 5 lbs of Ground Beef</h2>
           <p className="text-lg">
-            {' '}
             I{"'"}m Chris Stevers, and I{"'"}d like to deliver my ranch{"'"}s
-            100% grass-fed and grass-finished beef to your door. Want access to
-            our newsletter to receive exclusive sales and more? Subscribe now
+            100% grass-fed and grass-finished beef to your door. Subscribe now
             for a chance to win 5 lbs of ground beef!
           </p>
           <form
