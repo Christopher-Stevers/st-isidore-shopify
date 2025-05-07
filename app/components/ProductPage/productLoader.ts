@@ -218,7 +218,6 @@ export const productLoader = async ({
   // where variant options might show as available when they're not, but after
   // this deffered query resolves, the UI will update.
 
-  console.log(product.selectedVariant, 'selectedVariant');
   return defer({product, variants});
 };
 

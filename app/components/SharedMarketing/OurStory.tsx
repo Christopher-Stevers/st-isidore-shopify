@@ -6,7 +6,7 @@ const OurStory = () => {
       className="flex flex-col lg:flex-row content-center justify-center justify-items-center gap-24
 px-4 py-16 sm:px-16 md:justify-between lg:py-32 lg:px-24 bg-cover"
     >
-      <section>
+      <section className="our-story-section">
         <h2>Our Story</h2>
 
         <h3>Rebuilding Trust in Food, One Box at a Time</h3>

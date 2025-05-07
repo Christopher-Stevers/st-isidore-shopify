@@ -44,7 +44,7 @@ export const CollectionItem = ({
         </div>
         <div className="px-2 w-full">
           <button className="text-lg  bg-amber-600 rounded-md hover:bg-amber-500 text-white px-8 w-full py-4">
-            Get it Now
+            Get Yours now!
           </button>
         </div>
       </Link>

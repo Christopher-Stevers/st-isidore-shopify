@@ -10,14 +10,7 @@ export default [
   },
 
   {
-    direction: 'left',
-    title: 'Our Beef',
-    text: 'To guarantee top-notch quality, we uphold rigorous standards of health and animal welfare throughout our operations. After our animals have reached maturity, they are processed by a provincially licensed butcher. Finally, we deliver the beef right to your doorstep using a refrigerated courier service.',
-
-    src: 'https://cdn.shopify.com/s/files/1/0626/1991/0197/files/roastBeef.jpg?v=1713986534',
-  },
-  {
-    direction: 'left',
+    direction: 'right',
     title: 'Our Vision',
     text: 'We believe that grassfed beef should play an integral part of any farm that is committed to sustainability. Far from harming the environment, cattle raised exclusively on grass can help rebuild our soils and our world.',
 

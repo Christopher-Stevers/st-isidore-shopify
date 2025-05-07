@@ -31,7 +31,7 @@ type Claim = {
 
 const PromiseCard = ({promise}: {promise: Claim}) => {
   return (
-    <div className="text-center flex flex-col items-center gap-4 w-96 py-8">
+    <div className="text-center flex flex-col items-center gap-4 sm:w-96 w-80 py-8">
       <div>
         <Image
           className="rounded"
@@ -50,7 +50,7 @@ const PromiseCard = ({promise}: {promise: Claim}) => {
 const Claims = () => {
   return (
     <div className="w-full flex flex-col bg-white items-center gap-4">
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap flex-col sm:flex-row content-center justify-center gap-4">
         {promises.map((promise) => (
           <PromiseCard key={promise.title} promise={promise} />
         ))}

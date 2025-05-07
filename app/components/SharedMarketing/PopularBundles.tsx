@@ -99,7 +99,7 @@ function PopularBundles() {
 
       {/* Bundles Grid */}
       {/* This grid will display 1 card per row on small screens, 2 on medium, and 3 on large screens */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 flex-col sm:flex-row content-center justify-center">
         {nodes.map((bundle) => {
           if (!bundle.featuredImage?.url) {
             return null;
