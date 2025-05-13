@@ -27,8 +27,7 @@ const EmailGrabber: React.FC = () => {
 
   const handleCloseModal = () => {
     if (typeof window !== 'undefined' && window.localStorage) {
-      // Optionally, mark as "seen" or "closed without subscribing" to prevent immediate re-opening
-      // localStorage.setItem('dialogClosedOnce', 'true');
+      localStorage.setItem('subscribed', 'true');
     }
     setIsOpen(false);
   };
