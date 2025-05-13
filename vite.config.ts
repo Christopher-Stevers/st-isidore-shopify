@@ -18,6 +18,12 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  server: {
+    headers: {
+      'Content-Security-Policy':
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:3000; connect-src 'self' ws://localhost:3000;",
+    },
+  },
   ssr: {
     optimizeDeps: {
       include: ['typographic-base'],
