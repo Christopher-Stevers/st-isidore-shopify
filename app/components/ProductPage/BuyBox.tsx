@@ -48,7 +48,7 @@ const BuyBox = ({product, variants}: BuyBoxProps) => {
     flex flex-col md:flex-row w-[1080px] max-w-[75%] py-8  justify-start justify-items-stretch items-stretch
      gap-16  md:px-8"
     >
-      <BuyBoxImages product={product} />
+      <BuyBoxImages className="flex-1 order-2" product={product} />
       <div className="flex flex-col gap-4 flex-1 order-1">
         <BuyBoxTitle title={product.title} />
         <BuyBoxSocialProof />

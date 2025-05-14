@@ -10,6 +10,13 @@ px-4 py-16 sm:px-16 md:justify-between lg:py-32 lg:px-24 bg-cover"
         <h2>Our Story</h2>
 
         <h3>Rebuilding Trust in Food, One Box at a Time</h3>
+        <Image
+          src="https://cdn.shopify.com/s/files/1/0626/1991/0197/files/475783713_997625315756448_7862330775072287528_n.jpg?v=1746539876"
+          alt="The St. Isidore Ranch family"
+          width={540}
+          height={540}
+          className="float-right ml-4 mb-4 hidden md:inline rounded-lg shadow-md object-cover w-[360px] h-[360px] xl:w-[540px] xl:h-[540px]"
+        />
         <p>This isn&apos;t just about beef.</p>
         <p>
           It&apos;s about healing people through real food. Challenging a system
@@ -35,56 +42,18 @@ px-4 py-16 sm:px-16 md:justify-between lg:py-32 lg:px-24 bg-cover"
         </p>
         <p>Because you deserve better—and so does your body.</p>
 
-        <h3>What We Believe</h3>
+        <h3>Our Promise to you</h3>
         <p>
           <strong>1. Food is healthcare.</strong>
           <br />
-          Every meal is a chance to rebuild energy, strength, and resilience.
-          That starts with clean protein.
+          Every meal you buy from us is going to rebuild your energy, strength,
+          and resilience.
         </p>
         <p>
           <strong>2. Grassfed beef should be accessible.</strong>
           <br />
           You shouldn&apos;t need a private chef or a health guru to eat well.
-          We make elite-quality food simple.
-        </p>
-
-        <h3>Who This Is For</h3>
-        <p>
-          You&apos;re skeptical. You&apos;ve done the research. Maybe
-          you&apos;ve gone plant-based, maybe you&apos;ve counted every macro.
-          But deep down, you know something&apos;s still off with the food
-          system.
-        </p>
-        <p>
-          You&apos;re not looking for hype. You&apos;re looking for a supply
-          chain you can believe in—one that fuels your body and reflects your
-          values.
-        </p>
-        <p>
-          People like you aren&apos;t easy to win over. But when you find
-          something real, you stick with it. And we&apos;re here for the long
-          haul.
-        </p>
-
-        <h3>How It Works</h3>
-        <p>
-          We raise the beef. We pack it with care. We ship it straight to your
-          door.
-          <br />
-          No surprises. No mystery meat. Just results you can feel and flavor
-          you can taste.
-        </p>
-
-        <h3>Ready to Join the Movement?</h3>
-        <p>Try your first box today and feel the difference real food makes.</p>
-        <p className="py-4">
-          <a
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-4 text-lg rounded-md inline-block"
-            href="/collections"
-          >
-            <strong>Experience the Difference</strong>
-          </a>
+          When you buy our beef we make elite-quality food simple.
         </p>
       </section>
       <Image
@@ -92,7 +61,7 @@ px-4 py-16 sm:px-16 md:justify-between lg:py-32 lg:px-24 bg-cover"
         alt="Our Story"
         width={680}
         height={680}
-        className="object-fit flex-1 lg:h-[680px] lg:w-[680px] w-[360px] h-[360px]"
+        className="object-fit flex-1 md:hidden w-[360px] h-[360px]"
       />
     </div>
   );
