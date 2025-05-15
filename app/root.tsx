@@ -192,7 +192,7 @@ function Layout({children}: {children?: React.ReactNode}) {
         t.src=v;s=b.getElementsByTagName(e)[0];
         s.parentNode.insertBefore(t,s)}(window, document,'script',
         'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '1235261444704639');
+        fbq('init', '718040284049560');
         fbq('track', 'PageView');`,
           }}
         />
@@ -200,7 +200,7 @@ function Layout({children}: {children?: React.ReactNode}) {
         <noscript
           dangerouslySetInnerHTML={{
             __html: `<img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id=1235261444704639&ev=PageView&noscript=1"
+        src="https://www.facebook.com/tr?id=718040284049560&ev=PageView&noscript=1"
         />`,
           }}
         />
