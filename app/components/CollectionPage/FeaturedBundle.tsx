@@ -58,8 +58,7 @@ export const FeaturedBundle = ({
             For a limited time:<p> {featuredProduct.title}</p>
           </h2>
           <p className="text-xl p-6">
-            Have a {featuredProduct.title} delivered from our farm to your
-            doorstep. Limited time offer, act fast!
+            Say Hello to {featuredProduct.title}. Limited time offer, act fast!
           </p>
           <div className="p-6">
             <Link
