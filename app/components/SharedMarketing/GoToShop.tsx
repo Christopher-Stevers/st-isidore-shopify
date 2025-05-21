@@ -22,12 +22,12 @@ const GoToShop = () => {
                   </p>
                 </div>
                 <div className="flex gap-4 w-full justify-between">
-                  <button className="h-12 w-40 rounded-md bg-primary-500 hover:bg-primary-700 text-white font-bold xl:row-start-3">
+                  <a className="h-12 w-40 rounded-md bg-primary-500 hover:bg-primary-700 text-white font-bold xl:row-start-3">
                     Shop Bundles
-                  </button>
-                  <button className="h-12 w-40 rounded-md bg-primary-500 hover:bg-primary-700 text-white font-bold xl:row-start-3">
+                  </a>
+                  <a className="h-12 w-40 rounded-md bg-primary-500 hover:bg-primary-700 text-white font-bold xl:row-start-3">
                     Shop Bulk
-                  </button>
+                  </a>
                 </div>
               </div>
               <div className="order-2 flex-1">

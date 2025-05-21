@@ -9,9 +9,11 @@ import WhyChooseUs from '~/components/SharedMarketing/WhyChooseUs';
 import FreeFreezerFaq from '~/components/SharedMarketing/FreeFreezer/FreeFreezerFaq';
 import {freeFreezerContentsections} from '~/components/SharedMarketing/constants';
 import GenericContentSection from '~/components/SharedMarketing/GenericContentSection';
-
+import {type MetaFunction} from '@remix-run/react';
 import FreeFreezerBuyBoxes from '~/components/SharedMarketing/FreeFreezer/FreeFreezerBuyBoxes';
-
+export const meta: MetaFunction<typeof loader> = () => {
+  return [{title: `St Isidore Ranch | Get Your Free Freezer`}];
+};
 export const loader = async ({request, context}: LoaderFunctionArgs) => {
   const {storefront} = context;
 

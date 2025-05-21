@@ -1,6 +1,6 @@
-import {json, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {useLoaderData, Link, type MetaFunction} from '@remix-run/react';
-import {Pagination, getPaginationVariables} from '@shopify/hydrogen';
+import {json, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {useLoaderData, type MetaFunction} from '@remix-run/react';
+import {getPaginationVariables} from '@shopify/hydrogen';
 import {COLLECTION_QUERY} from './collections.$handle';
 import {seoPayload} from '~/lib/seo.server';
 import {FeaturedBundle} from '~/components/CollectionPage/FeaturedBundle';
@@ -19,7 +19,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
 
   const bulkHandle = 'bulk';
   const bundleHandle = 'bundles';
-  const individualHandle = 'individual';
+  const individualHandle = 'main';
 
   const featuredProductHandle = '1-2-beef-deposit-free-freezer-400-value';
   const selectedOptions: SelectedOptionInput[] = [];
