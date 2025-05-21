@@ -19,6 +19,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
 
   const bulkHandle = 'bulk';
   const bundleHandle = 'bundles';
+  const individualHandle = 'individual';
 
   const featuredProductHandle = '1-2-beef-deposit-free-freezer-400-value';
   const selectedOptions: SelectedOptionInput[] = [];
@@ -40,16 +41,24 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     },
   );
 
-  if (!bulkCollection || !bundleCollection) {
+  const {collection: individualCollection} = await storefront.query(
+    COLLECTION_QUERY,
+    {
+      variables: {handle: individualHandle, ...paginationVariables},
+    },
+  );
+  if (!bulkCollection || !bundleCollection || !individualCollection) {
     throw new Response(
-      `Collection ${bulkHandle} or ${bundleHandle} not found`,
+      `Collection ${bulkHandle} or ${bundleHandle} or ${individualHandle} not found`,
       {
         status: 404,
       },
     );
   }
 
-  const filteredCollections = {nodes: [bulkCollection, bundleCollection]};
+  const filteredCollections = {
+    nodes: [bulkCollection, bundleCollection, individualCollection],
+  };
 
   const seo = seoPayload.listCollections({
     collections: {
@@ -66,6 +75,13 @@ export async function loader({request, context}: LoaderFunctionArgs) {
           seo: {
             title: bundleCollection.title,
             description: bundleCollection.description,
+          },
+        },
+        {
+          ...individualCollection,
+          seo: {
+            title: individualCollection.title,
+            description: individualCollection.description,
           },
         },
       ],
