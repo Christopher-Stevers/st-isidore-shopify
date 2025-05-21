@@ -9,7 +9,17 @@ export const action = async ({request, context}: ActionFunctionArgs) => {
     const formData = await request.formData();
     const email = formData.get('email') as string;
     const name = formData.get('name') as string;
-    const result = await createDripSubscriber({
+    const discount = formData.get('discount') as string;
+    if (discount) {
+      await createDripSubscriber({
+        apiKey: context.env.DRIP_API_KEY as string,
+        accountId: context.env.DRIP_ACCOUNT_ID as string,
+        email,
+        firstName: name,
+        tag: discount,
+      });
+    }
+    await createDripSubscriber({
       apiKey: context.env.DRIP_API_KEY as string,
       accountId: context.env.DRIP_ACCOUNT_ID as string,
       email,

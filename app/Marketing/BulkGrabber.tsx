@@ -4,12 +4,13 @@ import {Dialog} from '@headlessui/react';
 import {XMarkIcon} from '@heroicons/react/24/solid';
 import {useLocation} from '@remix-run/react';
 import {useEffect, useRef, useState} from 'react';
-import BulkGrabber from './BulkGrabber';
 const colourLogo = `https://cdn.shopify.com/s/files/1/0626/1991/0197/files/St_Isidore_Ranch_Logo_1.png?v=1715056106`;
+
+const discountCode = 'BULK50';
 
 const EmailGrabber: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false); // Default to false, let useEffect handle initial opening
-
+  const [showCode, setShowCode] = useState(false);
   // Use mock location if useLocation from '@remix-run/react' is not available or throws error
 
   const location = useLocation();
@@ -42,7 +43,7 @@ const EmailGrabber: React.FC = () => {
         method: 'POST',
         body: (() => {
           const formData = new FormData(formRef.current);
-          formData.append('contest', '5 lbs');
+          formData.append('discount', '50');
           return formData;
         })(),
       });
@@ -63,11 +64,8 @@ const EmailGrabber: React.FC = () => {
       // eslint-disable-next-line no-console
       console.error('Error during form submission:', error);
     }
+    setShowCode(true);
   };
-
-  if (location.pathname.includes('free-freezer')) {
-    return <BulkGrabber />;
-  }
 
   return (
     <Dialog
@@ -92,17 +90,25 @@ const EmailGrabber: React.FC = () => {
             <img src={colourLogo} alt="Your Company Logo" className="h-16 " />
           </div>
 
-          <h2 className="text-3xl font-bold text-center text-gray-800">
-            ENTER TO WIN!
-          </h2>
-          <p className="text-center text-gray-600">
-            Subscribe to our newsletter for a chance to win
-            <span className="font-semibold">
-              {' '}
-              5 lbs of our 100% grass-fed ground beef!
-            </span>{' '}
-            Plus, get updates on new products and special offers.
-          </p>
+          {showCode ? (
+            <h2 className="text-3xl font-bold text-center text-gray-800">
+              Your discount code is: {discountCode}
+            </h2>
+          ) : (
+            <>
+              <h2 className="text-3xl font-bold text-center text-gray-800">
+                Get 50 bucks off your next bulk beef order!
+              </h2>
+              <p className="text-center text-gray-600">
+                Subscribe to our newsletter to get
+                <span className="font-semibold">
+                  {' '}
+                  $50 of our 100% grass-fed bulk beef!
+                </span>
+                Plus, get updates on new products and special offers.
+              </p>
+            </>
+          )}
 
           <form
             ref={formRef}
