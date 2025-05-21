@@ -28,7 +28,7 @@ export const loader = async ({request, context}: LoaderFunctionArgs) => {
   );
 
   const firstProductHandle = 'quarter-beef-1';
-  const secondProductHandle = 'eighth-beef';
+  const secondProductHandle = 'whole-beef-deposit-free-freezer-800-value';
   // await the query for the critical product data
   const {product: firstProduct} = await storefront.query(PRODUCT_QUERY, {
     variables: {handle: firstProductHandle, selectedOptions},

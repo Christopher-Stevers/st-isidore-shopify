@@ -20,7 +20,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   const bulkHandle = 'bulk';
   const bundleHandle = 'bundles';
 
-  const featuredProductHandle = 'quarter-beef-1';
+  const featuredProductHandle = '1-2-beef-deposit-free-freezer-400-value';
   const selectedOptions: SelectedOptionInput[] = [];
   const {product: featuredProduct} = await storefront.query(PRODUCT_QUERY, {
     variables: {handle: featuredProductHandle, selectedOptions},
