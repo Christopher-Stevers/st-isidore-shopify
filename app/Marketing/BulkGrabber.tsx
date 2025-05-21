@@ -105,43 +105,42 @@ const EmailGrabber: React.FC = () => {
                   $50 of our 100% grass-fed bulk beef!
                 </span>{' '}
                 Plus, get updates on new products and special offers.
+              </p>{' '}
+              <form
+                ref={formRef}
+                method="post"
+                action="/email" // This action might not be hit if JS handles it fully
+                id="subscribe-form-modal"
+                className="flex flex-col space-y-4"
+                onSubmit={handleSubscribe}
+              >
+                <div>
+                  <label htmlFor="email-modal" className="sr-only">
+                    Email address
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="Enter your best email here..."
+                    name="email"
+                    id="email-modal"
+                    required
+                    className="w-full p-3 text-gray-700 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  // Use a color that matches the "brownish-orange" from the image, e.g., bg-orange-600
+                  // Or, if your `bg-primary-500` is intended for this, you can use that.
+                  className="w-full px-4 py-3 font-semibold text-white bg-amber-500 rounded-md h-12 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors duration-150"
+                >
+                  SUBSCRIBE
+                </button>
+              </form>
+              <p className="text-xs text-center text-gray-500">
+                We respect your privacy. Unsubscribe at any time.
               </p>
             </>
           )}
-
-          <form
-            ref={formRef}
-            method="post"
-            action="/email" // This action might not be hit if JS handles it fully
-            id="subscribe-form-modal"
-            className="flex flex-col space-y-4"
-            onSubmit={handleSubscribe}
-          >
-            <div>
-              <label htmlFor="email-modal" className="sr-only">
-                Email address
-              </label>
-              <input
-                type="email"
-                placeholder="Enter your best email here..."
-                name="email"
-                id="email-modal"
-                required
-                className="w-full p-3 text-gray-700 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-              />
-            </div>
-            <button
-              type="submit"
-              // Use a color that matches the "brownish-orange" from the image, e.g., bg-orange-600
-              // Or, if your `bg-primary-500` is intended for this, you can use that.
-              className="w-full px-4 py-3 font-semibold text-white bg-amber-500 rounded-md h-12 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors duration-150"
-            >
-              SUBSCRIBE
-            </button>
-          </form>
-          <p className="text-xs text-center text-gray-500">
-            We respect your privacy. Unsubscribe at any time.
-          </p>
         </div>
 
         {/* Right Column: Image */}
