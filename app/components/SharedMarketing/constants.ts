@@ -29,7 +29,7 @@ export const freeFreezerContentsections: ContentSection[] = [
   },
   {
     title: 'Real Beef. Fair Price.',
-    body: 'Grassfed beef can be priced up to $20/lb at the grocery store. But right now you can reserve your bulk share for as little as $15/lb! And this isn&apos;t your Wal-Mart variety mystery meat either. This is 100% grass-fed, grass-finished beef. How&apos;s that for a bargain?',
+    body: 'Grassfed beef can be priced up to $20/lb at the grocery store. But right now you can reserve your bulk share for as little as $16/lb! And this isn&apos;t your Wal-Mart variety mystery meat either. This is 100% grass-fed, grass-finished beef. How&apos;s that for a bargain?',
     imagePosition: 'left',
     bgColor: 'bg-white',
     imageUrl:

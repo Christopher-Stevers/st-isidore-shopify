@@ -103,7 +103,7 @@ const EmailGrabber: React.FC = () => {
                 <span className="font-semibold">
                   {' '}
                   $50 of our 100% grass-fed bulk beef!
-                </span>
+                </span>{' '}
                 Plus, get updates on new products and special offers.
               </p>
             </>
