@@ -27,7 +27,7 @@ export const loader = async ({request, context}: LoaderFunctionArgs) => {
       !option.name.startsWith('fbclid'),
   );
 
-  const firstProductHandle = 'quarter-beef-1';
+  const firstProductHandle = '1-2-beef-deposit-free-freezer-400-value';
   const secondProductHandle = 'whole-beef-deposit-free-freezer-800-value';
   // await the query for the critical product data
   const {product: firstProduct} = await storefront.query(PRODUCT_QUERY, {
