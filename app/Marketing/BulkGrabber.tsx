@@ -52,7 +52,6 @@ const EmailGrabber: React.FC = () => {
         // Handle successful submission
         formRef.current.reset();
         localStorage.setItem('subscribed', 'true');
-        setIsOpen(false);
 
         // Redirect back to the current page
       } else {
