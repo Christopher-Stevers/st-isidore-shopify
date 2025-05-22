@@ -44,7 +44,7 @@ const FreeFreezerFaq = () => {
         'A 1/2 share (approx 150 lbs) typically requires 6-8 cubic feet of freezer space. A whole share (approx 300 lbs) needs about 12-16 cubic feet. Standard chest freezers or upright freezers work well.',
     },
     {
-      question: 'What if I don&apos;t like the beef?',
+      question: `What if I don't enjoy the beef?`,
       answer:
         'We stand by our quality with a 100% satisfaction guarantee. If you&apos;re not completely happy with your purchase, please contact us, and we&apos;ll make it right.',
     },
