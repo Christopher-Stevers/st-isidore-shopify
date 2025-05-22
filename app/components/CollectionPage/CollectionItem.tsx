@@ -15,11 +15,17 @@ export const CollectionItem = ({
     product.variants.nodes[0];
 
   const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
-  const freeFreezerText = 'Free Freezer';
-  const titleWithoutFreeFreezerText = product.title.replace(
-    freeFreezerText,
-    '',
-  );
+
+  // Step 1: Remove the "Free Freezer" text
+  const freezerRegex = /\+\s*Free\s*Freezer/i;
+
+  // Step 2: Remove the value text (both with and without parentheses)
+  const valueRegex = /(\(\$\d+\s*Value\)|\$\d+\s*Value)/i;
+
+  const titleWithoutFreeFreezerText = product.title
+    .replace(freezerRegex, '')
+    .replace(valueRegex, '')
+    .trim();
   return (
     <div
       className="grid w-80 gap-x-16 gap-y-4 bg-backdrop-500"
