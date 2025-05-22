@@ -15,7 +15,11 @@ export const CollectionItem = ({
     product.variants.nodes[0];
 
   const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
-
+  const freeFreezerText = 'Free Freezer';
+  const titleWithoutFreeFreezerText = product.title.replace(
+    freeFreezerText,
+    '',
+  );
   return (
     <div
       className="grid w-80 gap-x-16 gap-y-4 bg-backdrop-500"
@@ -38,7 +42,7 @@ export const CollectionItem = ({
           )}
           <div className="flex items-center text-center justify-between px-4">
             <h3 className="whitespace-pre text-xl font-semibold w-full">
-              {product.title}
+              {titleWithoutFreeFreezerText}
             </h3>
           </div>
         </div>
