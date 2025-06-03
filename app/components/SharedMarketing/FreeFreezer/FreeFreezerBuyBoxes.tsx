@@ -40,7 +40,8 @@ const FunnelBuyBox = ({product}: {product: BuyBoxProps['product']}) => {
 };
 
 const BuyBoxes = () => {
-  const {firstProduct, secondProduct} = useLoaderData<typeof loader>();
+  const {firstProduct, secondProduct, thirdProduct} =
+    useLoaderData<typeof loader>();
 
   return (
     <SectionWrapper bgColor="bg-transparent">
@@ -48,6 +49,9 @@ const BuyBoxes = () => {
         id="buybox-content"
         className="flex flex-col md:flex-row justify-between gap-8 md:gap-12 w-full "
       >
+        <FunnelBuyBox
+          product={thirdProduct as unknown as BuyBoxProps['product']}
+        />
         <FunnelBuyBox
           product={firstProduct as unknown as BuyBoxProps['product']}
         />
