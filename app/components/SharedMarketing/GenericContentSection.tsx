@@ -22,7 +22,7 @@ const GenericContentSection = ({
 }: ContentSection) => {
   const TextContent = () => (
     <div className="md:w-1/2  w-fit text-center md:text-left">
-      <h2 className="text-3xl md:text-4xl font-bold text-green-800 mb-4">
+      <h2 className="text-3xl px-4 md:text-4xl font-bold text-green-800 mb-4">
         {title}
       </h2>
       <p

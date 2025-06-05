@@ -12,11 +12,20 @@ export const freeFreezerBenefits: string[] = [
 
 export const freeFreezerContentsections: ContentSection[] = [
   {
+    title: 'Got Questions?',
+    body: "We're here to help! If you have a question that isn't answered there, please don't hesitate to call me at 519 703 6780. I'm here for any questions you might have about how we raise our cattle, how the deposit works, and how we get our beef to you.",
+    imageUrl:
+      'https://cdn.shopify.com/s/files/1/0626/1991/0197/files/photo_2025-06-05_11-22-26.jpg?v=1749137134',
+    imagePosition: 'right',
+    bgColor: 'bg-white',
+  },
+
+  {
     title: "Never Wonder Where You'll Store Your Supply Again.",
     body: 'Stay stocked and stress-free with a steady supply of nutrient-dense beef—and the freezer to keep it ready. At St Isidore Ranch, we include a FREE chest freezer so your beef stays fresh, convenient, and ready when you need it.',
     imageUrl:
       'https://cdn.shopify.com/s/files/1/0626/1991/0197/files/free_freezer.png?v=1747172996',
-    imagePosition: 'right',
+    imagePosition: 'left',
     bgColor: 'bg-white',
   },
   {

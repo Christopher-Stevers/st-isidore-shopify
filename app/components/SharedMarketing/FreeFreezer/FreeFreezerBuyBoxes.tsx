@@ -16,7 +16,7 @@ const FunnelBuyBox = ({product}: {product: BuyBoxProps['product']}) => {
       <div
         className="
     flex flex-col  py-8  justify-start justify-items-stretch items-stretch
-     gap-16  px-8"
+     gap-16  px-2 xl:px-8"
       >
         <BuyBoxImages product={product} />
         <div className="flex flex-col gap-4 flex-1">
@@ -47,7 +47,7 @@ const BuyBoxes = () => {
     <SectionWrapper bgColor="bg-transparent">
       <div
         id="buybox-content"
-        className="flex flex-col md:flex-row justify-between gap-8 md:gap-12 w-full "
+        className="flex flex-col md:flex-row justify-between gap-4 md:gap-4  w-full "
       >
         <FunnelBuyBox
           product={thirdProduct as unknown as BuyBoxProps['product']}
