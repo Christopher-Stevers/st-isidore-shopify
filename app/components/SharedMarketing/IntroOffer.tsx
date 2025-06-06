@@ -19,7 +19,7 @@ const IntroOffer = () => {
         </div>
         <div className="md:w-1/2 w-full text-center md:text-left">
           <h1 className="text-4xl md:text-5xl font-bold text-green-800 mb-3">
-            Buy A Half Or Whole Cow <br /> And Get A{' '}
+            Buy A Quarter or Half Cow <br /> And Get A{' '}
             <span className="text-amber-500">FREE Freezer!</span>
           </h1>
           <p className="text-2xl text-green-700 font-semibold mb-3">
