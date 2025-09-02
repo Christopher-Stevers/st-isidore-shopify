@@ -21,7 +21,6 @@ import {Button} from '~/components/Button';
 import {Text, Heading} from '~/components/Text';
 import {Link} from '~/components/Link';
 import {IconRemove} from '~/components/Icon';
-import {FeaturedProducts} from '~/components/FeaturedProducts';
 import {getInputStyleClasses} from '~/lib/utils';
 
 type Layouts = 'page' | 'drawer';
@@ -56,7 +55,7 @@ export function CartDetails({
   const container = {
     drawer:
       'flex flex-col gap-4 justify-between h-full h-screen-no-nav grid-rows-[1fr_auto]  ',
-    page: 'w-full pb-12 grid md:grid-cols-2 md:items-start gap-8 md:gap-8 lg:gap-12',
+    page: 'w-full pb-12 grid md:grid-cols-2 md:items-start gap-8 md:gap-8 lg:gap-12 overflow-auto',
   };
 
   return (
@@ -121,7 +120,7 @@ function CartDiscounts({
             name="discountCode"
             placeholder="Discount code"
           />
-          <button className="flex justify-end font-medium whitespace-nowrap">
+          <button className="flex justify-end whitespace-nowrap font-semibold bg-blue-500 rounded-md p-2 text-white">
             Apply Discount
           </button>
         </div>
@@ -164,8 +163,8 @@ function CartLines({
   const className = clsx([
     y > 0 ? 'border-t' : '',
     layout === 'page'
-      ? 'flex-grow md:translate-y-4'
-      : 'px-6 pb-6 sm-max:pt-2 overflow-auto transition md:px-12',
+      ? 'flex-grow md:translate-y-4 max-h-full'
+      : 'px-6 pb-6 sm-max:pt-2 overflow-auto transition md:px-12 max-h-[calc(100vh-270px)]',
   ]);
 
   return (
@@ -187,9 +186,9 @@ function CartCheckoutActions({checkoutUrl}: {checkoutUrl: string}) {
   if (!checkoutUrl) return null;
 
   return (
-    <div className="flex flex-col mt-2">
+    <div className="flex flex-col mt-2 bg-amber-500 rounded-md text-white font-semibold">
       <a href={checkoutUrl} target="_self">
-        <Button as="span" width="full">
+        <Button className="font-bold" as="span" width="full">
           Continue to Checkout
         </Button>
       </a>

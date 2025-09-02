@@ -68,7 +68,7 @@ export function Drawer({
                     }`}
                   >
                     {heading !== null && (
-                      <Dialog.Title>
+                      <Dialog.Title className="font-bold font-display text-4xl py-4 px-6">
                         <Heading as="span" size="lead" id="cart-contents">
                           {heading}
                         </Heading>
