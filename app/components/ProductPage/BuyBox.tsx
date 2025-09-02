@@ -72,7 +72,7 @@ const BuyBox = ({product, variants}: BuyBoxProps) => {
           selectedVariant={product.selectedVariant as ProductVariant}
           cta={
             product.metafields.find((metafield) => metafield?.key === 'cta')
-              ?.value || 'Fill my Freezer Now!'
+              ?.value || 'Add To Cart!'
           }
         />
       </div>

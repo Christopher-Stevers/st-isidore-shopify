@@ -37,7 +37,7 @@ const BuyBoxCTA = ({
               >
                 <div className="w-full flex items-center justify-center h-24 font-bold text-2xl bg-blue-500 text-white">
                   {selectedVariant?.availableForSale
-                    ? cta || 'Fill my Freezer Now!'
+                    ? cta || 'Add To Cart!'
                     : 'Sold out'}
                 </div>
               </button>
