@@ -20,6 +20,7 @@ async function createDripSubscriber({
           email,
           time_zone: 'America/Toronto',
           name: firstName,
+          tags: [tag],
           custom_fields: {
             tag,
           },
