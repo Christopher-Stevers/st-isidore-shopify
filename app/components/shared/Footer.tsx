@@ -1,12 +1,7 @@
 import React from 'react';
 import {Image} from '@shopify/hydrogen';
 import {Link} from '@remix-run/react';
-import Instagram from '../../components/svg/socialLogos/Instagram';
-//import Discord from "~/components/svg/socialLogos/Discord";
-import Facebook from '../../components/svg/socialLogos/Facebook';
-//import YouTube from "~/components/svg/socialLogos/Youtube";
-//import Twitter from "~/components/svg/socialLogos/Twitter";
-import Social, {type SocialType} from '../Social';
+import {SocialLinks} from './SocialLinks';
 
 type WebsiteLink = {
   name: string;
@@ -14,18 +9,6 @@ type WebsiteLink = {
 };
 
 export const Footer: React.FC = () => {
-  const socials: SocialType[] = [
-    {
-      name: 'Instagram',
-      link: 'https://www.instagram.com/st_isidore_ranch/',
-      SocialIcon: Instagram,
-    },
-    {
-      name: 'Facebook',
-      link: 'https://www.facebook.com/profile.php?id=61552526829554',
-      SocialIcon: Facebook,
-    },
-  ];
   const websiteLinks: WebsiteLink[] = [
     {
       name: 'Contact',
@@ -56,18 +39,7 @@ export const Footer: React.FC = () => {
           );
         })}
       </div>
-      <div className="flex flex-col gap-2">
-        {socials.map((social: SocialType) => {
-          return (
-            <Social
-              key={social.name}
-              link={social.link}
-              SocialIcon={social.SocialIcon}
-              name={social.name}
-            />
-          );
-        })}
-      </div>
+      <SocialLinks />
       <div className="col-span-2 flex flex-wrap content-center items-center justify-center gap-2 self-center sm:flex-nowrap">
         Made in Canada
         <Link to="https://arisedigital.ca" className="font-semibold underline">

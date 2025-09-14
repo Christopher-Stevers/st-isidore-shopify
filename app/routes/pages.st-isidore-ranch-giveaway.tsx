@@ -1,9 +1,7 @@
-import GiveawayPage from "~/components/SharedMarketing/Giveaway/Giveaway";
+import GiveawayPage from '~/components/SharedMarketing/Giveaway/Giveaway';
 
 const StIsidoreRanchGiveaway = () => {
-  return (
-<GiveawayPage />
-  );
+  return <GiveawayPage />;
 };
 
 export default StIsidoreRanchGiveaway;

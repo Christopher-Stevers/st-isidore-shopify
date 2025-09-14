@@ -12,7 +12,7 @@ const GoToShop = () => {
               <div className="flex flex-col justify-between gap-4 flex-1 order-1">
                 <div className="flex flex-col gap-4">
                   <h3 className="text-4xl font-semibold leading-none">
-                    Grass-Fed Ontario Beef.
+                    100% Grass-Fed and Grass-Finished Ontario Beef.
                     <br />
                     Delivered.
                   </h3>
@@ -22,10 +22,16 @@ const GoToShop = () => {
                   </p>
                 </div>
                 <div className="flex gap-4 w-full justify-between">
-                  <a className="h-12 w-40 rounded-md bg-primary-500 hover:bg-primary-700 text-white font-bold xl:row-start-3">
+                  <a
+                    href="/collections#Bundles"
+                    className="flex items-center justify-center h-12 w-40 rounded-md bg-primary-500 hover:bg-primary-700 text-white font-bold xl:row-start-3"
+                  >
                     Shop Bundles
                   </a>
-                  <a className="h-12 w-40 rounded-md bg-primary-500 hover:bg-primary-700 text-white font-bold xl:row-start-3">
+                  <a
+                    href="/collections#Bulk"
+                    className="flex items-center justify-center h-12 w-40 rounded-md bg-primary-500 hover:bg-primary-700 text-white font-bold xl:row-start-3"
+                  >
                     Shop Bulk
                   </a>
                 </div>

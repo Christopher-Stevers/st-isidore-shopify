@@ -282,11 +282,13 @@ function CartLineItem({line}: {line: CartLine}) {
           </Heading>
 
           <div className="grid pb-2">
-            {(merchandise?.selectedOptions || []).map((option) => (
-              <Text color="subtle" key={option.name}>
-                {option.name}: {option.value}
-              </Text>
-            ))}
+            {(merchandise?.selectedOptions || [])
+              .filter((option) => option.name !== 'Title')
+              .map((option) => (
+                <Text color="subtle" key={option.name}>
+                  {option.name}: {option.value}
+                </Text>
+              ))}
           </div>
 
           <div className="flex items-center gap-2">

@@ -3,7 +3,8 @@ import {ChevronUpIcon} from '@heroicons/react/24/solid';
 
 const faqs = [
   {
-    question: 'What makes your beef grass-fed and why does it matter?',
+    question:
+      'What makes your beef 100% grass-fed and finished and why does it matter?',
     answer:
       "Our cattle are raised exclusively on pasture, eating only grass and forage their entire lives. This natural diet results in beef that's higher in beneficial nutrients like omega-3 fatty acids, vitamins A and E, and antioxidants compared to grain-fed beef. It's better for the animals, better for the environment, and better for your health.",
   },

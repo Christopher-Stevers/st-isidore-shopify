@@ -69,7 +69,7 @@ export function PageLayout({children, layout}: LayoutProps) {
       </div>
       <CartCount openCart={openCart} />
       <Footer />
-      <EmailGrabber />
+      {/*<EmailGrabber />*/}
     </>
   );
 }
