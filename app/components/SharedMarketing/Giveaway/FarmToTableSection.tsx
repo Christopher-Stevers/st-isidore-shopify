@@ -4,27 +4,27 @@ const FarmToTableSection = ({placeholderImg}: {placeholderImg: string}) => {
   const features = [
     {
       icon: <House />,
-      title: 'Straight From our Ranch',
+      title: 'Born & Raised on Our Land',
       description:
-        "Our cattle are produced on our ranch, so you can trust the source and quality of the meat you're eating enjoying locally produced, high-quality beef that's not found in grocery stores.",
+        "Every animal is raised right here on our Ontario ranch from birth to harvest. You know exactly where your beef comes from and how it's been cared for every step of the way.",
     },
     {
       icon: <Leaf />,
-      title: 'Pure and Natural',
+      title: '100% Grass-Fed & Finished',
       description:
-        "Pure Grassfed Beef raised without hormones or antibiotics on a pesticide free farm, ensuring you're getting pure, natural meat that's good for you and the environment.",
+        "Our cattle graze on lush, pesticide-free pastures year-round. No grain, no hormones, no antibiotics - just pure, natural grass-fed beef that's better for you and the planet.",
     },
     {
       icon: <Star />,
-      title: 'Exceptional Taste and Texture',
+      title: 'Unmatched Flavor & Quality',
       description:
-        'Our customers praise the tenderness and flavor of our beef, making it a must-try for anyone looking for a delicious and unique experience.',
+        "Experience the rich, complex flavors that only come from grass-fed beef. Our customers consistently tell us it's the best beef they've ever tasted - tender, juicy, and full of character.",
     },
     {
       icon: <Truck />,
-      title: 'Hassle-Free Delivery',
+      title: 'Fresh to Your Door',
       description:
-        'Our specialty recyclable insulated box and shipping make it easy to get the quality meat you crave, right to your door.',
+        'We use premium insulated packaging and fast shipping to ensure your beef arrives frozen solid and ready for your freezer. No compromise on freshness or quality.',
     },
   ];
 
@@ -35,12 +35,12 @@ const FarmToTableSection = ({placeholderImg}: {placeholderImg: string}) => {
           <div className="pt-10 pb-12 px-6 sm:pt-16 sm:px-16 lg:py-16 lg:pr-0 xl:py-20 xl:px-20">
             <div className="lg:self-center">
               <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                <span className="block">The Farm to Table</span>
-                <span className="block">Difference</span>
+                <span className="block">Why Choose</span>
+                <span className="block">St. Isidore Ranch?</span>
               </h2>
               <div className="mt-8 space-y-6">
-                {features.map((feature, index) => (
-                  <div key={index} className="flex items-start">
+                {features.map((feature) => (
+                  <div key={feature.title} className="flex items-start">
                     <div className="flex-shrink-0">{feature.icon}</div>
                     <div className="ml-4">
                       <h3 className="text-lg font-semibold text-gray-900">

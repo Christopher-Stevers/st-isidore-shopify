@@ -11,6 +11,7 @@ export const action = async ({request, context}: ActionFunctionArgs) => {
     const name = formData.get('name') as string;
     const discount = formData.get('discount') as string;
     const contest = formData.get('contest') as string;
+
     if (discount) {
       await createDripSubscriber({
         apiKey: context.env.DRIP_API_KEY as string,
@@ -24,8 +25,8 @@ export const action = async ({request, context}: ActionFunctionArgs) => {
       apiKey: context.env.DRIP_API_KEY as string,
       accountId: context.env.DRIP_ACCOUNT_ID as string,
       email,
-        firstName: name,
-       tag: contest,
+      firstName: name,
+      tag: contest,
     });
 
     return {redirect: '/', status: 303};
