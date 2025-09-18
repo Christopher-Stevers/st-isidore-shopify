@@ -43,6 +43,7 @@ const EmailGrabber: React.FC = () => {
         method: 'POST',
         body: (() => {
           const formData = new FormData(formRef.current);
+          formData.append('first_name', formRef.current.first_name.value);
           formData.append('discount', '50');
           return formData;
         })(),
@@ -115,6 +116,18 @@ const EmailGrabber: React.FC = () => {
                 onSubmit={handleSubscribe}
               >
                 <div>
+                  <label htmlFor="name-modal" className="sr-only">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Enter your name here..."
+                    name="first_name"
+                    id="first_name"
+                    required
+                    className="w-full p-3 text-gray-700 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  />
+
                   <label htmlFor="email-modal" className="sr-only">
                     Email address
                   </label>

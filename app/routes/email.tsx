@@ -8,7 +8,10 @@ export const action = async ({request, context}: ActionFunctionArgs) => {
   try {
     const formData = await request.formData();
     const email = formData.get('email') as string;
-    const name = formData.get('name') as string;
+    const firstName =
+      (formData.get('name') as string) ??
+      (formData.get('first_name') as string);
+
     const discount = formData.get('discount') as string;
     const contest = formData.get('contest') as string;
 
@@ -17,7 +20,7 @@ export const action = async ({request, context}: ActionFunctionArgs) => {
         apiKey: context.env.DRIP_API_KEY as string,
         accountId: context.env.DRIP_ACCOUNT_ID as string,
         email,
-        firstName: name,
+        firstName,
         tag: discount,
       });
     }
@@ -25,7 +28,7 @@ export const action = async ({request, context}: ActionFunctionArgs) => {
       apiKey: context.env.DRIP_API_KEY as string,
       accountId: context.env.DRIP_ACCOUNT_ID as string,
       email,
-      firstName: name,
+      firstName,
       tag: contest,
     });
 

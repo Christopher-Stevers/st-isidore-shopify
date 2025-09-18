@@ -113,6 +113,19 @@ const EmailGrabber: React.FC = () => {
             onSubmit={handleSubscribe}
           >
             <div>
+              <label htmlFor="name-modal" className="sr-only">
+                Name
+              </label>
+              <input
+                type="text"
+                placeholder="Enter your name here..."
+                name="first_name"
+                id="first_name"
+                required
+                className="w-full p-3 text-gray-700 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              />
+            </div>
+            <div>
               <label htmlFor="email-modal" className="sr-only">
                 Email address
               </label>

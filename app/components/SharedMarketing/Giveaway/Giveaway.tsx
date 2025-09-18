@@ -1,10 +1,11 @@
 import {ArrowDown} from 'lucide-react';
 import Testimonials from '../Testimonials';
 import Features from './Features';
-import GiveawayForm from './GiveawayForm';
+import GiveawayForm, {formatDate} from './GiveawayForm';
 import BundleIncludes, {bundleItems} from './BundleIncludes';
 
 const giveAwayDate = new Date('October 31, 2025');
+export const giveAwayId = 'october-2025';
 
 export default function GiveawayPage() {
   return (
@@ -127,8 +128,8 @@ export default function GiveawayPage() {
             And it only takes a few seconds to enter... so why wait!
           </p>
           <p className="mt-2 text-sm text-gray-300">
-            We&apos;ll be choosing a random winner{' '}
-            {giveAwayDate.toLocaleDateString()}.
+            We&apos;ll be choosing a random winner on {formatDate(giveAwayDate)}
+            .
           </p>
           <div className="my-6 flex justify-center">
             <ArrowDown className="h-8 w-8 animate-bounce" />

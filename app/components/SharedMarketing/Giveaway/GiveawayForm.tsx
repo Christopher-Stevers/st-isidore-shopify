@@ -1,6 +1,15 @@
 import {useState} from 'react';
 import {useNavigate} from '@remix-run/react';
 import {ZapIcon} from 'lucide-react';
+import {giveAwayId} from './Giveaway';
+
+export const formatDate = (date: Date) => {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
 // Helper component for the form to avoid repetition
 const GiveawayForm = ({giveAwayDate}: {giveAwayDate: Date}) => {
   const navigate = useNavigate();
@@ -20,12 +29,9 @@ const GiveawayForm = ({giveAwayDate}: {giveAwayDate: Date}) => {
 
     try {
       const formData = new FormData();
-      formData.append('name', firstName.trim());
+      formData.append('first_name', firstName.trim());
       formData.append('email', email.trim());
-      formData.append(
-        'contest',
-        `$400-giveaway-entry ${giveAwayDate.toLocaleDateString()}`,
-      );
+      formData.append('contest', `$400-giveaway-entry-${giveAwayId}`);
 
       const response = await fetch('/email', {
         method: 'POST',
@@ -52,8 +58,7 @@ const GiveawayForm = ({giveAwayDate}: {giveAwayDate: Date}) => {
           🎉 You&apos;re entered! Good luck!
         </p>
         <p className="text-xs text-green-600 mt-2">
-          We&apos;ll be choosing a random winner{' '}
-          {giveAwayDate.toLocaleDateString()}.
+          We&apos;ll be choosing a random winner {formatDate(giveAwayDate)}.
         </p>
       </div>
     );
@@ -100,8 +105,7 @@ const GiveawayForm = ({giveAwayDate}: {giveAwayDate: Date}) => {
         {isSubmitting ? 'Entering...' : 'Enter Me To Win Now'}
       </button>
       <p className="text-center text-xs text-gray-300">
-        We&apos;ll be choosing a random winner{' '}
-        {giveAwayDate.toLocaleDateString()}.
+        We&apos;ll be choosing a random winner {formatDate(giveAwayDate)}.
       </p>
     </form>
   );
