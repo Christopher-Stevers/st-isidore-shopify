@@ -4,7 +4,7 @@ import Features from './Features';
 import GiveawayForm from './GiveawayForm';
 import BundleIncludes, {bundleItems} from './BundleIncludes';
 
-const giveAwayDate = new Date('October 15, 2025');
+const giveAwayDate = new Date('October 31, 2025');
 
 export default function GiveawayPage() {
   return (
