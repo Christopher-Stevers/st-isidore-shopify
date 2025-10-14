@@ -2,7 +2,7 @@
   "name": "st-isidore-ranch",
   "private": true,
   "sideEffects": false,
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "module",
   "scripts": {
     "build": "shopify hydrogen build --codegen",
