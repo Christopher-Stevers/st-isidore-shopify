@@ -1,4 +1,4 @@
-import {Await, useLocation} from '@remix-run/react';
+import { Await, useLocation } from 'react-router';
 import {Suspense} from 'react';
 import type {
   CartApiQueryFragment,

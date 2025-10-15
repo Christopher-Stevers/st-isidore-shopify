@@ -1,4 +1,4 @@
-import {json, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {data, type LoaderFunctionArgs} from 'react-router';
 import type {
   NormalizedPredictiveSearch,
   NormalizedPredictiveSearchResults,

@@ -1,8 +1,8 @@
-import {Await, type MetaFunction} from '@remix-run/react';
+import {Await, type MetaFunction} from 'react-router';
 import {Suspense} from 'react';
 import type {CartQueryDataReturn} from '@shopify/hydrogen';
 import {CartForm} from '@shopify/hydrogen';
-import {json, type ActionFunctionArgs} from '@shopify/remix-oxygen';
+import {data, type ActionFunctionArgs} from 'react-router';
 import {CartMain} from '~/components/Cart';
 import {useRootLoaderData} from '~/root';
 

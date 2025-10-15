@@ -1,12 +1,12 @@
 import {Suspense} from 'react';
-import {defer, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {data, redirect, type LoaderFunctionArgs} from 'react-router';
 import {
   Await,
   Link,
   useLoaderData,
   type MetaFunction,
   type FetcherWithComponents,
-} from '@remix-run/react';
+} from 'react-router';
 import type {
   ProductFragment,
   ProductVariantsQuery,

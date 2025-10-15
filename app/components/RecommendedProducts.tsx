@@ -1,9 +1,9 @@
 import {Suspense} from 'react';
-import {Await, Link} from '@remix-run/react';
+import {Await, Link} from 'react-router';
 import {Image, Money} from '@shopify/hydrogen';
 
 import type {RecommendedProductsQuery} from 'storefrontapi.generated';
-import {type LoaderFunctionArgs, defer} from '@shopify/remix-oxygen';
+import {type LoaderFunctionArgs, defer} from '@shopify/hydrogen';
 
 const FEATURED_COLLECTION_QUERY = `#graphql
   fragment FeaturedCollection on Collection {

@@ -4,18 +4,18 @@ import type {
   CustomerFragment,
 } from 'customer-accountapi.generated';
 import {
-  json,
+  data,
   redirect,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
-} from '@shopify/remix-oxygen';
+} from 'react-router';
 import {
   Form,
   useActionData,
   useNavigation,
   useOutletContext,
   type MetaFunction,
-} from '@remix-run/react';
+} from 'react-router';
 import {
   UPDATE_ADDRESS_MUTATION,
   DELETE_ADDRESS_MUTATION,
