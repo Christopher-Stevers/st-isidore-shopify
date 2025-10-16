@@ -1,5 +1,4 @@
 /// <reference types="vite/client" />
-/// <reference types="@shopify/remix-oxygen" />
 /// <reference types="@shopify/oxygen-workers-types" />
 
 // Enhance TypeScript's built-in typings.
@@ -33,11 +32,11 @@ declare global {
   }
 }
 
-declare module '@shopify/remix-oxygen' {
+declare module '@shopify/hydrogen' {
   /**
-   * Declare local additions to the Remix loader context.
+   * Declare local additions to the Hydrogen loader context.
    */
-  interface AppLoadContext {
+  interface HydrogenContext {
     env: Env;
     cart: HydrogenCart;
     storefront: Storefront;
@@ -45,9 +44,4 @@ declare module '@shopify/remix-oxygen' {
     session: AppSession;
     waitUntil: ExecutionContext['waitUntil'];
   }
-
-  /**
-   * Declare local additions to the Remix session data.
-   */
-  interface SessionData extends HydrogenSessionData {}
 }

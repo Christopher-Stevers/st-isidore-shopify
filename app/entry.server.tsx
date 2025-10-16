@@ -1,7 +1,7 @@
 import type {EntryContext} from 'react-router';
 import {ServerRouter} from 'react-router';
 import isbot from 'isbot';
-import * as ReactDOMServer from 'react-dom/server';
+import {renderToString} from 'react-dom/server';
 import {
   createContentSecurityPolicy,
   type HydrogenRouterContextProvider,
@@ -16,7 +16,7 @@ export default async function handleRequest(
 ) {
   const {nonce, header, NonceProvider} = createContentSecurityPolicy();
 
-  const body = await ReactDOMServer.renderToReadableStream(
+  const body = renderToString(
     <NonceProvider>
       <ServerRouter
         context={reactRouterContext}
@@ -24,20 +24,7 @@ export default async function handleRequest(
         nonce={nonce}
       />
     </NonceProvider>,
-    {
-      nonce,
-      signal: request.signal,
-      onError(error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-        responseStatusCode = 500;
-      },
-    },
   );
-
-  if (isbot(request.headers.get('user-agent'))) {
-    await body.allReady;
-  }
 
   responseHeaders.set('Content-Type', 'text/html');
 

@@ -17,6 +17,7 @@ export async function createHydrogenRouterContext(
   env: Env,
   executionContext: ExecutionContext,
 ) {
+  console.log('Creating Hydrogen context with env:', env);
   if (!env?.SESSION_SECRET) {
     throw new Error('SESSION_SECRET environment variable is not set');
   }
@@ -42,5 +43,6 @@ export async function createHydrogenRouterContext(
     additionalContext,
   );
 
+  console.log('Created Hydrogen context:', hydrogenContext);
   return hydrogenContext;
 }

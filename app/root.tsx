@@ -1,26 +1,22 @@
 import {useNonce} from '@shopify/hydrogen';
 import {
-  defer,
-  type SerializeFrom,
-  type LoaderFunctionArgs,
-} from '@shopify/hydrogen';
-import {
   Links,
   Meta,
   Outlet,
   Scripts,
   useMatches,
   useRouteError,
-  useLoaderData,
+  useRouteLoaderData,
   ScrollRestoration,
   isRouteErrorResponse,
+  type LoaderFunctionArgs,
   type ShouldRevalidateFunction,
 } from 'react-router';
 import favicon from './assets/favicon.svg';
 import resetStyles from './styles/reset.css?url';
 import appStyles from './styles/app.css?url';
 import stylesheet from '~/tailwind.css?url';
-import {Layout} from '~/components/Layout';
+import {Layout as PageLayout} from '~/components/Layout';
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -80,14 +76,25 @@ export function links() {
  */
 export const useRootLoaderData = () => {
   const [root] = useMatches();
-  return root?.data as SerializeFrom<typeof loader>;
+  return root?.loaderData as Awaited<ReturnType<typeof loader>>;
 };
 
 export async function loader({context}: LoaderFunctionArgs) {
-  const {storefront, customerAccount, cart} = context;
-  const publicStoreDomain = context.env.PUBLIC_STORE_DOMAIN;
+  console.log('Context received:', context);
+  console.log('Context keys:', Object.keys(context || {}));
+  console.log('Context type:', typeof context);
+  console.log('Context storefront:', context?.storefront);
+  console.log('Context customerAccount:', context?.customerAccount);
+  console.log('Context cart:', context?.cart);
 
-  const isLoggedInPromise = customerAccount.isLoggedIn();
+  if (!context) {
+    throw new Error('Context is undefined');
+  }
+
+  const {storefront, customerAccount, cart} = context;
+  const publicStoreDomain = context.env?.PUBLIC_STORE_DOMAIN;
+
+  const isLoggedInPromise = customerAccount?.isLoggedIn();
   const cartPromise = cart.get();
 
   // defer the footer query (below the fold)
@@ -106,38 +113,31 @@ export async function loader({context}: LoaderFunctionArgs) {
     },
   });
 
-  return defer(
-    {
-      cart: cartPromise,
-      footer: footerPromise,
-      header: await headerPromise,
-      isLoggedIn: isLoggedInPromise,
-      publicStoreDomain,
-    },
-    {
-      headers: {
-        'Set-Cookie': await context.session.commit(),
-      },
-    },
-  );
+  return {
+    cart: cartPromise,
+    footer: footerPromise,
+    header: await headerPromise,
+    isLoggedIn: isLoggedInPromise,
+    publicStoreDomain,
+  };
 }
 
-export default function App() {
+export function Layout({children}: {readonly children?: React.ReactNode}) {
   const nonce = useNonce();
-  const data = useLoaderData<typeof loader>();
+  const data = useRouteLoaderData<typeof loader>('root');
 
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="stylesheet" href={resetStyles}></link>
+        <link rel="stylesheet" href={appStyles}></link>
         <Meta />
         <Links />
       </head>
       <body>
-        <Layout {...data}>
-          <Outlet />
-        </Layout>
+        {data ? <PageLayout {...data}>{children}</PageLayout> : children}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
       </body>
@@ -145,10 +145,12 @@ export default function App() {
   );
 }
 
+export default function App() {
+  return <Outlet />;
+}
+
 export function ErrorBoundary() {
   const error = useRouteError();
-  const rootData = useRootLoaderData();
-  const nonce = useNonce();
   let errorMessage = 'Unknown error';
   let errorStatus = 500;
 
@@ -160,29 +162,15 @@ export function ErrorBoundary() {
   }
 
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <Layout {...rootData}>
-          <div className="route-error">
-            <h1>Oops</h1>
-            <h2>{errorStatus}</h2>
-            {errorMessage && (
-              <fieldset>
-                <pre>{errorMessage}</pre>
-              </fieldset>
-            )}
-          </div>
-        </Layout>
-        <ScrollRestoration nonce={nonce} />
-        <Scripts nonce={nonce} />
-      </body>
-    </html>
+    <div className="route-error">
+      <h1>Oops</h1>
+      <h2>{errorStatus}</h2>
+      {errorMessage && (
+        <fieldset>
+          <pre>{errorMessage}</pre>
+        </fieldset>
+      )}
+    </div>
   );
 }
 
