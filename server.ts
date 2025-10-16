@@ -1,6 +1,6 @@
 // Virtual entry point for the app
 import {storefrontRedirect} from '@shopify/hydrogen';
-import {createRequestHandler} from '@react-router/node';
+import {createRequestHandler} from '@shopify/hydrogen/oxygen';
 import {createHydrogenRouterContext} from '~/lib/context';
 
 /**
@@ -12,40 +12,38 @@ export default {
     env: Env,
     executionContext: ExecutionContext,
   ): Promise<Response> {
-    const hydrogenContext = await createHydrogenRouterContext(
-      request,
-      env,
-      executionContext,
-    );
-
-    const handleRequest = createRequestHandler({
-      build: await import('virtual:react-router/server-build'),
-      mode: process.env.NODE_ENV,
-      getLoadContext: () => hydrogenContext,
-    });
-
-    const response = await handleRequest(request);
-
-    if (hydrogenContext.session.isPending) {
-      response.headers.set(
-        'Set-Cookie',
-        await hydrogenContext.session.commit(),
-      );
-    }
-
-    if (response.status === 404) {
-      /**
-       * Check for redirects only when there's a 404 from the app.
-       * If the redirect doesn't exist, then `storefrontRedirect`
-       * will pass through the 404 response.
-       */
-      return storefrontRedirect({
+    try {
+      const hydrogenContext = await createHydrogenRouterContext(
         request,
-        response,
-        storefront: hydrogenContext.storefront,
-      });
-    }
+        env,
+        executionContext,
+      );
 
-    return response;
+      const handleRequest = createRequestHandler({
+        build: await import('virtual:react-router/server-build'),
+        mode: process.env.NODE_ENV,
+        getLoadContext: () => hydrogenContext,
+      });
+
+      const response = await handleRequest(request);
+
+      if (response.status === 404) {
+        /**
+         * Check for redirects only when there's a 404 from the app.
+         * If the redirect doesn't exist, then `storefrontRedirect`
+         * will pass through the 404 response.
+         */
+        return storefrontRedirect({
+          request,
+          response,
+          storefront: hydrogenContext.storefront,
+        });
+      }
+
+      return response;
+    } catch (error) {
+      console.error('Error in server fetch:', error);
+      return new Response('Internal Server Error', { status: 500 });
+    }
   },
 };

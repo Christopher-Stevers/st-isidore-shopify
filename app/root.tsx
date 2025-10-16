@@ -83,12 +83,12 @@ export async function loader({context}: LoaderFunctionArgs) {
   if (!context) {
     throw new Error('Context is undefined');
   }
- 
+
   const {storefront, customerAccount, cart} = context;
   const publicStoreDomain = context.env?.PUBLIC_STORE_DOMAIN;
 
   const isLoggedInPromise = customerAccount?.isLoggedIn();
-  const cartPromise = cart.get();
+  const cartPromise = cart?.get();
 
   // defer the footer query (below the fold)
   const footerPromise = storefront.query(FOOTER_QUERY, {
