@@ -14,5 +14,7 @@ module.exports = {
     'no-useless-escape': 'off',
     '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
     'no-case-declarations': 'off',
+    '@typescript-eslint/no-floating-promises': 'error',
+    '@typescript-eslint/no-misused-promises': 'error',
   },
 };

@@ -12,25 +12,16 @@ export default {
     env: Env,
     executionContext: ExecutionContext,
   ): Promise<Response> {
-    console.log('Server fetch called with env:', env);
-    console.log('Creating Hydrogen context...');
-
     const hydrogenContext = await createHydrogenRouterContext(
       request,
       env,
       executionContext,
     );
 
-    console.log('Hydrogen context created:', hydrogenContext);
-    console.log('Hydrogen context keys:', Object.keys(hydrogenContext || {}));
-
     const handleRequest = createRequestHandler({
       build: await import('virtual:react-router/server-build'),
       mode: process.env.NODE_ENV,
-      getLoadContext: () => {
-        console.log('getLoadContext called, returning:', hydrogenContext);
-        return hydrogenContext;
-      },
+      getLoadContext: () => hydrogenContext,
     });
 
     const response = await handleRequest(request);

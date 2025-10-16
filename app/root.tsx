@@ -80,17 +80,10 @@ export const useRootLoaderData = () => {
 };
 
 export async function loader({context}: LoaderFunctionArgs) {
-  console.log('Context received:', context);
-  console.log('Context keys:', Object.keys(context || {}));
-  console.log('Context type:', typeof context);
-  console.log('Context storefront:', context?.storefront);
-  console.log('Context customerAccount:', context?.customerAccount);
-  console.log('Context cart:', context?.cart);
-
   if (!context) {
     throw new Error('Context is undefined');
   }
-
+ 
   const {storefront, customerAccount, cart} = context;
   const publicStoreDomain = context.env?.PUBLIC_STORE_DOMAIN;
 
