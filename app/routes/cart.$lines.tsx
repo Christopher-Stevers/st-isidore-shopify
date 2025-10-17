@@ -1,4 +1,4 @@
-import type {LoaderFunctionArgs} from 'react-router';
+import {redirect, type LoaderFunctionArgs} from 'react-router';
 
 /**
  * Automatically creates a new cart based on the URL and redirects straight to checkout.

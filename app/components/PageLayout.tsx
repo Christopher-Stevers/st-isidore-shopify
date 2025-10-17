@@ -2,7 +2,7 @@ import {Await, useRouteLoaderData} from 'react-router';
 import {Suspense, useEffect, useMemo} from 'react';
 import {CartForm} from '@shopify/hydrogen';
 
-import {type LayoutQuery} from 'storefrontapi.generated';
+import type {LayoutQuery} from 'storefrontapi.generated';
 import {Cart} from '~/components/Cart';
 import {CartLoading} from '~/components/CartLoading';
 import {Drawer, useDrawer} from '~/components/Drawer';
@@ -11,9 +11,9 @@ import {type EnhancedMenu} from '~/lib/utils';
 import {useCartFetchers} from '~/hooks/useCartFetchers';
 import type {RootLoader} from '~/root';
 import {Footer} from './shared/Footer';
-import EmailGrabber from '~/Marketing/EmailGrabber';
 import {useIsHydrated} from '~/hooks/useIsHydrated';
 import {Link} from '~/components/Link';
+import {useRootLoaderData} from '~/root';
 
 export type LayoutProps = {
   children: React.ReactNode;
@@ -22,11 +22,10 @@ export type LayoutProps = {
     footerMenu?: EnhancedMenu | null;
   };
 };
-
 export function PageLayout({children, layout}: LayoutProps) {
   const {headerMenu} = layout || {};
+  const {header} = useRootLoaderData();
 
-  console.log(layout, 'my layout');
   const {
     isOpen: isCartOpen,
     openDrawer: openCart,
@@ -53,10 +52,10 @@ export function PageLayout({children, layout}: LayoutProps) {
             Skip to content
           </a>
         </div>
-        {headerMenu && layout?.shop.name && (
+        {header && (
           <Header
-            menu={headerMenu}
-            primaryDomainUrl={layout.shop.primaryDomain.url}
+            menu={header}
+            primaryDomainUrl={'https://stisidoreranch.com'}
             viewport="desktop"
           />
         )}
@@ -139,6 +138,7 @@ function Badge({openCart, count}: {count: number; openCart: () => void}) {
 
 function CartDrawer({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) {
   const rootData = useRouteLoaderData<RootLoader>('root');
+
   if (!rootData) return null;
 
   return (
@@ -146,7 +146,9 @@ function CartDrawer({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) {
       <div className="grid">
         <Suspense fallback={<CartLoading />}>
           <Await resolve={rootData?.cart}>
-            {(cart) => <Cart layout="drawer" onClose={onClose} cart={cart} />}
+            {(cart) => {
+              return <Cart layout="drawer" onClose={onClose} cart={cart} />;
+            }}
           </Await>
         </Suspense>
       </div>

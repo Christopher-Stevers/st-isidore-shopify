@@ -1,32 +1,16 @@
-import {Await, Link, useLocation} from 'react-router';
-import {Suspense} from 'react';
+import {Link, useLocation} from 'react-router';
+
 import type {HeaderQuery} from 'storefrontapi.generated';
-import type {LayoutProps} from './Layout';
-import {useRootLoaderData} from '~/root';
 
 import {Image} from '@shopify/hydrogen';
-import type {EnhancedMenu} from '~/lib/utils';
 
 export const Logo =
   'https://cdn.shopify.com/s/files/1/0626/1991/0197/files/canvas_image.png?v=1715807518';
 
-type HeaderProps = {
-  header: {
-    menu: EnhancedMenu;
-    shop: {
-      primaryDomain: {
-        url: string;
-      };
-    };
-  };
-  cart?: unknown;
-  isLoggedIn?: boolean;
-};
-
 type Viewport = 'desktop' | 'mobile';
 
 type HeaderMenuProps = {
-  menu: EnhancedMenu;
+  menu: HeaderQuery['menu'];
   primaryDomainUrl: string;
   viewport: Viewport;
 };

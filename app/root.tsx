@@ -21,7 +21,7 @@ import '~/tailwind.css';
 import favicon from './assets/favicon.svg';
 import resetStyles from './styles/reset.css?url';
 import appStyles from './styles/app.css?url';
-import {Layout as PageLayout} from '~/components/Layout';
+import {PageLayout} from '~/components/PageLayout';
 import {
   PRODUCT_FRAGMENT,
   VARIANTS_QUERY,
@@ -124,7 +124,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   });
 
   // Load cart data
-  const cartPromise = cart?.get();
+  const cartPromise = cart.get();
 
   const bestSellers = layout?.bestSellers;
   const featuredProduct = layout?.product;
@@ -171,7 +171,29 @@ export function Layout({children}: {readonly children?: React.ReactNode}) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
-        <Links />
+        <Links /> {/* Meta Pixel Code */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: ` !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '718040284049560');
+        fbq('track', 'PageView');`,
+          }}
+        />
+        <noscript
+          dangerouslySetInnerHTML={{
+            __html: `<img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=718040284049560&ev=PageView&noscript=1"
+        />`,
+          }}
+        />
+        {/* End Meta Pixel Code */}
       </head>
       <body>
         {data ? (
