@@ -2,7 +2,7 @@ import type {LoaderFunctionArgs} from 'react-router';
 import {useLoaderData, type MetaFunction} from 'react-router';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return [{title: `Hydrogen | ${data?.page.title ?? ''}`}];
+  return [{title: `St Isidore Ranch | ${data?.page.title ?? ''}`}];
 };
 
 export async function loader({params, context}: LoaderFunctionArgs) {

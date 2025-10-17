@@ -5,6 +5,7 @@
   --grid-item-width: 355px;
   --color-dark: #000;
   --color-light: #fff;
+  background: hsl(36 62% 94%);
 }
 
 img {
@@ -25,6 +26,7 @@ aside {
   position: fixed;
   right: calc(-1 * var(--aside-width));
   top: 0;
+  z-index: 50;
   transition: transform 200ms ease-in-out;
 }
 
@@ -193,11 +195,16 @@ aside li {
 * components/Cart
 * --------------------------------------------------
 */
+
+#cart-aside {
+  z-index: 50;
+}
 .cart-main {
   height: 100%;
   max-height: calc(100vh - var(--cart-aside-summary-height));
   overflow-y: auto;
   width: auto;
+  z-index: 40;
 }
 
 .cart-main.with-discount {
@@ -372,6 +379,11 @@ aside li {
   height: auto;
   width: 100%;
 }
+.product-item ul {
+  list-style: inside;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
 
 /*
 * --------------------------------------------------
@@ -451,6 +463,15 @@ aside li {
   width: 100%;
 }
 
+.article h2 {
+  font-weight: 600;
+}
+
+.article a {
+  color: #0c2c15;
+  text-decoration: underline;
+}
+
 /*
 * --------------------------------------------------
 * routes/account
@@ -459,4 +480,21 @@ aside li {
 
 .account-logout {
   display: inline-block;
+}
+
+.our-story-section > h2 {
+  font-size: 4rem;
+  font-family: 'Rye';
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.our-story-section > h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.our-story-section > p {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
 }

@@ -1,4 +1,4 @@
-import {Analytics, getShopAnalytics, useNonce} from '@shopify/hydrogen';
+import { Analytics, getShopAnalytics, useNonce } from "@shopify/hydrogen";
 import {
   Links,
   Meta,
@@ -11,13 +11,13 @@ import {
   isRouteErrorResponse,
   type LoaderFunctionArgs,
   type ShouldRevalidateFunction,
-} from 'react-router';
-import '~/tailwind.css';
-import favicon from './assets/favicon.svg';
-import resetStyles from './styles/reset.css?url';
-import appStyles from './styles/app.css?url';
-import {Layout as PageLayout} from '~/components/Layout';
-import type {Route} from './+types/root';
+  type MetaFunction,
+} from "react-router";
+import "~/tailwind.css";
+import favicon from "./assets/favicon.svg";
+import resetStyles from "./styles/reset.css?url";
+import appStyles from "./styles/app.css?url";
+import { Layout as PageLayout } from "~/components/Layout";
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -28,7 +28,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
   nextUrl,
 }) => {
   // revalidate when a mutation is performed e.g add to cart, login...
-  if (formMethod && formMethod !== 'GET') {
+  if (formMethod && formMethod !== "GET") {
     return true;
   }
 
@@ -43,31 +43,31 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 export function links() {
   return [
     {
-      rel: 'preconnect',
-      href: 'https://fonts.googleapis.com',
-      crossOrigin: 'anonymous',
+      rel: "preconnect",
+      href: "https://fonts.googleapis.com",
+      crossOrigin: "anonymous",
     },
     {
-      rel: 'preconnect',
-      href: 'https://fonts.gstatic.com',
-      crossOrigin: 'anonymous',
+      rel: "preconnect",
+      href: "https://fonts.gstatic.com",
+      crossOrigin: "anonymous",
     },
     {
-      crossOrigin: 'anonymous',
-      rel: 'stylesheet',
-      href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Rye&family=Cantarell&family=Tangerine&display=swap',
+      crossOrigin: "anonymous",
+      rel: "stylesheet",
+      href: "https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Rye&family=Cantarell&family=Tangerine&display=swap",
     },
-    {rel: 'stylesheet', href: resetStyles},
-    {rel: 'stylesheet', href: appStyles},
+    { rel: "stylesheet", href: resetStyles },
+    { rel: "stylesheet", href: appStyles },
     {
-      rel: 'preconnect',
-      href: 'https://cdn.shopify.com',
+      rel: "preconnect",
+      href: "https://cdn.shopify.com",
     },
     {
-      rel: 'preconnect',
-      href: 'https://shop.app',
+      rel: "preconnect",
+      href: "https://shop.app",
     },
-    {rel: 'icon', type: 'image/svg+xml', href: favicon},
+    { rel: "icon", type: "image/svg+xml", href: favicon },
   ];
 }
 
@@ -76,16 +76,17 @@ export function links() {
  */
 export const useRootLoaderData = () => {
   const [root] = useMatches();
-  return root?.loaderData as Awaited<ReturnType<typeof loader>>;
+  return root?.data as Awaited<ReturnType<typeof loader>>;
 };
-export async function loader(args: Route.LoaderArgs) {
-  const {storefront, cart, env} = args.context;
+
+export async function loader({ context }: LoaderFunctionArgs) {
+  const { storefront, cart, env } = context;
 
   // Load footer data (deferred)
   const footer = storefront.query(FOOTER_QUERY, {
     cache: storefront.CacheLong(),
     variables: {
-      footerMenuHandle: 'footer', // Adjust to your footer menu handle
+      footerMenuHandle: "footer",
     },
   });
 
@@ -104,28 +105,36 @@ export async function loader(args: Route.LoaderArgs) {
       checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
       storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,
       withPrivacyBanner: false,
-      // localize the privacy banner
       country: storefront.i18n.country,
       language: storefront.i18n.language,
     },
   };
 }
-export function Layout({children}: {readonly children?: React.ReactNode}) {
+
+export function Layout({ children }: { readonly children?: React.ReactNode }) {
   const nonce = useNonce();
-  const data = useRouteLoaderData<typeof loader>('root');
+  const data = useRouteLoaderData<typeof loader>("root");
 
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <link rel="stylesheet" href={resetStyles}></link>
-        <link rel="stylesheet" href={appStyles}></link>
         <Meta />
         <Links />
       </head>
       <body>
-        {data ? <PageLayout {...data}>{children}</PageLayout> : children}
+        {data ? (
+          <Analytics.Provider
+            cart={data.cart}
+            shop={data.shop}
+            consent={data.consent}
+          >
+            <PageLayout {...data}>{children}</PageLayout>
+          </Analytics.Provider>
+        ) : (
+          children
+        )}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
       </body>
@@ -139,7 +148,7 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  let errorMessage = 'Unknown error';
+  let errorMessage = "Unknown error";
   let errorStatus = 500;
 
   if (isRouteErrorResponse(error)) {

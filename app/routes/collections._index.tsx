@@ -1,120 +1,103 @@
-import type {LoaderFunctionArgs} from 'react-router';
-import {useLoaderData, Link} from 'react-router';
-import {Pagination, getPaginationVariables, Image} from '@shopify/hydrogen';
-import type {CollectionFragment} from 'storefrontapi.generated';
+import type { LoaderFunctionArgs } from "react-router";
+import { useLoaderData, Link } from "react-router";
+import { Pagination, getPaginationVariables, Image } from "@shopify/hydrogen";
+import type { SelectedOptionInput } from "@shopify/hydrogen/storefront-api-types";
+import { PRODUCT_QUERY } from "~/components/ProductPage/productLoader";
+import { COLLECTION_QUERY } from "./collections.$handle";
+import { seoPayload } from "~/lib/seo.server";
+import CollectionDisplay from "~/components/CollectionPage/CollectionDisplay";
+import { FeaturedBundle } from "~/components/CollectionPage/FeaturedBundle";
 
-export async function loader({context, request}: LoaderFunctionArgs) {
+export async function loader({ request, context }: LoaderFunctionArgs) {
+  const { storefront } = context;
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 4,
+    pageBy: 50,
   });
 
-  const {collections} = await context.storefront.query(COLLECTIONS_QUERY, {
-    variables: paginationVariables,
+  const bulkHandle = "bulk";
+  const bundleHandle = "bundles";
+  const individualHandle = "main";
+
+  const featuredProductHandle = "1-2-beef-deposit-free-freezer-400-value";
+  const selectedOptions: SelectedOptionInput[] = [];
+  const { product: featuredProduct } = await storefront.query(PRODUCT_QUERY, {
+    variables: { handle: featuredProductHandle, selectedOptions },
   });
 
-  return json({collections});
+  const { collection: bundleCollection } = await storefront.query(
+    COLLECTION_QUERY,
+    {
+      variables: { handle: bundleHandle, ...paginationVariables },
+    }
+  );
+
+  const { collection: bulkCollection } = await storefront.query(
+    COLLECTION_QUERY,
+    {
+      variables: { handle: bulkHandle, ...paginationVariables },
+    }
+  );
+
+  const { collection: individualCollection } = await storefront.query(
+    COLLECTION_QUERY,
+    {
+      variables: { handle: individualHandle, ...paginationVariables },
+    }
+  );
+  if (!bulkCollection || !bundleCollection || !individualCollection) {
+    throw new Response(
+      `Collection ${bulkHandle} or ${bundleHandle} or ${individualHandle} not found`,
+      {
+        status: 404,
+      }
+    );
+  }
+
+  const filteredCollections = {
+    nodes: [bulkCollection, bundleCollection, individualCollection],
+  };
+
+  const seo = seoPayload.listCollections({
+    collections: {
+      nodes: [
+        {
+          ...bulkCollection,
+          seo: {
+            title: bulkCollection.title,
+            description: bulkCollection.description,
+          },
+        },
+        {
+          ...bundleCollection,
+          seo: {
+            title: bundleCollection.title,
+            description: bundleCollection.description,
+          },
+        },
+        {
+          ...individualCollection,
+          seo: {
+            title: individualCollection.title,
+            description: individualCollection.description,
+          },
+        },
+      ],
+    },
+    url: request.url,
+  });
+
+  return { collections: filteredCollections, seo, featuredProduct };
 }
 
-export default function Collections() {
-  const {collections} = useLoaderData<typeof loader>();
-
+export default function Collection() {
+  const { collections, featuredProduct } = useLoaderData<typeof loader>();
   return (
-    <div className="collections">
-      <h1>Collections</h1>
-      <Pagination connection={collections}>
-        {({nodes, isLoading, PreviousLink, NextLink}) => (
-          <div>
-            <PreviousLink>
-              {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
-            </PreviousLink>
-            <CollectionsGrid collections={nodes} />
-            <NextLink>
-              {isLoading ? 'Loading...' : <span>Load more ↓</span>}
-            </NextLink>
-          </div>
-        )}
-      </Pagination>
+    <div className="collection">
+      <h1 className="hidden">Shop</h1>
+      <FeaturedBundle featuredProduct={featuredProduct} />
+      {collections.nodes.map((elem) => {
+        return <CollectionDisplay key={elem.id} collection={elem} />;
+      })}
     </div>
   );
 }
-
-function CollectionsGrid({collections}: {collections: CollectionFragment[]}) {
-  return (
-    <div className="collections-grid">
-      {collections.map((collection, index) => (
-        <CollectionItem
-          key={collection.id}
-          collection={collection}
-          index={index}
-        />
-      ))}
-    </div>
-  );
-}
-
-function CollectionItem({
-  collection,
-  index,
-}: {
-  collection: CollectionFragment;
-  index: number;
-}) {
-  return (
-    <Link
-      className="collection-item"
-      key={collection.id}
-      to={`/collections/${collection.handle}`}
-      prefetch="intent"
-    >
-      {collection?.image && (
-        <Image
-          alt={collection.image.altText || collection.title}
-          aspectRatio="1/1"
-          data={collection.image}
-          loading={index < 3 ? 'eager' : undefined}
-        />
-      )}
-      <h5>{collection.title}</h5>
-    </Link>
-  );
-}
-
-const COLLECTIONS_QUERY = `#graphql
-  fragment Collection on Collection {
-    id
-    title
-    handle
-    image {
-      id
-      url
-      altText
-      width
-      height
-    }
-  }
-  query StoreCollections(
-    $country: CountryCode
-    $endCursor: String
-    $first: Int
-    $language: LanguageCode
-    $last: Int
-    $startCursor: String
-  ) @inContext(country: $country, language: $language) {
-    collections(
-      first: $first,
-      last: $last,
-      before: $startCursor,
-      after: $endCursor
-    ) {
-      nodes {
-        ...Collection
-      }
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-    }
-  }
-` as const;

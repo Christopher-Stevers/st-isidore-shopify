@@ -3,7 +3,7 @@ import {useLoaderData, type MetaFunction} from 'react-router';
 import {Image} from '@shopify/hydrogen';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return [{title: `Hydrogen | ${data?.article.title ?? ''} article`}];
+  return [{title: `St Isidore Ranch | ${data?.article.title ?? ''} article`}];
 };
 
 export async function loader({params, context}: LoaderFunctionArgs) {
@@ -37,19 +37,27 @@ export default function Article() {
   }).format(new Date(article.publishedAt));
 
   return (
-    <div className="article">
-      <h1>
-        {title}
+    <div className="article px-8">
+      <div className="py-4">
+        <h1 className="font-display text-3xl">{title}</h1>
         <span>
           {publishedDate} &middot; {author?.name}
         </span>
-      </h1>
-
-      {image && <Image data={image} sizes="90vw" loading="eager" />}
-      <div
-        dangerouslySetInnerHTML={{__html: contentHtml}}
-        className="article"
-      />
+      </div>
+      <div className="flex gap-2 flex-wrap">
+        <div
+          dangerouslySetInnerHTML={{__html: contentHtml}}
+          className="max-w-[1000px]"
+        />
+        {image && (
+          <Image
+            className="max-w-[240px]"
+            data={image}
+            sizes="90vw"
+            loading="eager"
+          />
+        )}
+      </div>
     </div>
   );
 }
