@@ -1,5 +1,4 @@
-import {redirect, type LoaderFunctionArgs} from 'react-router';
-import {type MetaFunction} from 'react-router';
+import {redirect, type LoaderFunctionArgs, type MetaFunction} from 'react-router';
 import type {ProductVariantsQuery} from 'storefrontapi.generated';
 import {getSelectedProductOptions} from '@shopify/hydrogen';
 import type {SelectedOption} from '@shopify/hydrogen/storefront-api-types';
@@ -218,7 +217,7 @@ export const productLoader = async ({
   // where variant options might show as available when they're not, but after
   // this deffered query resolves, the UI will update.
 
-  return defer({product, variants});
+  return {product, variants};
 };
 
 export type ProductLoaderType = typeof productLoader;

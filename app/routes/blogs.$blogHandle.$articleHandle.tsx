@@ -1,9 +1,14 @@
-import type {LoaderFunctionArgs} from 'react-router';
-import {useLoaderData, type MetaFunction} from 'react-router';
+import {
+  type LoaderFunctionArgs,
+  useLoaderData,
+  type MetaFunction,
+} from 'react-router';
 import {Image} from '@shopify/hydrogen';
 
-export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return [{title: `St Isidore Ranch | ${data?.article.title ?? ''} article`}];
+export const meta: MetaFunction<typeof loader> = ({loaderData}) => {
+  return [
+    {title: `St Isidore Ranch | ${loaderData?.article.title ?? ''} article`},
+  ];
 };
 
 export async function loader({params, context}: LoaderFunctionArgs) {
@@ -23,7 +28,7 @@ export async function loader({params, context}: LoaderFunctionArgs) {
 
   const article = blog.articleByHandle;
 
-  return json({article});
+  return {article};
 }
 
 export default function Article() {

@@ -6,13 +6,14 @@ import type {
   HeaderQuery,
 } from 'storefrontapi.generated';
 import {Aside} from '~/components/Aside';
-import Footer from './shared/Footer';
+import {Footer} from '~/components/Footer';
 import {Header, HeaderMenu} from '~/components/Header';
-import {CartMain} from '~/components/Cart';
+import {Cart} from './Cart';
 import {
   PredictiveSearchForm,
   PredictiveSearchResults,
 } from '~/components/Search';
+import {useRootLoaderData} from '~/root';
 
 export type LayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
@@ -22,20 +23,24 @@ export type LayoutProps = {
   isLoggedIn?: Promise<boolean>;
 };
 
-export function Layout({
-  cart,
-  children = null,
-  footer,
-  header,
-  isLoggedIn,
-}: Readonly<LayoutProps>) {
+export function Layout({children}: {children: React.ReactNode}) {
   const location = useLocation();
+  const {
+    layout: {headerMenu, shop},
+    cart,
+  } = useRootLoaderData();
   return (
     <>
       <CartAside cart={cart} />
       <SearchAside />
-      {header && <MobileMenuAside menu={header?.menu} shop={header?.shop} />}
-      {header && <Header header={header} cart={cart} isLoggedIn={isLoggedIn} />}
+      {headerMenu && <MobileMenuAside menu={headerMenu} shop={shop} />}
+      {headerMenu && (
+        <Header
+          menu={headerMenu as any}
+          primaryDomainUrl={shop?.primaryDomain?.url}
+          viewport="desktop"
+        />
+      )}
       <main
         className={`min-h-[calc(100vh-128px)] ${
           location.pathname !== '/' && 'lg:p-32 p-8'
@@ -43,7 +48,7 @@ export function Layout({
       >
         {children}
       </main>
-      <Footer footer={footer} />
+      <Footer />
     </>
   );
 }
@@ -54,7 +59,9 @@ function CartAside({cart}: {cart: LayoutProps['cart']}) {
       <Suspense fallback={<p>Loading cart ...</p>}>
         <Await resolve={cart}>
           {(cart) => {
-            return <CartMain cart={cart} layout="aside" />;
+            return (
+              <Cart cart={cart as any} layout="drawer" onClose={() => {}} />
+            );
           }}
         </Await>
       </Suspense>
@@ -97,13 +104,7 @@ function SearchAside() {
   );
 }
 
-function MobileMenuAside({
-  menu,
-  shop,
-}: {
-  menu: HeaderQuery['menu'];
-  shop: HeaderQuery['shop'];
-}) {
+function MobileMenuAside({menu, shop}: {menu: any; shop: any}) {
   return (
     menu &&
     shop?.primaryDomain?.url && (

@@ -1,19 +1,19 @@
-import { Await, useRouteLoaderData } from "react-router";
-import { Suspense, useEffect, useMemo } from "react";
-import { CartForm } from "@shopify/hydrogen";
+import {Await, useRouteLoaderData} from 'react-router';
+import {Suspense, useEffect, useMemo} from 'react';
+import {CartForm} from '@shopify/hydrogen';
 
-import { type LayoutQuery } from "storefrontapi.generated";
-import { Cart } from "~/components/Cart";
-import { CartLoading } from "~/components/CartLoading";
-import { Drawer, useDrawer } from "~/components/Drawer";
-import { Header } from "~/components/Header";
-import { type EnhancedMenu } from "~/lib/utils";
-import { useCartFetchers } from "~/hooks/useCartFetchers";
-import type { RootLoader } from "~/root";
-import { Footer } from "./shared/Footer";
-import EmailGrabber from "~/Marketing/EmailGrabber";
-import { useIsHydrated } from "~/hooks/useIsHydrated";
-import { Link } from "~/components/Link";
+import {type LayoutQuery} from 'storefrontapi.generated';
+import {Cart} from '~/components/Cart';
+import {CartLoading} from '~/components/CartLoading';
+import {Drawer, useDrawer} from '~/components/Drawer';
+import {Header} from '~/components/Header';
+import {type EnhancedMenu} from '~/lib/utils';
+import {useCartFetchers} from '~/hooks/useCartFetchers';
+import type {RootLoader} from '~/root';
+import {Footer} from './shared/Footer';
+import EmailGrabber from '~/Marketing/EmailGrabber';
+import {useIsHydrated} from '~/hooks/useIsHydrated';
+import {Link} from '~/components/Link';
 
 export type LayoutProps = {
   children: React.ReactNode;
@@ -23,9 +23,10 @@ export type LayoutProps = {
   };
 };
 
-export function PageLayout({ children, layout }: LayoutProps) {
-  const { headerMenu } = layout || {};
+export function PageLayout({children, layout}: LayoutProps) {
+  const {headerMenu} = layout || {};
 
+  console.log(layout, 'my layout');
   const {
     isOpen: isCartOpen,
     openDrawer: openCart,
@@ -73,8 +74,8 @@ export function PageLayout({ children, layout }: LayoutProps) {
     </>
   );
 }
-function CartCount({ openCart }: { openCart: () => void }) {
-  const rootData = useRouteLoaderData<RootLoader>("root");
+function CartCount({openCart}: {openCart: () => void}) {
+  const rootData = useRouteLoaderData<RootLoader>('root');
   if (!rootData) return null;
 
   return (
@@ -87,7 +88,7 @@ function CartCount({ openCart }: { openCart: () => void }) {
     </Suspense>
   );
 }
-function Badge({ openCart, count }: { count: number; openCart: () => void }) {
+function Badge({openCart, count}: {count: number; openCart: () => void}) {
   const isHydrated = useIsHydrated();
 
   const BadgeCounter = useMemo(
@@ -116,7 +117,7 @@ function Badge({ openCart, count }: { count: number; openCart: () => void }) {
         </div>
       </>
     ),
-    [count]
+    [count],
   );
 
   return isHydrated ? (
@@ -136,14 +137,8 @@ function Badge({ openCart, count }: { count: number; openCart: () => void }) {
   );
 }
 
-function CartDrawer({
-  isOpen,
-  onClose,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-}) {
-  const rootData = useRouteLoaderData<RootLoader>("root");
+function CartDrawer({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) {
+  const rootData = useRouteLoaderData<RootLoader>('root');
   if (!rootData) return null;
 
   return (

@@ -1,13 +1,14 @@
-import type { MetaFunction } from "react-router";
-import Product from "~/components/ProductPage";
-import { productLoader } from "~/components/ProductPage/productLoader";
+import type {MetaFunction} from 'react-router';
+import Product from '~/components/ProductPage';
+import {productLoader} from '~/components/ProductPage/productLoader';
 
 export const loader = productLoader;
-export const meta: MetaFunction<typeof productLoader> = ({ loaderData }) => {
-  console.log(loaderData);
+export const meta: MetaFunction<typeof loader> = ({matches}) => {
+  const data = matches.find((match) => match.id === 'routes/products.$handle')
+    ?.data as Awaited<ReturnType<typeof loader>> | undefined;
   return [
-    { title: loaderData?.product?.title ?? "" },
-    { name: "description", content: loaderData?.product?.description },
+    {title: data?.product?.title ?? ''},
+    {name: 'description', content: data?.product?.description},
   ];
 };
 

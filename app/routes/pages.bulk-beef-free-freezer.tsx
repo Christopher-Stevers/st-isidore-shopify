@@ -1,56 +1,56 @@
-import Testimonials from "~/components/SharedMarketing/Testimonials";
-import { getSelectedProductOptions } from "@shopify/hydrogen";
-import { type LoaderFunctionArgs } from "react-router";
-import { PRODUCT_QUERY } from "~/components/ProductPage/productLoader";
-import IntroOffer from "~/components/SharedMarketing/IntroOffer";
-import HowItWorks from "~/components/SharedMarketing/HowItWorks";
-import FreeFreezerCallToAction from "~/components/SharedMarketing/FreeFreezer/FreeFreezerCallToAction";
-import WhyChooseUs from "~/components/SharedMarketing/WhyChooseUs";
-import FreeFreezerFaq from "~/components/SharedMarketing/FreeFreezer/FreeFreezerFaq";
-import { freeFreezerContentsections } from "~/components/SharedMarketing/constants";
-import GenericContentSection from "~/components/SharedMarketing/GenericContentSection";
-import { type MetaFunction } from "react-router";
-import FreeFreezerBuyBoxes from "~/components/SharedMarketing/FreeFreezer/FreeFreezerBuyBoxes";
+import Testimonials from '~/components/SharedMarketing/Testimonials';
+import {getSelectedProductOptions} from '@shopify/hydrogen';
+import {type LoaderFunctionArgs, defer} from 'react-router';
+import {PRODUCT_QUERY} from '~/components/ProductPage/productLoader';
+import IntroOffer from '~/components/SharedMarketing/IntroOffer';
+import HowItWorks from '~/components/SharedMarketing/HowItWorks';
+import FreeFreezerCallToAction from '~/components/SharedMarketing/FreeFreezer/FreeFreezerCallToAction';
+import WhyChooseUs from '~/components/SharedMarketing/WhyChooseUs';
+import FreeFreezerFaq from '~/components/SharedMarketing/FreeFreezer/FreeFreezerFaq';
+import {freeFreezerContentsections} from '~/components/SharedMarketing/constants';
+import GenericContentSection from '~/components/SharedMarketing/GenericContentSection';
+import {type MetaFunction} from 'react-router';
+import FreeFreezerBuyBoxes from '~/components/SharedMarketing/FreeFreezer/FreeFreezerBuyBoxes';
 export const meta: MetaFunction<typeof loader> = () => {
-  return [{ title: `St Isidore Ranch | Get Your Free Freezer` }];
+  return [{title: `St Isidore Ranch | Get Your Free Freezer`}];
 };
-export const loader = async ({ request, context }: LoaderFunctionArgs) => {
-  const { storefront } = context;
+export const loader = async ({request, context}: LoaderFunctionArgs) => {
+  const {storefront} = context;
 
   const selectedOptions = getSelectedProductOptions(request).filter(
     (option) =>
       // Filter out Shopify predictive search query params
-      !option.name.startsWith("_sid") &&
-      !option.name.startsWith("_pos") &&
-      !option.name.startsWith("_psq") &&
-      !option.name.startsWith("_ss") &&
-      !option.name.startsWith("_v") &&
+      !option.name.startsWith('_sid') &&
+      !option.name.startsWith('_pos') &&
+      !option.name.startsWith('_psq') &&
+      !option.name.startsWith('_ss') &&
+      !option.name.startsWith('_v') &&
       // Filter out third party tracking params
-      !option.name.startsWith("fbclid")
+      !option.name.startsWith('fbclid'),
   );
 
-  const firstProductHandle = "1-2-beef-deposit-free-freezer-400-value";
-  const secondProductHandle = "whole-beef-deposit-free-freezer-800-value";
-  const thirdProductHandle = "1-4-beef";
+  const firstProductHandle = '1-2-beef-deposit-free-freezer-400-value';
+  const secondProductHandle = 'whole-beef-deposit-free-freezer-800-value';
+  const thirdProductHandle = '1-4-beef';
   // await the query for the critical product data
-  const { product: firstProduct } = await storefront.query(PRODUCT_QUERY, {
-    variables: { handle: firstProductHandle, selectedOptions },
+  const {product: firstProduct} = await storefront.query(PRODUCT_QUERY, {
+    variables: {handle: firstProductHandle, selectedOptions},
   });
-  const { product: secondProduct } = await storefront.query(PRODUCT_QUERY, {
-    variables: { handle: secondProductHandle, selectedOptions },
+  const {product: secondProduct} = await storefront.query(PRODUCT_QUERY, {
+    variables: {handle: secondProductHandle, selectedOptions},
   });
-  const { product: thirdProduct } = await storefront.query(PRODUCT_QUERY, {
-    variables: { handle: thirdProductHandle, selectedOptions },
+  const {product: thirdProduct} = await storefront.query(PRODUCT_QUERY, {
+    variables: {handle: thirdProductHandle, selectedOptions},
   });
 
   if (!firstProduct?.id) {
-    throw new Response(null, { status: 404 });
+    throw new Response(null, {status: 404});
   }
   if (!secondProduct?.id) {
-    throw new Response(null, { status: 404 });
+    throw new Response(null, {status: 404});
   }
   if (!thirdProduct?.id) {
-    throw new Response(null, { status: 404 });
+    throw new Response(null, {status: 404});
   }
 
   const firstVariantOfFirstProduct = firstProduct.variants.nodes[0];
@@ -61,13 +61,13 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   thirdProduct.selectedVariant = firstVariantOfThirdProduct!;
 
   if (!firstVariantOfFirstProduct) {
-    throw new Response(null, { status: 404 });
+    throw new Response(null, {status: 404});
   }
   if (!firstVariantOfSecondProduct) {
-    throw new Response(null, { status: 404 });
+    throw new Response(null, {status: 404});
   }
   if (!firstVariantOfThirdProduct) {
-    throw new Response(null, { status: 404 });
+    throw new Response(null, {status: 404});
   }
 
   // In order to show which variants are available in the UI, we need to query
@@ -76,7 +76,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   // where variant options might show as available when they're not, but after
   // this deffered query resolves, the UI will update.
 
-  return defer({ firstProduct, secondProduct, thirdProduct });
+  return defer({firstProduct, secondProduct, thirdProduct});
 };
 
 // Main App Component

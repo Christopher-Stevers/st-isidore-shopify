@@ -15,7 +15,7 @@ export async function loader({context}: LoaderFunctionArgs) {
     throw new Error('Customer not found');
   }
 
-  return json(
+  return Response.json(
     {customer: data.customer},
     {
       headers: {

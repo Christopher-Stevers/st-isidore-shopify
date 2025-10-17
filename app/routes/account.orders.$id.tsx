@@ -40,7 +40,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     firstDiscount?.__typename === 'PricingPercentageValue' &&
     firstDiscount?.percentage;
 
-  return json(
+  return Response.json(
     {
       order,
       lineItems,

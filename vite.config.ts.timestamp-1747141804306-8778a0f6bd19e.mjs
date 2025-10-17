@@ -19,9 +19,6 @@ var vite_config_default = defineConfig({
     tsconfigPaths()
   ],
   ssr: {
-    optimizeDeps: {
-      include: ["typographic-base"]
-    }
   },
   optimizeDeps: {
     include: [

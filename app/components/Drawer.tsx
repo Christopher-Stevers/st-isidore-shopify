@@ -1,7 +1,6 @@
 import {Fragment, useState} from 'react';
 import {Dialog, Transition} from '@headlessui/react';
 
-import {Heading} from '~/components/Text';
 import {IconClose} from '~/components/Icon';
 
 /**
@@ -69,9 +68,9 @@ export function Drawer({
                   >
                     {heading !== null && (
                       <Dialog.Title className="font-bold font-display text-4xl py-4 px-6">
-                        <Heading as="span" size="lead" id="cart-contents">
+                        <h2 className="text-lead" id="cart-contents">
                           {heading}
-                        </Heading>
+                        </h2>
                       </Dialog.Title>
                     )}
                     <button

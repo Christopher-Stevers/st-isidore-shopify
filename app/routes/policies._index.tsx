@@ -9,7 +9,7 @@ export async function loader({context}: LoaderFunctionArgs) {
     throw new Response('No policies found', {status: 404});
   }
 
-  return json({policies});
+  return {policies};
 }
 
 export default function Policies() {

@@ -1,7 +1,7 @@
 import {useLocation, useRouteLoaderData} from 'react-router';
 import type {MoneyV2} from '@shopify/hydrogen/storefront-api-types';
 import type {FulfillmentStatus} from '@shopify/hydrogen/customer-account-api-types';
-import typographicBase from 'typographic-base';
+
 
 import type {
   ChildMenuItemFragment,
@@ -40,20 +40,6 @@ export function missingClass(string?: string, prefix?: string) {
   return string.match(regex) === null;
 }
 
-export function formatText(input?: string | React.ReactNode) {
-  if (!input) {
-    return;
-  }
-
-  if (typeof input !== 'string') {
-    return input;
-  }
-
-  return typographicBase(input, {locale: 'en-us'}).replace(
-    /\s([^\s<]+)\s*$/g,
-    '\u00A0$1',
-  );
-}
 
 export function getExcerpt(text: string) {
   const regex = /<p.*>(.*?)<\/p>/;
@@ -271,7 +257,8 @@ export function getLocaleFromRequest(request: Request): I18nLocale {
 
 export function usePrefixPathWithLocale(path: string) {
   const rootData = useRouteLoaderData<RootLoader>('root');
-  const selectedLocale = rootData?.selectedLocale ?? DEFAULT_LOCALE;
+  // For now, use DEFAULT_LOCALE since selectedLocale is not in root loader
+  const selectedLocale = DEFAULT_LOCALE;
 
   return `${selectedLocale.pathPrefix}${
     path.startsWith('/') ? path : '/' + path
@@ -281,7 +268,8 @@ export function usePrefixPathWithLocale(path: string) {
 export function useIsHomePath() {
   const {pathname} = useLocation();
   const rootData = useRouteLoaderData<RootLoader>('root');
-  const selectedLocale = rootData?.selectedLocale ?? DEFAULT_LOCALE;
+  // For now, use DEFAULT_LOCALE since selectedLocale is not in root loader
+  const selectedLocale = DEFAULT_LOCALE;
   const strippedPathname = pathname.replace(selectedLocale.pathPrefix, '');
   return strippedPathname === '/';
 }

@@ -1,39 +1,39 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable react/no-unescaped-entities */
-import { redirect, type LoaderFunctionArgs } from "react-router";
+import {redirect, type LoaderFunctionArgs} from 'react-router';
 import {
   useLoaderData,
   type FetcherWithComponents,
   type MetaFunction,
-} from "react-router";
-import { useEffect, useRef, useState } from "react";
-import { CartForm } from "@shopify/hydrogen";
-import HeroButton from "~/components/base/FancyButton";
+} from 'react-router';
+import {useEffect, useRef, useState} from 'react';
+import {CartForm} from '@shopify/hydrogen';
+import HeroButton from '~/components/base/FancyButton';
 
 export const meta: MetaFunction<typeof loader> = () => {
-  return [{ title: `St Isidore Ranch` }];
+  return [{title: `St Isidore Ranch`}];
 };
 
-export async function loader({ params, context }: LoaderFunctionArgs) {
+export async function loader({params, context}: LoaderFunctionArgs) {
   const handle = params.handle;
 
   if (!handle) {
-    return redirect("/");
+    return redirect('/');
   }
 
-  return json({ params, context });
+  return {params, context};
 }
 
 export default function Promotion() {
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const { params } = useLoaderData<typeof loader>();
+  const {params} = useLoaderData<typeof loader>();
   const [hasChecked, setHasChecked] = useState(false);
 
   //only set open first time, use local storage to track if user has subscribed
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    const hasSubscribed = localStorage.getItem("subscribed") === "true";
+    const hasSubscribed = localStorage.getItem('subscribed') === 'true';
     if (hasSubscribed) {
       setIsSubscribed(true);
     }
@@ -46,29 +46,29 @@ export default function Promotion() {
     if (!formRef.current) return;
     try {
       // Perform your form submission logic here, for example using fetch or an API call
-      const response = await fetch("/email", {
-        method: "POST",
+      const response = await fetch('/email', {
+        method: 'POST',
         body: new FormData(formRef.current),
       });
 
       if (response.ok && formRef.current) {
         // Handle successful submission
         formRef.current.reset();
-        localStorage.setItem("subscribed", "true");
+        localStorage.setItem('subscribed', 'true');
         setIsSubscribed(true);
 
         // Redirect back to the current page
       } else {
         // Handle submission errors
         // eslint-disable-next-line no-console
-        console.error("Submission failed");
+        console.error('Submission failed');
       }
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error("Error during form submission:", error);
+      console.error('Error during form submission:', error);
     }
 
-    window.location.href = window.location.href.split("#")[0] + "#cart-aside";
+    window.location.href = window.location.href.split('#')[0] + '#cart-aside';
   };
   return (
     <>
@@ -159,7 +159,7 @@ export default function Promotion() {
                   lines: [
                     {
                       merchandiseId:
-                        "gid://shopify/ProductVariant/43831597137973",
+                        'gid://shopify/ProductVariant/43831597137973',
                       quantity: 2,
                     },
                   ],
@@ -172,18 +172,18 @@ export default function Promotion() {
                       name="analytics"
                       type="hidden"
                       value={JSON.stringify({
-                        action: "add",
-                        label: "2lb Ground Beef",
+                        action: 'add',
+                        label: '2lb Ground Beef',
                       })}
                     />
                     <button
                       className="bg-primary-500 py-2 px-4 text-center font-semibold leading-loose w-full text-white rounded-md"
                       type="submit"
-                      disabled={fetcher.state !== "idle"}
+                      disabled={fetcher.state !== 'idle'}
                       onClick={() => {
                         handleSubscribe();
                         window.location.href =
-                          window.location.href + "#cart-aside";
+                          window.location.href + '#cart-aside';
                       }}
                     >
                       Get Your Beef!

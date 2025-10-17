@@ -3,12 +3,7 @@ import type {
   AddressFragment,
   CustomerFragment,
 } from 'customer-accountapi.generated';
-import {
-  data,
-  redirect,
-  type ActionFunctionArgs,
-  type LoaderFunctionArgs,
-} from 'react-router';
+import {type ActionFunctionArgs, type LoaderFunctionArgs} from 'react-router';
 import {
   Form,
   useActionData,
@@ -38,7 +33,7 @@ export const meta: MetaFunction = () => {
 export async function loader({context}: LoaderFunctionArgs) {
   await context.customerAccount.handleAuthStatus();
 
-  return json(
+  return Response.json(
     {},
     {
       headers: {
@@ -64,7 +59,7 @@ export async function action({request, context}: ActionFunctionArgs) {
     // this will ensure redirecting to login never happen for mutatation
     const isLoggedIn = await customerAccount.isLoggedIn();
     if (!isLoggedIn) {
-      return json(
+      return Response.json(
         {error: {[addressId]: 'Unauthorized'}},
         {
           status: 401,
@@ -122,7 +117,7 @@ export async function action({request, context}: ActionFunctionArgs) {
             throw new Error('Customer address create failed.');
           }
 
-          return json(
+          return Response.json(
             {
               error: null,
               createdAddress: data?.customerAddressCreate?.customerAddress,
@@ -136,7 +131,7 @@ export async function action({request, context}: ActionFunctionArgs) {
           );
         } catch (error: unknown) {
           if (error instanceof Error) {
-            return json(
+            return Response.json(
               {error: {[addressId]: error.message}},
               {
                 status: 400,
@@ -146,7 +141,7 @@ export async function action({request, context}: ActionFunctionArgs) {
               },
             );
           }
-          return json(
+          return Response.json(
             {error: {[addressId]: error}},
             {
               status: 400,
@@ -184,7 +179,7 @@ export async function action({request, context}: ActionFunctionArgs) {
             throw new Error('Customer address update failed.');
           }
 
-          return json(
+          return Response.json(
             {
               error: null,
               updatedAddress: address,
@@ -198,7 +193,7 @@ export async function action({request, context}: ActionFunctionArgs) {
           );
         } catch (error: unknown) {
           if (error instanceof Error) {
-            return json(
+            return Response.json(
               {error: {[addressId]: error.message}},
               {
                 status: 400,
@@ -208,7 +203,7 @@ export async function action({request, context}: ActionFunctionArgs) {
               },
             );
           }
-          return json(
+          return Response.json(
             {error: {[addressId]: error}},
             {
               status: 400,
@@ -242,7 +237,7 @@ export async function action({request, context}: ActionFunctionArgs) {
             throw new Error('Customer address delete failed.');
           }
 
-          return json(
+          return Response.json(
             {error: null, deletedAddress: addressId},
             {
               headers: {
@@ -252,7 +247,7 @@ export async function action({request, context}: ActionFunctionArgs) {
           );
         } catch (error: unknown) {
           if (error instanceof Error) {
-            return json(
+            return Response.json(
               {error: {[addressId]: error.message}},
               {
                 status: 400,
@@ -262,7 +257,7 @@ export async function action({request, context}: ActionFunctionArgs) {
               },
             );
           }
-          return json(
+          return Response.json(
             {error: {[addressId]: error}},
             {
               status: 400,
@@ -275,7 +270,7 @@ export async function action({request, context}: ActionFunctionArgs) {
       }
 
       default: {
-        return json(
+        return Response.json(
           {error: {[addressId]: 'Method not allowed'}},
           {
             status: 405,
@@ -288,7 +283,7 @@ export async function action({request, context}: ActionFunctionArgs) {
     }
   } catch (error: unknown) {
     if (error instanceof Error) {
-      return json(
+      return Response.json(
         {error: error.message},
         {
           status: 400,
@@ -298,7 +293,7 @@ export async function action({request, context}: ActionFunctionArgs) {
         },
       );
     }
-    return json(
+    return Response.json(
       {error},
       {
         status: 400,

@@ -1,11 +1,15 @@
-import type {LoaderFunctionArgs} from 'react-router';
-import {Link, useLoaderData, type MetaFunction} from 'react-router';
+import {
+  type LoaderFunctionArgs,
+  Link,
+  useLoaderData,
+  type MetaFunction,
+} from 'react-router';
 import {Image, Pagination, getPaginationVariables} from '@shopify/hydrogen';
 import type {ArticleItemFragment} from 'storefrontapi.generated';
 import {useEffect} from 'react';
 
-export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return [{title: `St Isidore Ranch | ${data?.blog.title ?? ''} blog`}];
+export const meta: MetaFunction<typeof loader> = ({loaderData}) => {
+  return [{title: `St Isidore Ranch | ${loaderData?.blog?.title ?? ''} blog`}];
 };
 
 export const loader = async ({
@@ -27,7 +31,7 @@ export const loader = async ({
     throw new Response('Not found', {status: 404});
   }
 
-  return json({blog});
+  return {blog};
 };
 
 export default function Blog() {

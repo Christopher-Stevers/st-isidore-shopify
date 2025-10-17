@@ -38,7 +38,7 @@ export async function loader({params, context}: LoaderFunctionArgs) {
     throw new Response('Could not find the policy', {status: 404});
   }
 
-  return json({policy});
+  return {policy};
 }
 
 export default function Policy() {

@@ -34,7 +34,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     throw Error('Customer orders not found');
   }
 
-  return json(
+  return Response.json(
     {customer: data.customer},
     {
       headers: {

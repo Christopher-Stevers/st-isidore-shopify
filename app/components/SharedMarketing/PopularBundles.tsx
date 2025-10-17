@@ -1,7 +1,7 @@
-import { Link } from "react-router";
-import { StarIcon } from "lucide-react";
-import React from "react";
-import { useRootLoaderData } from "~/root";
+import {Link} from 'react-router';
+import {StarIcon} from 'lucide-react';
+import React from 'react';
+import {useRootLoaderData} from '~/root';
 
 interface BundleCardProps {
   imageUrl: string;
@@ -35,8 +35,8 @@ const BundleCard: React.FC<BundleCardProps> = ({
         <StarIcon
           className="fill-yellow-500"
           key={i}
-          fill={i <= rating ? "fill" : "none"}
-        />
+          fill={i <= rating ? 'fill' : 'none'}
+        />,
       );
     }
     return stars;
@@ -80,10 +80,10 @@ const BundleCard: React.FC<BundleCardProps> = ({
 // Main App Component
 function PopularBundles() {
   const {
-    layout: {
-      bestSellers: { nodes },
-    },
+    layout: {bestSellers},
   } = useRootLoaderData();
+
+  const nodes = bestSellers?.nodes || [];
   // Sample data for the bundles
 
   return (
@@ -112,7 +112,7 @@ function PopularBundles() {
               title={bundle.title}
               rating={5}
               price={bundle.priceRange.minVariantPrice.amount}
-              imageAlt={"image of bundle"}
+              imageAlt={'image of bundle'}
               handle={bundle.handle}
             />
           );

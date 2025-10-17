@@ -3,7 +3,6 @@ import {flattenConnection, Image, Money, useMoney} from '@shopify/hydrogen';
 import type {MoneyV2, Product} from '@shopify/hydrogen/storefront-api-types';
 
 import type {ProductCardFragment} from 'storefrontapi.generated';
-import {Text} from '~/components/Text';
 import {Link} from '~/components/Link';
 import {Button} from '~/components/Button';
 import {AddToCartButton} from '~/components/AddToCartButton';
@@ -64,23 +63,16 @@ export function ProductCard({
                 loading={loading}
               />
             )}
-            <Text
-              as="label"
-              size="fine"
-              className="absolute top-0 right-0 m-4 text-right text-notice"
-            >
+            <label className="absolute top-0 right-0 m-4 text-right text-notice text-fine">
               {cardLabel}
-            </Text>
+            </label>
           </div>
           <div className="grid gap-1">
-            <Text
-              className="w-full overflow-hidden whitespace-nowrap text-ellipsis "
-              as="h3"
-            >
+            <div className="w-full overflow-hidden whitespace-nowrap text-ellipsis font-medium text-copy">
               {product.title}
-            </Text>
+            </div>
             <div className="flex gap-4">
-              <Text className="flex gap-4">
+              <div className="flex gap-4 text-copy    ">
                 <Money withoutTrailingZeros data={price!} />
                 {isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2) && (
                   <CompareAtPrice
@@ -88,7 +80,7 @@ export function ProductCard({
                     data={compareAtPrice as MoneyV2}
                   />
                 )}
-              </Text>
+              </div>
             </div>
           </div>
         </div>
@@ -104,16 +96,16 @@ export function ProductCard({
           variant="secondary"
           className="mt-2"
         >
-          <Text as="span" className="flex items-center justify-center gap-2">
+          <span className="flex items-center justify-center gap-2">
             Add to Cart
-          </Text>
+          </span>
         </AddToCartButton>
       )}
       {quickAdd && !firstVariant.availableForSale && (
         <Button variant="secondary" className="mt-2" disabled>
-          <Text as="span" className="flex items-center justify-center gap-2">
+          <span className="flex items-center justify-center gap-2">
             Sold out
-          </Text>
+          </span>
         </Button>
       )}
     </div>

@@ -1,14 +1,14 @@
-import { Await, Link, useLocation } from "react-router";
-import { Suspense } from "react";
-import type { HeaderQuery } from "storefrontapi.generated";
-import type { LayoutProps } from "./Layout";
-import { useRootLoaderData } from "~/root";
+import {Await, Link, useLocation} from 'react-router';
+import {Suspense} from 'react';
+import type {HeaderQuery} from 'storefrontapi.generated';
+import type {LayoutProps} from './Layout';
+import {useRootLoaderData} from '~/root';
 
-import { Image } from "@shopify/hydrogen";
-import type { EnhancedMenu } from "~/lib/utils";
+import {Image} from '@shopify/hydrogen';
+import type {EnhancedMenu} from '~/lib/utils';
 
 export const Logo =
-  "https://cdn.shopify.com/s/files/1/0626/1991/0197/files/canvas_image.png?v=1715807518";
+  'https://cdn.shopify.com/s/files/1/0626/1991/0197/files/canvas_image.png?v=1715807518';
 
 type HeaderProps = {
   header: {
@@ -23,14 +23,14 @@ type HeaderProps = {
   isLoggedIn?: boolean;
 };
 
-type Viewport = "desktop" | "mobile";
+type Viewport = 'desktop' | 'mobile';
 
 type HeaderMenuProps = {
   menu: EnhancedMenu;
   primaryDomainUrl: string;
   viewport: Viewport;
 };
-export function Header({ menu, primaryDomainUrl }: HeaderMenuProps) {
+export function Header({menu, primaryDomainUrl}: HeaderMenuProps) {
   return (
     <header className="header">
       <HeaderMenu
@@ -48,7 +48,7 @@ export function HeaderMenu({
   viewport,
 }: HeaderMenuProps) {
   function closeAside(event: React.MouseEvent<HTMLAnchorElement>) {
-    if (viewport === "mobile") {
+    if (viewport === 'mobile') {
       event.preventDefault();
       window.location.href = event.currentTarget.href;
     }
@@ -59,7 +59,7 @@ export function HeaderMenu({
   return (
     <nav
       className={`flex relative w-full py-4 z-20 content-center md:px-0 px-4 items-center font-display justify-between text-2xl ${
-        location.pathname !== "/" && "bg-primary-700"
+        location.pathname !== '/' && 'bg-primary-700'
       }`}
       role="navigation"
     >
@@ -74,19 +74,18 @@ export function HeaderMenu({
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
         const currentUrl =
-          item.url === "/collections/all" ? "/collections" : item.url;
+          item.url === '/collections/all' ? '/collections' : item.url;
         // if the url is internal, we strip the domain
         const url =
-          item.url.includes("myshopify.com") ||
+          item.url.includes('myshopify.com') ||
           item.url.includes(primaryDomainUrl)
             ? new URL(currentUrl).pathname
             : currentUrl;
         return (
           <Link
             className={`text-white ${
-              url !== location?.pathname ? "opacity-70" : ""
-            } ${url === "/" ? "hidden md:block" : ""}`}
-            end
+              url !== location?.pathname ? 'opacity-70' : ''
+            } ${url === '/' ? 'hidden md:block' : ''}`}
             key={item.id}
             onClick={closeAside}
             prefetch="intent"
@@ -121,51 +120,51 @@ function SearchToggle() {
 }
 
 const FALLBACK_HEADER_MENU = {
-  id: "gid://shopify/Menu/199655587896",
+  id: 'gid://shopify/Menu/199655587896',
   items: [
     {
-      id: "gid://shopify/MenuItem/461609500728",
+      id: 'gid://shopify/MenuItem/461609500728',
       resourceId: null,
       tags: [],
-      title: "Home",
-      type: "HTTP",
-      url: "/",
+      title: 'Home',
+      type: 'HTTP',
+      url: '/',
       items: [],
     },
     {
-      id: "gid://shopify/MenuItem/461609533496",
+      id: 'gid://shopify/MenuItem/461609533496',
       resourceId: null,
       tags: [],
-      title: "Blog",
-      type: "HTTP",
-      url: "/blogs",
+      title: 'Blog',
+      type: 'HTTP',
+      url: '/blogs',
       items: [],
     },
     {
-      id: "gid://shopify/MenuItem/461609566264",
+      id: 'gid://shopify/MenuItem/461609566264',
       resourceId: null,
       tags: [],
-      title: "Contact",
-      type: "HTTP",
-      url: "/contact",
+      title: 'Contact',
+      type: 'HTTP',
+      url: '/contact',
       items: [],
     },
     {
-      id: "gid://shopify/MenuItem/461609599032",
-      resourceId: "gid://shopify/Page/92591030328",
+      id: 'gid://shopify/MenuItem/461609599032',
+      resourceId: 'gid://shopify/Page/92591030328',
       tags: [],
-      title: "Shop",
-      type: "PAGE",
-      url: "/collections",
+      title: 'Shop',
+      type: 'PAGE',
+      url: '/collections',
       items: [],
     },
     {
-      id: "gid://shopify/MenuItem/461609599032",
-      resourceId: "gid://shopify/Page/92591030328",
+      id: 'gid://shopify/MenuItem/461609599032',
+      resourceId: 'gid://shopify/Page/92591030328',
       tags: [],
-      title: "About us",
-      type: "PAGE",
-      url: "/pages/our-story",
+      title: 'About us',
+      type: 'PAGE',
+      url: '/pages/our-story',
       items: [],
     },
   ],

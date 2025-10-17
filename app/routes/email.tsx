@@ -1,6 +1,5 @@
 import EmailGrabber from '~/Marketing/EmailGrabber';
-
-import {type ActionFunctionArgs} from '@remix-run/node'; // or cloudflare/deno
+import {type ActionFunctionArgs} from 'react-router';
 import createDripSubscriber from '~/lib/email';
 
 // Note the "action" export name, this will handle our form POST
