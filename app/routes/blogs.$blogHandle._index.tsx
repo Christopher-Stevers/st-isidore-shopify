@@ -1,4 +1,4 @@
-import {data, type LoaderFunctionArgs} from 'react-router';
+import type {LoaderFunctionArgs} from 'react-router';
 import {Link, useLoaderData, type MetaFunction} from 'react-router';
 import {Image, Pagination, getPaginationVariables} from '@shopify/hydrogen';
 import type {ArticleItemFragment} from 'storefrontapi.generated';

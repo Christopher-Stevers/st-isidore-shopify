@@ -19,13 +19,25 @@ export default {
         executionContext,
       );
 
+      /**
+       * Create a Remix request handler and pass
+       * Hydrogen's Storefront client to the loader context.
+       */
       const handleRequest = createRequestHandler({
+        // eslint-disable-next-line import/no-unresolved
         build: await import('virtual:react-router/server-build'),
         mode: process.env.NODE_ENV,
         getLoadContext: () => hydrogenContext,
       });
 
       const response = await handleRequest(request);
+
+      if (hydrogenContext.session.isPending) {
+        response.headers.set(
+          'Set-Cookie',
+          await hydrogenContext.session.commit(),
+        );
+      }
 
       if (response.status === 404) {
         /**
@@ -42,8 +54,8 @@ export default {
 
       return response;
     } catch (error) {
-      console.error('Error in server fetch:', error);
-      return new Response('Internal Server Error', { status: 500 });
+      console.error(error);
+      return new Response('An unexpected error occurred', {status: 500});
     }
   },
 };

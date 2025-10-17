@@ -1,5 +1,6 @@
 import {createHydrogenContext} from '@shopify/hydrogen';
-import {CART_QUERY_FRAGMENT} from './fragments.js';
+import {AppSession} from '~/lib/session';
+import {CART_QUERY_FRAGMENT} from '~/lib/fragments';
 
 const additionalContext = {
   // Additional context for custom properties, CMS clients, 3P SDKs, etc.
@@ -21,7 +22,10 @@ export async function createHydrogenRouterContext(
   }
 
   const waitUntil = executionContext.waitUntil.bind(executionContext);
-  const cache = await caches.open('hydrogen');
+  const [cache, session] = await Promise.all([
+    caches.open('hydrogen'),
+    AppSession.init(request, [env.SESSION_SECRET]),
+  ]);
 
   const hydrogenContext = createHydrogenContext(
     {
@@ -29,6 +33,7 @@ export async function createHydrogenRouterContext(
       request,
       cache,
       waitUntil,
+      session,
       i18n: {language: 'EN', country: 'US'},
       cart: {
         queryFragment: CART_QUERY_FRAGMENT,

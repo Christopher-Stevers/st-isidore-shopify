@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 /// <reference types="@shopify/oxygen-workers-types" />
+/// <reference types="@cloudflare/workers-types" />
 
 // Enhance TypeScript's built-in typings.
 import '@total-typescript/ts-reset';

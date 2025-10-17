@@ -3,7 +3,7 @@ import {
   createCookieSessionStorage,
   type SessionStorage,
   type Session,
-} from '@shopify/hydrogen';
+} from 'react-router';
 
 /**
  * This is a custom session implementation for your Hydrogen shop.

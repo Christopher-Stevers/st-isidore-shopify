@@ -1,4 +1,4 @@
-import {data, redirect, type LoaderFunctionArgs} from 'react-router';
+import type {LoaderFunctionArgs} from 'react-router';
 import {Link, useLoaderData, type MetaFunction} from 'react-router';
 import {Money, Image, flattenConnection} from '@shopify/hydrogen';
 import type {OrderLineItemFullFragment} from 'customer-accountapi.generated';

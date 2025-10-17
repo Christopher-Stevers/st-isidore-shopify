@@ -1,9 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-accent: 'Tangerine', serif;
+  --font-display: 'Rye', serif;
+  --font-text: 'Cantarell', sans-serif;
+  --font-sans: 'Roboto', sans-serif;
+  
+  --color-form: #30313d;
+  --color-primary-500: hsl(137 58% 11%);
+  --color-primary-700: hsl(137 58% 5%);
+  --color-backdrop-500: hsl(36 62% 94%);
+  --color-backdrop-700: hsl(36 62% 94%);
+}
 
 @layer utilities {
   .custom-list-bullet {

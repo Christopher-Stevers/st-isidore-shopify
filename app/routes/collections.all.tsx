@@ -1,4 +1,4 @@
-import {data, redirect, type LoaderFunctionArgs} from 'react-router';
+import type {LoaderFunctionArgs} from 'react-router';
 import {useLoaderData, Link, type MetaFunction} from 'react-router';
 import {
   Pagination,

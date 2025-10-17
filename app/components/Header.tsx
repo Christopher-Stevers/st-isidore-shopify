@@ -1,4 +1,4 @@
-import { Await, Link, NavLink, useLocation } from 'react-router';
+import {Await, Link, useLocation} from 'react-router';
 import {Suspense} from 'react';
 import type {HeaderQuery} from 'storefrontapi.generated';
 import type {LayoutProps} from './Layout';
@@ -74,7 +74,7 @@ export function HeaderMenu({
             : currentUrl;
         console.log(url, currentUrl);
         return (
-          <NavLink
+          <Link
             className={`text-white ${
               url !== location?.pathname ? 'opacity-70' : ''
             }`}
@@ -85,7 +85,7 @@ export function HeaderMenu({
             to={url}
           >
             {item.title}
-          </NavLink>
+          </Link>
         );
       })}
       <Link to="/">

@@ -1,11 +1,7 @@
-import {data, redirect, type LoaderFunctionArgs} from 'react-router';
+import {redirect} from 'react-router';
+import type {LoaderFunctionArgs} from 'react-router';
 import {useLoaderData, Link, type MetaFunction} from 'react-router';
-import {
-  Pagination,
-  getPaginationVariables,
-  Image,
-  Money,
-} from '@shopify/hydrogen';
+import {Pagination, getPaginationVariables, Image} from '@shopify/hydrogen';
 import type {ProductItemFragment} from 'storefrontapi.generated';
 import {useVariantUrl} from '~/lib/variants';
 import {useState} from 'react';
@@ -35,7 +31,7 @@ export async function loader({request, params, context}: LoaderFunctionArgs) {
       status: 404,
     });
   }
-  return json({collection});
+  return {collection};
 }
 
 export default function Collection() {

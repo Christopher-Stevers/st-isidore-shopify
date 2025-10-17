@@ -1,7 +1,5 @@
-import {Suspense} from 'react';
 import {data, redirect, type LoaderFunctionArgs} from 'react-router';
 import {
-  Await,
   Link,
   useLoaderData,
   type MetaFunction,
@@ -86,7 +84,7 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
     variables: {handle},
   });
 
-  return defer({product, variants});
+  return data({product, variants});
 }
 
 function redirectToFirstVariant({
@@ -153,7 +151,7 @@ function ProductMain({
 }: {
   product: ProductFragment;
   selectedVariant: ProductFragment['selectedVariant'];
-  variants: Promise<ProductVariantsQuery>;
+  variants: ProductVariantsQuery;
 }) {
   const {title, descriptionHtml} = product;
   return (
@@ -171,28 +169,11 @@ function ProductMain({
 
       <ProductPrice selectedVariant={selectedVariant} />
       <br />
-      <Suspense
-        fallback={
-          <ProductForm
-            product={product}
-            selectedVariant={selectedVariant}
-            variants={[]}
-          />
-        }
-      >
-        <Await
-          errorElement="There was a problem loading product variants"
-          resolve={variants}
-        >
-          {(data) => (
-            <ProductForm
-              product={product}
-              selectedVariant={selectedVariant}
-              variants={data.product?.variants.nodes || []}
-            />
-          )}
-        </Await>
-      </Suspense>
+      <ProductForm
+        product={product}
+        selectedVariant={selectedVariant}
+        variants={variants.product?.variants.nodes || []}
+      />
     </div>
   );
 }

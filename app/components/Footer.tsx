@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router';
+import {Link} from 'react-router';
 import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
 import {useRootLoaderData} from '~/root';
 
@@ -41,7 +41,7 @@ function FooterMenu({
             {item.title}
           </a>
         ) : (
-          <NavLink
+          <Link
             end
             key={item.id}
             prefetch="intent"
@@ -49,7 +49,7 @@ function FooterMenu({
             to={url}
           >
             {item.title}
-          </NavLink>
+          </Link>
         );
       })}
     </nav>

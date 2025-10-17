@@ -1,4 +1,4 @@
-import { Await, useLocation } from 'react-router';
+import {Await, useLocation} from 'react-router';
 import {Suspense} from 'react';
 import type {
   CartApiQueryFragment,
@@ -17,24 +17,24 @@ import {
 export type LayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
   children?: React.ReactNode;
-
   footer: Promise<FooterQuery>;
-  header: HeaderQuery;
-  isLoggedIn: Promise<boolean>;
+  header?: HeaderQuery;
+  isLoggedIn?: Promise<boolean>;
 };
 
 export function Layout({
   cart,
   children = null,
+  footer,
   header,
   isLoggedIn,
-}: LayoutProps) {
+}: Readonly<LayoutProps>) {
   const location = useLocation();
   return (
     <>
       <CartAside cart={cart} />
       <SearchAside />
-      <MobileMenuAside menu={header?.menu} shop={header?.shop} />
+      {header && <MobileMenuAside menu={header?.menu} shop={header?.shop} />}
       {header && <Header header={header} cart={cart} isLoggedIn={isLoggedIn} />}
       <main
         className={`min-h-[calc(100vh-128px)] ${
@@ -43,7 +43,7 @@ export function Layout({
       >
         {children}
       </main>
-      <Footer />
+      <Footer footer={footer} />
     </>
   );
 }

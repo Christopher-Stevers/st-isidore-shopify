@@ -1,4 +1,4 @@
-import {useNonce} from '@shopify/hydrogen';
+import {Analytics, getShopAnalytics, useNonce} from '@shopify/hydrogen';
 import {
   Links,
   Meta,
@@ -12,11 +12,12 @@ import {
   type LoaderFunctionArgs,
   type ShouldRevalidateFunction,
 } from 'react-router';
+import '~/tailwind.css';
 import favicon from './assets/favicon.svg';
 import resetStyles from './styles/reset.css?url';
 import appStyles from './styles/app.css?url';
-import stylesheet from '~/tailwind.css?url';
 import {Layout as PageLayout} from '~/components/Layout';
+import type {Route} from './+types/root';
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -56,7 +57,6 @@ export function links() {
       rel: 'stylesheet',
       href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Rye&family=Cantarell&family=Tangerine&display=swap',
     },
-    {rel: 'stylesheet', href: stylesheet},
     {rel: 'stylesheet', href: resetStyles},
     {rel: 'stylesheet', href: appStyles},
     {
@@ -78,43 +78,38 @@ export const useRootLoaderData = () => {
   const [root] = useMatches();
   return root?.loaderData as Awaited<ReturnType<typeof loader>>;
 };
+export async function loader(args: Route.LoaderArgs) {
+  const {storefront, cart, env} = args.context;
 
-export async function loader({context}: LoaderFunctionArgs) {
-  if (!context) {
-    throw new Error('Context is undefined');
-  }
-
-  const {storefront, customerAccount, cart} = context;
-  const publicStoreDomain = context.env?.PUBLIC_STORE_DOMAIN;
-
-  const isLoggedInPromise = customerAccount?.isLoggedIn();
-  const cartPromise = cart?.get();
-
-  // defer the footer query (below the fold)
-  const footerPromise = storefront.query(FOOTER_QUERY, {
+  // Load footer data (deferred)
+  const footer = storefront.query(FOOTER_QUERY, {
     cache: storefront.CacheLong(),
     variables: {
       footerMenuHandle: 'footer', // Adjust to your footer menu handle
     },
   });
 
-  // await the header query (above the fold)
-  const headerPromise = storefront.query(HEADER_QUERY, {
-    cache: storefront.CacheLong(),
-    variables: {
-      headerMenuHandle: 'main-menu', // Adjust to your header menu handle
-    },
-  });
+  // Load cart data
+  const cartPromise = cart?.get();
 
   return {
+    footer,
     cart: cartPromise,
-    footer: footerPromise,
-    header: await headerPromise,
-    isLoggedIn: isLoggedInPromise,
-    publicStoreDomain,
+    publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
+    shop: getShopAnalytics({
+      storefront,
+      publicStorefrontId: env.PUBLIC_STOREFRONT_ID,
+    }),
+    consent: {
+      checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
+      storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,
+      withPrivacyBanner: false,
+      // localize the privacy banner
+      country: storefront.i18n.country,
+      language: storefront.i18n.language,
+    },
   };
 }
-
 export function Layout({children}: {readonly children?: React.ReactNode}) {
   const nonce = useNonce();
   const data = useRouteLoaderData<typeof loader>('root');

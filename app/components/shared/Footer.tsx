@@ -1,6 +1,6 @@
 import React from 'react';
 import {Image} from '@shopify/hydrogen';
-import { Link } from 'react-router';
+import {Link} from 'react-router';
 import Instagram from '../../components/svg/socialLogos/Instagram';
 //import Discord from "~/components/svg/socialLogos/Discord";
 import Facebook from '../../components/svg/socialLogos/Facebook';

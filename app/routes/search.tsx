@@ -1,5 +1,9 @@
-import {defer, type LoaderFunctionArgs} from 'react-router';
-import {useLoaderData, type MetaFunction} from 'react-router';
+import {
+  data,
+  type LoaderFunctionArgs,
+  useLoaderData,
+  type MetaFunction,
+} from 'react-router';
 import {getPaginationVariables} from '@shopify/hydrogen';
 
 import {SearchForm, SearchResults, NoSearchResults} from '~/components/Search';
@@ -41,7 +45,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     totalResults,
   };
 
-  return defer({
+  return data({
     searchTerm,
     searchResults,
   });

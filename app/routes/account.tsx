@@ -1,5 +1,5 @@
-import {data, type LoaderFunctionArgs} from 'react-router';
-import {Form, NavLink, Outlet, useLoaderData} from 'react-router';
+import type {LoaderFunctionArgs} from 'react-router';
+import {Form, Link, Outlet, useLoaderData} from 'react-router';
 import {CUSTOMER_DETAILS_QUERY} from '~/graphql/customer-account/CustomerDetailsQuery';
 
 export function shouldRevalidate() {
@@ -63,17 +63,17 @@ function AccountMenu() {
 
   return (
     <nav role="navigation">
-      <NavLink to="/account/orders" style={isActiveStyle}>
+      <Link to="/account/orders" style={isActiveStyle}>
         Orders &nbsp;
-      </NavLink>
+      </Link>
       &nbsp;|&nbsp;
-      <NavLink to="/account/profile" style={isActiveStyle}>
+      <Link to="/account/profile" style={isActiveStyle}>
         &nbsp; Profile &nbsp;
-      </NavLink>
+      </Link>
       &nbsp;|&nbsp;
-      <NavLink to="/account/addresses" style={isActiveStyle}>
+      <Link to="/account/addresses" style={isActiveStyle}>
         &nbsp; Addresses &nbsp;
-      </NavLink>
+      </Link>
       &nbsp;|&nbsp;
       <Logout />
     </nav>
