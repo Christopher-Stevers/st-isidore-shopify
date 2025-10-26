@@ -1,6 +1,5 @@
 import Testimonials from '~/components/SharedMarketing/Testimonials';
 import {getSelectedProductOptions} from '@shopify/hydrogen';
-import {type LoaderFunctionArgs, defer} from 'react-router';
 import {PRODUCT_QUERY} from '~/components/ProductPage/productLoader';
 import IntroOffer from '~/components/SharedMarketing/IntroOffer';
 import HowItWorks from '~/components/SharedMarketing/HowItWorks';
@@ -9,7 +8,7 @@ import WhyChooseUs from '~/components/SharedMarketing/WhyChooseUs';
 import FreeFreezerFaq from '~/components/SharedMarketing/FreeFreezer/FreeFreezerFaq';
 import {freeFreezerContentsections} from '~/components/SharedMarketing/constants';
 import GenericContentSection from '~/components/SharedMarketing/GenericContentSection';
-import {type MetaFunction} from 'react-router';
+import {type MetaFunction, type LoaderFunctionArgs} from 'react-router';
 import FreeFreezerBuyBoxes from '~/components/SharedMarketing/FreeFreezer/FreeFreezerBuyBoxes';
 export const meta: MetaFunction<typeof loader> = () => {
   return [{title: `St Isidore Ranch | Get Your Free Freezer`}];
@@ -76,7 +75,7 @@ export const loader = async ({request, context}: LoaderFunctionArgs) => {
   // where variant options might show as available when they're not, but after
   // this deffered query resolves, the UI will update.
 
-  return defer({firstProduct, secondProduct, thirdProduct});
+  return {firstProduct, secondProduct, thirdProduct};
 };
 
 // Main App Component

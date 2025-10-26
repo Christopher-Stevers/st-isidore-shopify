@@ -1,4 +1,4 @@
-import {type LoaderFunctionArgs, defer} from 'react-router';
+import {type LoaderFunctionArgs} from 'react-router';
 import {getSelectedProductOptions} from '@shopify/hydrogen';
 import {PRODUCT_QUERY} from '~/components/ProductPage/productLoader';
 import ThankYou from '~/components/SharedMarketing/Giveaway/ThankYou';
@@ -65,7 +65,7 @@ export const loader = async ({request, context}: LoaderFunctionArgs) => {
   // where variant options might show as available when they're not, but after
   // this deffered query resolves, the UI will update.
 
-  return defer({firstProduct, secondProduct, thirdProduct});
+  return {firstProduct, secondProduct, thirdProduct};
 };
 
 const GiveawayThankYou = () => {

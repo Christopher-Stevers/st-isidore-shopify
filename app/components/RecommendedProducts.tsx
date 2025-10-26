@@ -3,7 +3,7 @@ import {Await, Link} from 'react-router';
 import {Image, Money} from '@shopify/hydrogen';
 
 import type {RecommendedProductsQuery} from 'storefrontapi.generated';
-import {type LoaderFunctionArgs, defer} from '@shopify/hydrogen';
+import type {LoaderFunctionArgs} from 'react-router';
 
 const FEATURED_COLLECTION_QUERY = `#graphql
   fragment FeaturedCollection on Collection {
@@ -65,7 +65,7 @@ export async function loader({context}: LoaderFunctionArgs) {
   const featuredCollection = collections.nodes[0];
   const recommendedProducts = storefront.query(RECOMMENDED_PRODUCTS_QUERY);
 
-  return defer({featuredCollection, recommendedProducts});
+  return {featuredCollection, recommendedProducts};
 }
 const RecommendedProducts = ({
   products,

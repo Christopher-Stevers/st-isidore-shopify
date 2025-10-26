@@ -1,30 +1,44 @@
-import {ShoppingCart, Truck, Smile} from 'lucide-react';
+import {ShoppingCart, Truck, Smile, Package} from 'lucide-react';
 
 interface OfferHowItWorksProps {
   title?: string;
   steps?: Array<{
-    icon: React.ReactNode;
+    icon: string;
     title: string;
     description: string;
   }>;
 }
 
+const dynamicIcons = {
+  'shopping-cart': <ShoppingCart className="w-12 h-12 text-red-600 mb-4" />,
+  truck: <Truck className="w-12 h-12 text-red-600 mb-4" />,
+  smile: <Smile className="w-12 h-12 text-red-600 mb-4" />,
+  package: <Package className="w-12 h-12 text-red-600 mb-4" />,
+};
+
+export const getIcon = (icon: string) => {
+  if (icon in dynamicIcons) {
+    return dynamicIcons[icon as keyof typeof dynamicIcons];
+  }
+  return <Package className="w-12 h-12 text-red-600 mb-4" />;
+};
+
 export function OfferHowItWorks({
   title = 'How It Works',
   steps = [
     {
-      icon: <ShoppingCart className="w-12 h-12 text-red-600 mb-4" />,
+      icon: 'shopping-cart',
       title: 'Order Your Box',
       description: 'Choose your beef sampler and place your order online',
     },
     {
-      icon: <Truck className="w-12 h-12 text-red-600 mb-4" />,
+      icon: 'truck',
       title: 'We Prepare & Ship',
       description:
         'We carefully package your fresh beef and ship it to your door',
     },
     {
-      icon: <Smile className="w-12 h-12 text-red-600 mb-4" />,
+      icon: 'smile',
       title: 'Enjoy Premium Beef',
       description: 'Receive your order and enjoy the finest grass-fed beef',
     },
@@ -41,7 +55,7 @@ export function OfferHowItWorks({
             key={`step-${step.title}-${index}`}
             className="flex flex-col items-center p-6 bg-white rounded-xl shadow-lg"
           >
-            {step.icon}
+            {getIcon(step.icon)}
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               {step.title}
             </h3>
