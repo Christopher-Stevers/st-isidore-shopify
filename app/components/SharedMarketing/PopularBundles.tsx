@@ -2,6 +2,7 @@ import {Link} from 'react-router';
 import {StarIcon} from 'lucide-react';
 import React from 'react';
 import {useRootLoaderData} from '~/root';
+import { Image } from '@shopify/hydrogen';
 
 interface BundleCardProps {
   imageUrl: string;
@@ -45,7 +46,7 @@ const BundleCard: React.FC<BundleCardProps> = ({
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden flex flex-col items-center p-4 md:p-6 w-[300px] ">
       {/* Product Image */}
-      <img
+      <Image
         src={imageUrl}
         alt={imageAlt || title}
         className="w-full h-48 object-cover rounded-md"
