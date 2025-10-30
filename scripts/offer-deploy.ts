@@ -20,7 +20,8 @@ import { processAdSetCsvs } from './meta/generateAdCsv';
 
 interface DeployOptions {
   config: string;
-  adsets: string;
+  adsets?: string;
+  tier?: string; // e.g., "Tier1", "Tier2"
 }
 
 async function cleanupAdSetDirectory(adsetsPath: string): Promise<void> {
@@ -81,12 +82,14 @@ async function parseArguments(): Promise<DeployOptions> {
       options.config = arg.split('=')[1];
     } else if (arg.startsWith('--adsets=')) {
       options.adsets = arg.split('=')[1];
+    } else if (arg.startsWith('--tier=')) {
+      options.tier = arg.split('=')[1];
     }
   }
 
-  if (!options.config || !options.adsets) {
+  if (!options.config) {
     console.error('❌ Missing required arguments');
-    console.log('Usage: npx tsx scripts/offer-deploy.ts --config=./path/to/config.ts --adsets=./path/to/adsets/');
+    console.log('Usage: npx tsx scripts/offer-deploy.ts --config=./path/to/config.ts [--adsets=./path/to/adsets/]');
     process.exit(1);
   }
 
@@ -136,10 +139,17 @@ async function deployOffer(options: DeployOptions): Promise<DeployResult> {
     // 3. Process AdSet CSVs
     console.log('\n📊 Processing AdSet CSVs...');
     try {
+      // Determine adsets directory: use provided or default to sibling "adsets" next to config
+      const configDir = path.dirname(path.resolve(options.config));
+      const adsetsDir = path.resolve(options.adsets ?? path.join(configDir, 'adsets'));
+
+      // Ensure directory exists
+      await fs.mkdir(adsetsDir, { recursive: true });
+
       // Clean up any existing generated files first
-      await cleanupAdSetDirectory(options.adsets);
+      await cleanupAdSetDirectory(adsetsDir);
       
-      const processedFiles = await processAdSetCsvs(options.adsets, offerConfig);
+      const processedFiles = await processAdSetCsvs(adsetsDir, offerConfig, options.tier);
       result.adsets.success = true;
       result.adsets.processedFiles = processedFiles;
       console.log('✅ AdSet CSVs processed successfully');

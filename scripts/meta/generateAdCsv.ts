@@ -29,7 +29,11 @@ interface ProcessedAdSet {
   adSetName: string;
 }
 
-async function processAdSetCsvs(adsetsPath: string, offerConfig: OfferConfig): Promise<ProcessedAdSet[]> {
+async function processAdSetCsvs(
+  adsetsPath: string,
+  offerConfig: OfferConfig,
+  tierFilter?: string
+): Promise<ProcessedAdSet[]> {
   console.log(`📊 Processing AdSet CSVs from: ${adsetsPath}`);
 
   // Check if path is a directory
@@ -38,13 +42,10 @@ async function processAdSetCsvs(adsetsPath: string, offerConfig: OfferConfig): P
     throw new Error(`Path ${adsetsPath} is not a directory`);
   }
 
-  // Find all CSV files in the directory
+  // Find all CSV files in the directory (optional)
   const files = await fs.readdir(adsetsPath);
-  const csvFiles = files.filter(file => file.toLowerCase().endsWith('.csv'));
-
-  if (csvFiles.length === 0) {
-    throw new Error(`No CSV files found in ${adsetsPath}`);
-  }
+  // Only treat template CSV as input to avoid re-processing consolidated output
+  const csvFiles = files.filter(file => file.toLowerCase() === 'adset_template.csv');
 
   // Clean up any remaining prepared files (backup cleanup)
   console.log('🧹 Final cleanup of prepared files...');
@@ -60,11 +61,52 @@ async function processAdSetCsvs(adsetsPath: string, offerConfig: OfferConfig): P
     }
   }
 
-  console.log(`📊 Found ${csvFiles.length} CSV files to process`);
-
-  // Process all CSV files and create only one consolidated file
+  // Process all CSV files and create only one consolidated file (or synthesize from config)
   const allRows: any[] = [];
   const processedFiles: ProcessedAdSet[] = [];
+
+  // If no CSVs exist, synthesize rows from offerConfig defaults
+  if (csvFiles.length === 0) {
+    console.log('ℹ️  No CSV files found. Auto-generating AdSets from offer config...');
+    const defaultAdSets = [
+      'Tier1_Retargeting_SocialProof',
+      'Tier1_Retargeting_Hypertarget',
+      'Tier1_Sales_Warm',
+      'Tier1_Sales_Cold'
+    ];
+    const filteredAdSets = tierFilter
+      ? defaultAdSets.filter(name => name.toLowerCase().startsWith(tierFilter.toLowerCase()))
+      : defaultAdSets;
+    const adTypes = [
+      { type: 'Carousel', suffix: ' | Carousel' },
+      { type: 'Video', suffix: ' | Video' },
+      { type: 'Static', suffix: ' | Static Image' }
+    ];
+
+    for (const adSetName of filteredAdSets) {
+      for (const adType of adTypes) {
+        const row: any = {};
+        row['Campaign Name'] = offerConfig.campaignName || offerConfig.title;
+        row['Ad Set Name'] = adSetName;
+        row['Ad Name'] = `${offerConfig.title} | ${adSetName}${adType.suffix}`;
+        row['Ad Type'] = adType.type;
+        if (offerConfig.marketingConfig?.hero) {
+          row['Headline'] = offerConfig.marketingConfig.hero.title || offerConfig.title;
+          row['Description'] = offerConfig.marketingConfig.hero.subtitle || offerConfig.description || '';
+        } else {
+          row['Headline'] = offerConfig.title;
+          row['Description'] = offerConfig.description || '';
+        }
+        row['Primary Text'] = offerConfig.highlights && offerConfig.highlights.length > 0
+          ? offerConfig.highlights[0]
+          : (offerConfig.description || '');
+        row['Website URL'] = `https://stisidoreranch.com/offers/${offerConfig.handle}`;
+        allRows.push(row);
+      }
+    }
+  } else {
+    console.log(`📊 Found ${csvFiles.length} CSV files to process`);
+  }
 
   for (const csvFile of csvFiles) {
     try {
@@ -82,12 +124,12 @@ async function processAdSetCsvs(adsetsPath: string, offerConfig: OfferConfig): P
         continue;
       }
 
-      // Generate ad set name from filename (remove .csv extension)
-      const adSetName = path.basename(csvFile, '.csv');
-
-      // Process each row to create 3 ad types for each AdSet
+      // Process template rows; optionally filter by tier
       for (const row of records) {
-        const currentAdSetName = row['Ad Set Name'] || adSetName;
+        const currentAdSetName = row['Ad Set Name'] || 'AdSet_Template';
+        if (tierFilter && !currentAdSetName.toLowerCase().startsWith(tierFilter.toLowerCase())) {
+          continue;
+        }
         
         // Create 3 different ad types for each AdSet
         const adTypes = [
@@ -136,17 +178,18 @@ async function processAdSetCsvs(adsetsPath: string, offerConfig: OfferConfig): P
   // Create one consolidated CSV file
   if (allRows.length > 0) {
     const consolidatedContent = stringify(allRows, { header: true });
-    const consolidatedFile = path.join(adsetsPath, 'All_AdSets_Consolidated.csv');
+    const consolidatedName = `${tierFilter ? tierFilter : 'All'}_AdSets_Consolidated.csv`;
+    const consolidatedFile = path.join(adsetsPath, consolidatedName);
     await fs.writeFile(consolidatedFile, consolidatedContent);
     
-    console.log(`📊 Created consolidated file: All_AdSets_Consolidated.csv (${allRows.length} rows)`);
+    console.log(`📊 Created consolidated file: ${consolidatedName} (${allRows.length} rows)`);
     
     // Add the consolidated file to processed files
     processedFiles.push({
       inputFile: 'Template files',
       outputFile: consolidatedFile,
       campaignName: offerConfig.campaignName || offerConfig.title,
-      adSetName: 'All AdSets'
+      adSetName: tierFilter ? `${tierFilter} AdSets` : 'All AdSets'
     });
   }
 

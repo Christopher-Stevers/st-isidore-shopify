@@ -1,94 +1,105 @@
 const offerConfig = {
-  handle: "fall-comfort-box",
-  title: "Fall Comfort Box",
-  description: "A cozy fall assortment featuring ground beef, stew beef, and roasts — perfect for family dinners and slow-cooked meals all season long.",
+  // Basic Product Info
+  handle: "fall-family-beef-sampler",
+  title: "Fall Family Beef Sampler Box",
+  description:
+    "A 15 lb assortment of Ontario grass-fed beef — perfect for family dinners this fall. Enjoy premium steaks, hearty roasts, and convenient ground beef, all raised with integrity on open pasture.",
   price: "199.00",
-  compareAtPrice: "239.00",
-  campaignName: "Fall Family Freezer Fill-Up",
-  startDate: "2025-10-01",
+  compareAtPrice: "265.00",
+
+  // Campaign Details
+  campaignName: "Fall Family Beef Sampler",
+  startDate: "2025-10-29",
   endDate: "2025-12-15",
-  targetAudience: "Families and meal preppers who want healthy, hearty meals for fall and winter.",
+  targetAudience:
+    "Ontario families who value health, convenience, and transparency — seeking local, nutrient-dense, pasture-raised beef for their tables.",
+
+  // Product Highlights
   highlights: [
-    "Perfect for cozy fall meals",
-    "Slow-cooker friendly roasts & stew beef",
-    "Locally raised & 100% grass-fed",
-    "Delivered freezer-ready to your door"
+    "15 lb family-friendly bundle",
+    "Ontario grass-fed and finished beef",
+    "Balanced mix of steaks, roasts, and ground",
+    "Save ~25 % vs buying individually"
   ],
+
+  // Marketing Configuration Object
   marketingConfig: {
     hero: {
-      title: "Warm Up with the Fall Comfort Box",
-      subtitle: "Ground beef, stew beef, and roasts — everything you need for cozy, nourishing meals all season long.",
+      title: "Feed Your Family Better This Fall",
+      subtitle:
+        "Taste the difference in local, grass-fed beef — convenient, delicious, and raised with care right here in Ontario.",
       ctaText: "Reserve Your Box",
       ctaUrl: "/cart",
       bullets: [
-        "15+ lbs of local beef",
-        "Perfect for soups, stews & slow cooking",
-        "Freezer-ready — limited fall run"
+        "100 % Grass-Fed • Pasture-Raised",
+        "Perfect 15 lb Family Sampler",
+        "Limited Fall Availability"
       ]
     },
     cuts: {
       title: "What's Inside",
       items: [
-        "10 lbs Ground Beef (1 lb packs)",
-        "3 lbs Stew Beef",
-        "1 × Pot Roast (~2.5 lbs)",
-        "1 × Chuck Roast (~2.5 lbs)",
-        "1 × Rump Roast (~2.5 lbs)"
+        "6 lb Ground Beef",
+        "0.625 lb NY Strip Steaks (2 × 5 oz)",
+        "0.75 lb Sirloin Steak",
+        "0.75 lb Sirloin Tip Steak",
+        "2.5 lb Pot Roast (Cross Rib)",
+        "2.5 lb Blade Roast",
+        "2 lb Stew Meat",
+        "0.5 lb Shank Bones (optional)"
       ],
       showImages: true
     },
     delivery: {
-      title: "Ontario-Wide Delivery",
-      content: "Delivered direct from St. Isidore Ranch — frozen, vacuum-sealed, and ready for your freezer. Free delivery for most of Southwestern Ontario.",
+      title: "Local Delivery & Pickup",
+      content:
+        "Delivered fresh-frozen across Southwestern Ontario or available for easy farm pickup. We coordinate directly after checkout to confirm delivery timing.",
       icon: "truck"
     },
     promise: {
       title: "Our Promise",
-      content: "Raised on pasture and finished on grass and hay. No antibiotics, no hormones — just clean, honest beef from our family ranch.",
-      guarantee: "Satisfaction guaranteed or your money back."
+      content:
+        "We raise every animal on open pasture without grain, growth hormones, or feedlot stress — just clean, nutrient-dense beef you can feel good about feeding your family.",
+      guarantee: "Satisfaction guaranteed or we’ll make it right."
     },
     howItWorks: {
       title: "How It Works",
       steps: [
         {
           icon: "shopping-cart",
-          title: "Reserve Your Box",
-          description: "Place your order online to secure your Fall Comfort Box before it sells out."
+          title: "Reserve Online",
+          description:
+            "Secure your Fall Family Beef Sampler today — quantities are limited for the season."
         },
         {
           icon: "package",
-          title: "We Hand-Pack & Freeze",
-          description: "We carefully pack and freeze your cuts at peak freshness, ready for delivery."
+          title: "We Prepare Your Box",
+          description:
+            "Our butcher carefully packs each order with your steaks, roasts, and ground beef."
         },
         {
           icon: "truck",
-          title: "Delivered to Your Doorstep",
-          description: "Your beef arrives frozen and vacuum-sealed — ready to stock your freezer."
+          title: "Delivery or Pickup",
+          description:
+            "We deliver across Ontario or schedule a convenient local pickup."
         }
       ]
     },
     testimonials: {
       enabled: true,
-      title: "What Families Are Saying"
+      title: "What Ontario Families Are Saying"
     },
-    story: {
-      enabled: false
-    },
+    story: { enabled: false },
     newsletter: {
       enabled: true,
       title: "Stay in the Loop",
-      subtitle: "Be the first to hear about upcoming seasonal boxes and special offers.",
-      ctaText: "Join Our Ranch Newsletter"
+      subtitle:
+        "Get recipes, cooking tips, and early access to new beef shares.",
+      ctaText: "Join the Farm Rebel List"
     },
-    claims: {
-      enabled: false
-    },
-    faq: {
-      enabled: false
-    },
-    whyChooseUs: {
-      enabled: false
-    },
+    claims: { enabled: false },
+    faq: { enabled: false },
+    whyChooseUs: { enabled: false },
     sections: [
       { id: "hero", enabled: true, position: 1 },
       { id: "cuts", enabled: true, position: 2 },
@@ -100,5 +111,7 @@ const offerConfig = {
     ]
   }
 };
+
+
 
 export default offerConfig;
