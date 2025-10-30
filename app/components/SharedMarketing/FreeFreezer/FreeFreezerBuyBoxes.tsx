@@ -15,7 +15,7 @@ const FunnelBuyBox = ({ product }: { product: BuyBoxProps["product"] }) => {
     <div className="@container flex-1">
       <div
         className="
-    flex flex-col  py-8  justify-start justify-items-stretch items-stretch
+    flex  py-8  justify-start justify-items-stretch items-stretch
      gap-16  px-2 xl:px-8"
       >
         <BuyBoxImages product={product} />
