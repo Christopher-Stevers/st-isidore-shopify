@@ -28,43 +28,23 @@ export const loader = async ({request, context}: LoaderFunctionArgs) => {
       !option.name.startsWith('fbclid'),
   );
 
-  const firstProductHandle = '1-2-beef-deposit-free-freezer-400-value';
-  const secondProductHandle = 'whole-beef-deposit-free-freezer-800-value';
   const thirdProductHandle = '1-4-beef';
   // await the query for the critical product data
-  const {product: firstProduct} = await storefront.query(PRODUCT_QUERY, {
-    variables: {handle: firstProductHandle, selectedOptions},
-  });
-  const {product: secondProduct} = await storefront.query(PRODUCT_QUERY, {
-    variables: {handle: secondProductHandle, selectedOptions},
-  });
+ 
   const {product: thirdProduct} = await storefront.query(PRODUCT_QUERY, {
     variables: {handle: thirdProductHandle, selectedOptions},
   });
 
-  if (!firstProduct?.id) {
-    throw new Response(null, {status: 404});
-  }
-  if (!secondProduct?.id) {
-    throw new Response(null, {status: 404});
-  }
+
   if (!thirdProduct?.id) {
     throw new Response(null, {status: 404});
   }
 
-  const firstVariantOfFirstProduct = firstProduct.variants.nodes[0];
-  const firstVariantOfSecondProduct = secondProduct.variants.nodes[0];
+
   const firstVariantOfThirdProduct = thirdProduct.variants.nodes[0];
-  firstProduct.selectedVariant = firstVariantOfFirstProduct!;
-  secondProduct.selectedVariant = firstVariantOfSecondProduct!;
   thirdProduct.selectedVariant = firstVariantOfThirdProduct!;
 
-  if (!firstVariantOfFirstProduct) {
-    throw new Response(null, {status: 404});
-  }
-  if (!firstVariantOfSecondProduct) {
-    throw new Response(null, {status: 404});
-  }
+
   if (!firstVariantOfThirdProduct) {
     throw new Response(null, {status: 404});
   }
@@ -75,7 +55,7 @@ export const loader = async ({request, context}: LoaderFunctionArgs) => {
   // where variant options might show as available when they're not, but after
   // this deffered query resolves, the UI will update.
 
-  return {firstProduct, secondProduct, thirdProduct};
+  return { thirdProduct};
 };
 
 // Main App Component

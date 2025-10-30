@@ -6,260 +6,244 @@ Copy and paste these prompts into ChatGPT to generate complete campaign configur
 
 ---
 
-## 🎯 **Complete Campaign Generation Prompt**
+## 🎯 **Complete Campaign Generation Prompt (Only: Offer Config JSON + 6-Email MD)**
 
 ```
-I need you to create a complete marketing campaign configuration for [CAMPAIGN_NAME]. 
+I need a single campaign package. Only produce:
+- campaign.json (offer config for Shopify + ads creative fields)
+- emails.md (6-email marketing series)
 
-**Campaign Details:**
-- Product: [PRODUCT_NAME]
-- Price: $[PRICE]
-- Compare At: $[COMPARE_PRICE]
-- Season/Occasion: [SEASON/OCCASION]
-- Target Audience: [AUDIENCE_DESCRIPTION]
+1) Output a JSON config (campaign.json) with this EXACT shape. Important: Do NOT invent fields that are controlled by the CSV template (Campaign/Ad Set naming, placements, budgets). Leave them empty or omit them. Only include what’s necessary for creatives and landing URL.
+{
+  "campaign": {"name":"","tier":"T0|T1|T23|T45","objective":"","dailyBudget":null,"startTime":"","stopTime":"","pageId":"","pixelId":"","tags":[]},
+  "adsets": [{
+    "name":"","dailyBudget":null,"optimizationGoal":"","billingEvent":"","attributionSpec":"",
+    "audience":{"countries":[],"customAudiences":[],"interests":[],"genders":[],"ageMin":null,"ageMax":null},
+    "placements":{"publisherPlatforms":[],"facebookPositions":[],"instagramPositions":[],"devicePlatforms":[]}
+  }],
+  "ads": [{
+    "name":"...","primaryText":"...","headline":"...","description":"...",
+    "link":"https://...","displayLink":"","callToAction":"SHOP_NOW","urlTags":"",
+    "image":{"source":"./assets/creative.jpg"}
+  }],
+  "shopify": {"landingUrl":"https://...","productHandle":"...","images":["https://..."],"price":199},
+  "utm": {"source":"meta","medium":"paid","campaign":"[sanitized_name]","content":""}
+}
 
-**What I need:**
-1. Complete TypeScript offer configuration (config.ts)
-2. AdSet CSV template with 4 AdSets
-3. 5-email drip campaign (emails.md)
+Rules:
+- Do NOT populate template-controlled fields (Campaign/Ad Set naming, placements, budgets) unless explicitly provided.
+- Ad creative should match the tier intent (per the Value Ladder PDF).
 
-**AdSets needed:**
-- Tier1_Retargeting_SocialProof (3 ads)
-- Tier1_Retargeting_Hypertarget (2 ads)
-- Tier1_Sales_Warm (4 ads)
-- Tier1_Sales_Cold (2 ads)
+2) Output a 6-email marketing series (emails.md) with sections:
+   - Email 1: Welcome & What’s Inside
+   - Email 2: Preparation + Storage Tips
+   - Email 3: Delivery Day + What to Expect
+   - Email 4: First Recipe (detailed)
+   - Email 5: Social Proof + FAQs
+   - Email 6: Final Reminder + Offer Close
+Each email should include subject, preview line, body with headings, and a clear CTA linking to the landing URL.
 
-**Email sequence:**
-- Email 1: Welcome & What's Inside
-- Email 2: Preparation Tips
-- Email 3: Delivery Day
-- Email 4: First Recipe
-- Email 5: Thank You & Feedback
+3) Keep campaigns limited to those in the DTC Rancher CSV template. No extra archetypes.
 
-Generate all three files with complete, production-ready content.
+Return BOTH files: campaign.json and emails.md.
 ```
 
 ---
 
-## 📋 **Individual Component Prompts**
+## 📋 **Individual Component Prompts (Updated for Unified Config + Emails)**
 
-### **Offer Configuration Generator**
+### **Offer + Ads Unified Config Generator**
 
 ```
-Create a TypeScript offer configuration for [CAMPAIGN_NAME] following this EXACT structure:
+Generate:
+1) campaign.json (machine config matching the schema above)
+2) emails.md (6-email series as specified)
 
-```typescript
-const offerConfig = {
-  // Basic Product Info
-  handle: "[URL_FRIENDLY_NAME]",                    // e.g., "fall-comfort-box"
-  title: "[PRODUCT_NAME]",                          // e.g., "Fall Comfort Box"
-  description: "[2-3 sentence product description]",
-  price: "[PRICE]",                                 // e.g., "199.00"
-  compareAtPrice: "[COMPARE_PRICE]",                // e.g., "239.00"
-  
-  // Campaign Details
-  campaignName: "[MARKETING_CAMPAIGN_NAME]",        // e.g., "Fall Family Freezer Fill-Up"
-  startDate: "[START_DATE]",                        // e.g., "2025-10-01"
-  endDate: "[END_DATE]",                            // e.g., "2025-12-15"
-  targetAudience: "[AUDIENCE_DESCRIPTION]",
-  
-  // Product Highlights
-  highlights: [
-    "[Key selling point 1]",
-    "[Key selling point 2]",
-    "[Key selling point 3]",
-    "[Key selling point 4]"
+Inputs you can assume:
+- Product: [PRODUCT_NAME], Price: $[PRICE], Compare At: $[COMPARE_PRICE]
+- Tier: T0/T1/T23/T45, Objective: TRAFFIC/LEADS/CONVERSIONS
+- Audience: [AUDIENCE_DESCRIPTION]
+- Landing page URL: https://example.com/pages/[handle]
+
+Ensure creative fields (primary text, headline, description), landing URL, and CTA are complete. Keep campaigns limited to those in the DTC Rancher CSV template. Include strong CTAs and links in emails.
+
+### Shopify section requirements (must be present in campaign.json)
+- shopify.landingUrl: Full URL to the offer landing page (https://...)
+- shopify.productHandle: URL-safe handle for the product (used as SKU/handle)
+- shopify.price: Price (number or string, e.g., 199 or "199.00")
+- Do NOT include images here (images are handled separately)
+
+Also include the full OfferConfig shape (except images) to drive Shopify upload:
+- handle (string) – same as shopify.productHandle
+- title (string) – product title
+- description (string) – rich product description (HTML allowed)
+- price (string) – e.g., "199.00"
+- compareAtPrice (string, optional)
+- campaignName (string, optional)
+- startDate, endDate (YYYY-MM-DD, optional)
+- targetAudience (string, optional)
+- highlights (string[], optional)
+
+- marketingConfig (object, optional):
+  - hero: { title, subtitle, ctaText, ctaUrl, bullets[] }
+  - cuts: { title, items[], showImages }
+  - delivery: { title, content, icon }
+  - promise: { title, content, guarantee }
+  - howItWorks: { title, steps[{ icon, title, description }] }
+  - testimonials: { enabled, title }
+  - story: { enabled, title, content }
+  - newsletter: { enabled, title, subtitle, ctaText }
+  - claims: { enabled, title }
+  - faq: { enabled, title }
+  - whyChooseUs: { enabled, title }
+  - sections: [{ id, enabled, position }]
+
+These fields map directly to Shopify product fields and metafields used by the uploader. If any are unknown, include the key with an empty string or reasonable default (e.g., enabled: false).
+```
+
+### Example minimal compliant campaign.json (copy-paste ready)
+
+```json
+{
+  "campaign": {
+    "name": "Starter Bundle",
+    "tier": "T1",
+    "objective": "CONVERSIONS",
+    "dailyBudget": 50,
+    "startTime": "2025-11-01T08:00:00Z",
+    "stopTime": "",
+    "pageId": "",
+    "pixelId": "",
+    "tags": []
+  },
+  "adsets": [
+    {
+      "name": "Default",
+      "dailyBudget": null,
+      "lifetimeBudget": null,
+      "timeStart": "",
+      "timeStop": "",
+      "optimizationGoal": "",
+      "billingEvent": "",
+      "bidAmount": null,
+      "attributionSpec": "",
+      "audience": {
+        "countries": ["CA"],
+        "customAudiences": [],
+        "interests": [],
+        "genders": [],
+        "ageMin": null,
+        "ageMax": null
+      },
+      "placements": {
+        "publisherPlatforms": [],
+        "facebookPositions": [],
+        "instagramPositions": [],
+        "devicePlatforms": []
+      }
+    }
   ],
-  
-  // Marketing Configuration Object
-  marketingConfig: {
-    hero: {
-      title: "[MAIN_HEADLINE]",
-      subtitle: "[SUPPORTING_SUBTITLE]",
-      ctaText: "[CALL_TO_ACTION_TEXT]",
-      ctaUrl: "/cart",
-      bullets: [
-        "[Bullet point 1]",
-        "[Bullet point 2]",
-        "[Bullet point 3]"
-      ]
-    },
-    cuts: {
-      title: "What's Inside",
-      items: [
-        "[Item 1 with quantity]",
-        "[Item 2 with quantity]",
-        "[Item 3 with quantity]",
-        "[Item 4 with quantity]",
-        "[Item 5 with quantity]"
-      ],
-      showImages: true
-    },
-    delivery: {
-      title: "[DELIVERY_TITLE]",
-      content: "[Delivery description and details]",
-      icon: "truck"
-    },
-    promise: {
-      title: "Our Promise",
-      content: "[Quality promise and guarantees]",
-      guarantee: "[Satisfaction guarantee text]"
-    },
-    howItWorks: {
-      title: "How It Works",
-      steps: [
-        {
-          icon: "shopping-cart",
-          title: "[Step 1 Title]",
-          description: "[Step 1 description]"
-        },
-        {
-          icon: "package",
-          title: "[Step 2 Title]",
-          description: "[Step 2 description]"
-        },
-        {
-          icon: "truck",
-          title: "[Step 3 Title]",
-          description: "[Step 3 description]"
-        }
-      ]
-    },
-    testimonials: {
-      enabled: true,
-      title: "What [CUSTOMERS] Are Saying"
-    },
-    story: {
-      enabled: false
-    },
-    newsletter: {
-      enabled: true,
-      title: "Stay in the Loop",
-      subtitle: "[Newsletter signup subtitle]",
-      ctaText: "[Newsletter CTA text]"
-    },
-    claims: {
-      enabled: false
-    },
-    faq: {
-      enabled: false
-    },
-    whyChooseUs: {
-      enabled: false
-    },
-    sections: [
-      { id: "hero", enabled: true, position: 1 },
-      { id: "cuts", enabled: true, position: 2 },
-      { id: "delivery", enabled: true, position: 3 },
-      { id: "promise", enabled: true, position: 4 },
-      { id: "how_it_works", enabled: true, position: 5 },
-      { id: "testimonials", enabled: true, position: 6 },
-      { id: "newsletter", enabled: true, position: 7 }
-    ]
+  "ads": [
+    {
+      "name": "Primary",
+      "primaryText": "Taste the difference of Ontario grass-fed beef. Fresh, local, and raised right.",
+      "headline": "Starter Bundle – Limited Spots",
+      "description": "Farm-to-table quality. Perfect for busy weeknights.",
+      "link": "https://example.com/pages/starter-bundle",
+      "displayLink": "",
+      "callToAction": "SHOP_NOW",
+      "urlTags": "",
+      "image": { "source": "https://cdn.example.com/creative/starter-01.jpg" }
+    }
+  ],
+  "shopify": {
+    "landingUrl": "https://example.com/pages/starter-bundle",
+    "productHandle": "starter-bundle",
+    "price": 199
+  },
+  "utm": {
+    "source": "meta",
+    "medium": "paid",
+    "campaign": "Starter_Bundle",
+    "content": ""
   }
-};
-
-export default offerConfig;
+}
 ```
 
-**Campaign Details:**
-- Product: [PRODUCT_NAME]
-- Price: $[PRICE] / Compare At: $[COMPARE_PRICE]
-- Season/Occasion: [SEASON/OCCASION]
-- Target Audience: [AUDIENCE_DESCRIPTION]
-
-**Required Content:**
-- Compelling hero section with title, subtitle, and CTA
-- Detailed "What's Inside" section with specific items
-- Delivery information and promises
-- 3-step "How It Works" process
-- Appropriate section enablement for your campaign type
-
-Generate the complete config.ts file with all placeholders filled in with campaign-specific content.
-```
-
-### **AdSet Template Generator**
+### **Meta CSV Generator Prompt (DTC Rancher Template)**
 
 ```
-Create an AdSet CSV template for [CAMPAIGN_NAME] with these specifications:
-
-**Campaign Name:** [CAMPAIGN_NAME]
-**Website URL:** https://example.com (will be replaced)
-
-**AdSets needed:**
-1. **Tier1_Retargeting_SocialProof** (3 ads)
-   - Focus: Social proof, testimonials, reviews
-   - Headlines: Benefit-focused, trust-building
-   
-2. **Tier1_Retargeting_Hypertarget** (2 ads)
-   - Focus: Specific targeting, personalization
-   - Headlines: Personalized, targeted messaging
-   
-3. **Tier1_Sales_Warm** (4 ads)
-   - Focus: Warm audience, product benefits
-   - Headlines: Feature-focused, value-driven
-   
-4. **Tier1_Sales_Cold** (2 ads)
-   - Focus: Cold audience, broad appeal
-   - Headlines: Problem-solving, attention-grabbing
-
-**For each ad, provide:**
-- Varied headlines (different angles)
-- Compelling descriptions
-- Engaging primary text
-- Clear value propositions
-
-Generate the complete CSV with proper headers and varied content for each ad.
+Using the campaign.json, produce rows that match the headers and structure of our template at scripts/meta/DTC Rancher_Value Ladder_Meta Ads Template.csv. Only include campaign archetypes present in the template. Do not invent new columns.
 ```
 
 ### **Drip Email Campaign Generator**
 
 ```
-Create a 5-email drip campaign for [CAMPAIGN_NAME] with this structure:
+Create a 6-email marketing sequence for [CAMPAIGN_NAME] that nurtures leads toward purchase (not fulfillment). Include soft storytelling hooks about the ranch where appropriate.
 
-**Email 1: Welcome & What's Inside**
-- Subject: [Welcome subject line]
+General rules:
+- Each email must include: Subject, Preview line, Body with 3–5 short sections, 1 primary CTA linking to the landing URL, and a P.S. (optional).
+- Keep copy skimmable with short paragraphs, bullets, and bold key phrases.
+- Include optional placeholders for farm storytelling blocks where noted.
+
+Email structure:
+**Email 1: Welcome + Brand Story (Top-of-Funnel)**
+- Subject: [Warm welcome + curiosity]
+- Preview: [Promise of value + what’s coming]
+- Content:
+  - Who we are and what we stand for (grass-fed, local, transparent)
+  - Placeholder: [FARM_STORY_SNIPPET – origin story, family values]
+  - Core benefit to reader (taste, health, trust)
+  - CTA: Discover the offer
+
+**Email 2: Problem → Solution (Education/Authority)**
+- Subject: [Common problem your beef solves]
+- Preview: [Benefit-led teaser]
 - Content: 
-  - Welcome message and excitement
-  - Detailed product breakdown
-  - What's included in the box
-  - Next steps and timeline
+  - Identify 1–2 pain points (quality, sourcing, price predictability)
+  - Your method: pasture-based, no hormones/antibiotics
+  - Placeholder: [FARM_PRACTICES_BLOCK – grazing, stewardship]
+  - CTA: See how the bundle works
 
-**Email 2: Preparation Tips**
-- Subject: [Preparation subject line]
+**Email 3: Social Proof + Proof of Quality**
+- Subject: [Customer results/testimonials]
+- Preview: [Highlight a specific win]
 - Content:
-  - Storage and handling tips
-  - Cooking suggestions and ideas
-  - Recipe recommendations
-  - Preparation timeline
+  - 2–3 short testimonials or reviews
+  - Quality/process proof (butcher, quick-freeze, vacuum seal)
+  - Placeholder: [PHOTO_CALLOUT – family on ranch or herd]
+  - CTA: Browse the starter bundle
 
-**Email 3: Delivery Day**
-- Subject: [Delivery subject line]
+**Email 4: Education + Light Recipe Inspiration**
+- Subject: [Quick dinner wins / simple cooking approach]
+- Preview: [Ease + taste]
 - Content:
-  - Delivery confirmation and details
-  - What to expect when it arrives
-  - Immediate next steps
-  - Contact information for questions
+  - 1 simple versatile recipe concept (no fulfillment steps)
+  - Storage/meal-planning tip for busy families
+  - Reiterate value of the bundle (variety + savings)
+  - CTA: Start with the entry bundle
 
-**Email 4: First Recipe**
-- Subject: [Recipe subject line]
+**Email 5: Offer Breakdown + Objection Handling**
+- Subject: [What you get + why it’s worth it]
+- Preview: [Savings + convenience]
 - Content:
-  - Featured recipe with full instructions
-  - Cooking tips and techniques
-  - Serving suggestions
-  - Additional recipe ideas
+  - Bullet list of inclusions/benefits
+  - Tackle 2–3 common objections (cost, delivery, cooking skill)
+  - Placeholder: [RANCHER_NOTE – personal note from Chris]
+  - CTA: Reserve your box
 
-**Email 5: Thank You & Feedback**
-- Subject: [Thank you subject line]
+**Email 6: Urgency + Last Chance**
+- Subject: [Deadline or limited spots]
+- Preview: [Don’t miss out]
 - Content:
-  - Appreciation and gratitude
-  - Feedback request
-  - Future offerings preview
-  - Community and social sharing
+  - Restate key benefits quickly
+  - Reason to act now (limited inventory/seasonal)
+  - Risk reversal (guarantee/quality promise)
+  - CTA: Claim your spot today
 
-**Tone:** [FRIENDLY/PROFESSIONAL/CASUAL]
-**Brand Voice:** [BRAND_PERSONALITY]
-**Call-to-Actions:** Clear and specific
+Tone: [FRIENDLY/CONFIDENT/DOWN-TO-EARTH]
+Brand Voice: [AUTHENTIC_RANCHER]
+CTAs: Clear, single action per email
 
 Generate the complete emails.md file with frontmatter and all email content.
 ```

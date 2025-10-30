@@ -9,7 +9,6 @@
  */
 
 import 'dotenv/config';
-import offerConfig from './offerConfig';
 
 interface OfferConfig {
   handle: string;
@@ -436,18 +435,7 @@ async function upsertOffer(config: OfferConfig) {
 
 
 // Auto-run when executed directly
-if (process.argv[1] && process.argv[1].endsWith('upsertOffer.ts')) {
-  upsertOffer(offerConfig)
-    .then(() => {
-      console.log('✅ Offer upserted successfully!');
-      console.log(`\nView at: https://${SHOPIFY_STORE_DOMAIN}/offers/${offerConfig.handle}`);
-      process.exit(0);
-    })
-    .catch((error) => {
-      console.error('❌ Error:', error.message);
-      process.exit(1);
-    });
-}
+// no auto-run; invoked by runOffer.ts with --json
 
 export {upsertOffer, type OfferConfig};
 

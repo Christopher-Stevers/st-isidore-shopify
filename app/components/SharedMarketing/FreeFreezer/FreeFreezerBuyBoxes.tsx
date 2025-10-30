@@ -40,7 +40,7 @@ const FunnelBuyBox = ({ product }: { product: BuyBoxProps["product"] }) => {
 };
 
 const BuyBoxes = () => {
-  const { firstProduct, secondProduct, thirdProduct } =
+  const {   thirdProduct } =
     useLoaderData<typeof loader>();
 
   return (
@@ -51,12 +51,6 @@ const BuyBoxes = () => {
       >
         <FunnelBuyBox
           product={thirdProduct as unknown as BuyBoxProps["product"]}
-        />
-        <FunnelBuyBox
-          product={firstProduct as unknown as BuyBoxProps["product"]}
-        />
-        <FunnelBuyBox
-          product={secondProduct as unknown as BuyBoxProps["product"]}
         />
       </div>
     </SectionWrapper>

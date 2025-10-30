@@ -1,0 +1,46 @@
+{
+  "campaign": {
+    "name": "T1_Entry_Bundle_Cold_CA_1101",
+    "tier": "T1",
+    "objective": "CONVERSIONS",
+    "dailyBudget": 50,
+    "startTime": "2025-11-01T08:00:00Z",
+    "pageId": "YOUR_PAGE_ID",
+    "pixelId": "YOUR_PIXEL_ID",
+    "tags": ["tier1", "bundle"]
+  },
+  "adsets": [
+    {
+      "name": "CA_Broad_AutoPlacements",
+      "dailyBudget": 50,
+      "optimizationGoal": "OFFSITE_CONVERSIONS",
+      "billingEvent": "IMPRESSIONS",
+      "attributionSpec": "7d_click",
+      "audience": {"countries": ["CA"]},
+      "placements": {
+        "publisherPlatforms": ["facebook", "instagram"],
+        "facebookPositions": ["feed"],
+        "instagramPositions": ["stream"],
+        "devicePlatforms": ["mobile", "desktop"]
+      }
+    }
+  ],
+  "ads": [
+    {
+      "name": "Static_01",
+      "primaryText": "Taste the difference. Grass-fed beef, delivered.",
+      "headline": "Starter Bundle – Limited Spots",
+      "description": "Farm-to-table freshness.",
+      "link": "https://example.com/pages/tier1-offer",
+      "callToAction": "SHOP_NOW"
+    }
+  ],
+  "shopify": {
+    "landingUrl": "https://example.com/pages/tier1-offer",
+    "productHandle": "starter-bundle",
+    "images": ["https://cdn.shopify.com/asset.jpg"]
+  },
+  "utm": {"source": "meta", "medium": "paid", "campaign": "T1_Entry_Bundle_Cold_CA_1101"}
+}
+
+
