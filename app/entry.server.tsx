@@ -60,13 +60,15 @@ export default async function handleRequest(
   let csp = header;
   const nonceToken = `'nonce-${nonce}'`;
   // Scripts
-  csp = addOrAppend(csp, 'script-src', `'self' ${nonceToken} https://cdn.shopify.com https://shopify.com http://localhost:*`);
-  csp = addOrAppend(csp, 'script-src-elem', `'self' ${nonceToken} https://cdn.shopify.com https://shopify.com http://localhost:*`);
+  csp = addOrAppend(csp, 'script-src', `'self' ${nonceToken} 'unsafe-inline' 'unsafe-eval' https://cdn.shopify.com https://shopify.com http://localhost:*`);
+  csp = addOrAppend(csp, 'script-src-elem', `'self' ${nonceToken} 'unsafe-inline' 'unsafe-eval' https://cdn.shopify.com https://shopify.com http://localhost:*`);
   // Styles
   csp = addOrAppend(csp, 'style-src', `'self' 'unsafe-inline' https://cdn.shopify.com https://fonts.googleapis.com http://localhost:*`);
   csp = addOrAppend(csp, 'style-src-elem', `'self' 'unsafe-inline' https://cdn.shopify.com https://fonts.googleapis.com http://localhost:*`);
   // Fonts
   csp = addOrAppend(csp, 'font-src', `'self' https://fonts.gstatic.com data:`);
+  // Connect
+  csp = addOrAppend(csp, 'connect-src', `'self' https://api.emailjs.com http://localhost:* ws://localhost:*`);
 
   responseHeaders.set('Content-Security-Policy', csp);
 
