@@ -9,6 +9,7 @@ import Claims from '~/components/SharedMarketing/Claims';
 import Faq from '~/components/SharedMarketing/FAQ';
 import WhyChooseUs from '~/components/SharedMarketing/WhyChooseUs';
 import {parseMarketingMetafields} from '~/lib/marketingMetafields';
+import { Image } from '@shopify/hydrogen';
 
 interface Metafield {
   key: string;
@@ -102,8 +103,15 @@ export function MarketingSystem({offer, metafields}: MarketingSystemProps) {
             <div className="bg-white rounded-2xl p-8 shadow-lg">
               <div className="grid md:grid-cols-2 gap-12 items-center">
                 <div>
-                  <div className="aspect-video bg-gray-200 rounded-xl flex items-center justify-center mb-6">
-                    <span className="text-gray-500">Ranch Photo</span>
+                  <div className="aspect-video bg-gray-200 rounded-xl flex items-center justify-center mb-6 overflow-hidden">
+                    <Image
+                      data={{
+                        url: "https://cdn.shopify.com/s/files/1/0626/1991/0197/files/me.png?v=1762894223",
+                        altText: "St Isidore Ranch landscape",
+                      }}
+                      className="object-cover w-full h-full"
+                      loading="lazy"
+                    />
                   </div>
                 </div>
                 <div className="space-y-6">
