@@ -16,12 +16,19 @@ function parseArgs() {
 function fromUnifiedJson(p: string): OfferConfig {
   const full = path.resolve(p);
   const raw = JSON.parse(fs.readFileSync(full, 'utf8')) as any;
+  
+  // If offerConfig exists, use it directly (it has the full marketing config)
+  if (raw.offerConfig) {
+    return raw.offerConfig as OfferConfig;
+  }
+  
+  // Otherwise, build from unified config structure
   const cfg: OfferConfig = {
     handle: raw.shopify?.productHandle || raw.campaign?.name?.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
     title: raw.campaign?.name || 'Offer',
     description: raw.ads?.[0]?.primaryText || 'Offer',
     price: String(raw.shopify?.price ?? '0.00'),
-    compareAtPrice: undefined,
+    compareAtPrice: raw.offerConfig?.compareAtPrice || undefined,
     campaignName: raw.campaign?.name,
     startDate: raw.campaign?.startTime?.slice(0, 10),
     endDate: raw.campaign?.stopTime?.slice(0, 10),

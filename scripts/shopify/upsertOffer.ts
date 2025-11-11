@@ -275,7 +275,7 @@ async function upsertOffer(config: OfferConfig) {
             id: existingProductId,
             title: config.title,
             descriptionHtml: config.description || '',
-            metafields: metafields,
+            // Don't set metafields here - use metafieldsSet mutation instead
           },
         },
       }),
@@ -289,6 +289,85 @@ async function upsertOffer(config: OfferConfig) {
     }
 
     console.log('Product updated successfully:', updateData.data?.productUpdate?.product);
+
+    // Update metafields separately using metafieldsSet (batched in chunks of 25)
+    if (metafields.length > 0) {
+      console.log(`Setting ${metafields.length} metafields in batches...`);
+      const metafieldsSetMutation = `
+        mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
+          metafieldsSet(metafields: $metafields) {
+            metafields {
+              id
+              namespace
+              key
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+      `;
+
+      // Filter out metafields with empty values (Shopify rejects them)
+      // But allow 'false' for boolean types
+      const metafieldsInput = metafields
+        .filter(mf => {
+          if (mf.type === 'boolean') {
+            return mf.value === 'true' || mf.value === 'false';
+          }
+          return mf.value !== null && mf.value !== undefined && String(mf.value).trim() !== '';
+        })
+        .map(mf => ({
+          ownerId: existingProductId,
+          namespace: mf.namespace.replace('$app:', ''),
+          key: mf.key,
+          value: mf.value,
+          type: mf.type,
+        }));
+
+      // Batch metafields into chunks of 25 (Shopify limit)
+      const batchSize = 25;
+      let totalSet = 0;
+      for (let i = 0; i < metafieldsInput.length; i += batchSize) {
+        const batch = metafieldsInput.slice(i, i + batchSize);
+        console.log(`Setting batch ${Math.floor(i / batchSize) + 1} (${batch.length} metafields)...`);
+
+        const metafieldsResponse = await fetch(shopifyGraphQLUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Shopify-Access-Token': SHOPIFY_ADMIN_API_TOKEN,
+          },
+          body: JSON.stringify({
+            query: metafieldsSetMutation,
+            variables: {
+              metafields: batch,
+            },
+          }),
+        });
+
+        const metafieldsData = await metafieldsResponse.json();
+        
+        if (metafieldsData.errors) {
+          console.error('Metafields GraphQL Errors:', metafieldsData.errors);
+        }
+        
+        if (metafieldsData.data?.metafieldsSet?.userErrors?.length > 0) {
+          console.error('Metafields User Errors:', metafieldsData.data.metafieldsSet.userErrors);
+        } else {
+          const setCount = metafieldsData.data?.metafieldsSet?.metafields?.length || 0;
+          totalSet += setCount;
+          console.log(`✅ Batch ${Math.floor(i / batchSize) + 1}: Set ${setCount} metafields`);
+        }
+      }
+      console.log(`✅ Successfully set ${totalSet} metafields total`);
+      // Debug: log cuts_items specifically
+      const cutsItemsMf = metafieldsInput.find(mf => mf.key === 'cuts_items');
+      if (cutsItemsMf) {
+        console.log('📦 cuts_items value:', cutsItemsMf.value);
+      }
+    }
 
     // Now update the variant pricing using REST API
     if (variantId) {
@@ -361,7 +440,7 @@ async function upsertOffer(config: OfferConfig) {
             descriptionHtml: config.description || '',
             productType: 'Offer',
             vendor: 'St. Isidore Ranch',
-            metafields: metafields,
+            // Don't set metafields here - use metafieldsSet mutation instead
           },
         },
       }),
@@ -381,6 +460,85 @@ async function upsertOffer(config: OfferConfig) {
 
     const createdProduct = createData.data?.productCreate?.product;
     console.log('Product created successfully:', createdProduct);
+
+    // Set metafields separately using metafieldsSet (batched in chunks of 25)
+    if (metafields.length > 0 && createdProduct?.id) {
+      console.log(`Setting ${metafields.length} metafields in batches...`);
+      const metafieldsSetMutation = `
+        mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
+          metafieldsSet(metafields: $metafields) {
+            metafields {
+              id
+              namespace
+              key
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+      `;
+
+      // Filter out metafields with empty values (Shopify rejects them)
+      // But allow 'false' for boolean types
+      const metafieldsInput = metafields
+        .filter(mf => {
+          if (mf.type === 'boolean') {
+            return mf.value === 'true' || mf.value === 'false';
+          }
+          return mf.value !== null && mf.value !== undefined && String(mf.value).trim() !== '';
+        })
+        .map(mf => ({
+          ownerId: createdProduct.id,
+          namespace: mf.namespace.replace('$app:', ''),
+          key: mf.key,
+          value: mf.value,
+          type: mf.type,
+        }));
+
+      // Batch metafields into chunks of 25 (Shopify limit)
+      const batchSize = 25;
+      let totalSet = 0;
+      for (let i = 0; i < metafieldsInput.length; i += batchSize) {
+        const batch = metafieldsInput.slice(i, i + batchSize);
+        console.log(`Setting batch ${Math.floor(i / batchSize) + 1} (${batch.length} metafields)...`);
+
+        const metafieldsResponse = await fetch(shopifyGraphQLUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Shopify-Access-Token': SHOPIFY_ADMIN_API_TOKEN,
+          },
+          body: JSON.stringify({
+            query: metafieldsSetMutation,
+            variables: {
+              metafields: batch,
+            },
+          }),
+        });
+
+        const metafieldsData = await metafieldsResponse.json();
+        
+        if (metafieldsData.errors) {
+          console.error('Metafields GraphQL Errors:', metafieldsData.errors);
+        }
+        
+        if (metafieldsData.data?.metafieldsSet?.userErrors?.length > 0) {
+          console.error('Metafields User Errors:', metafieldsData.data.metafieldsSet.userErrors);
+        } else {
+          const setCount = metafieldsData.data?.metafieldsSet?.metafields?.length || 0;
+          totalSet += setCount;
+          console.log(`✅ Batch ${Math.floor(i / batchSize) + 1}: Set ${setCount} metafields`);
+        }
+      }
+      console.log(`✅ Successfully set ${totalSet} metafields total`);
+      // Debug: log cuts_items specifically
+      const cutsItemsMf = metafieldsInput.find(mf => mf.key === 'cuts_items');
+      if (cutsItemsMf) {
+        console.log('📦 cuts_items value:', cutsItemsMf.value);
+      }
+    }
 
     // Now update the default variant with pricing
     if (createdProduct?.variants?.nodes?.[0]?.id) {
