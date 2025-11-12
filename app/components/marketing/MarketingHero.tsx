@@ -1,6 +1,6 @@
 import {Image} from '@shopify/hydrogen';
-import {Link} from 'react-router';
 import type {MarketingConfig} from '~/lib/marketingConfig';
+import {AddToCartButton} from '~/components/AddToCartButton';
 
 interface MarketingHeroProps {
   readonly offer: any;
@@ -83,12 +83,27 @@ export function MarketingHero({offer, config}: MarketingHeroProps) {
             </div>
 
             {/* CTA Button */}
-            <Link
-              to={config?.ctaUrl || `/products/${offer.handle}`}
-              className="inline-block bg-black text-white px-8 py-4 rounded-2xl text-lg font-semibold hover:bg-neutral-800 transition-colors duration-200"
-            >
-              {config?.ctaText || 'Get yours →'}
-            </Link>
+            {offer.variants?.nodes?.[0]?.id ? (
+              <AddToCartButton
+                lines={[
+                  {
+                    merchandiseId: offer.variants.nodes[0].id,
+                    quantity: 1,
+                  },
+                ]}
+                className="inline-block bg-black text-white px-8 py-4 rounded-2xl text-lg font-semibold hover:bg-neutral-800 transition-colors duration-200"
+                width="auto"
+              >
+                {config?.ctaText || 'Get yours →'}
+              </AddToCartButton>
+            ) : (
+              <a
+                href={config?.ctaUrl || `/products/${offer.handle}`}
+                className="inline-block bg-black text-white px-8 py-4 rounded-2xl text-lg font-semibold hover:bg-neutral-800 transition-colors duration-200"
+              >
+                {config?.ctaText || 'Get yours →'}
+              </a>
+            )}
 
             {/* Sub-text */}
             <p className="text-sm text-gray-600">{offer.pickupDelivery}</p>
