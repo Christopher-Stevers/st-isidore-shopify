@@ -21,7 +21,6 @@ import '~/tailwind.css';
 import favicon from './assets/favicon.svg';
 import resetStyles from './styles/reset.css?url';
 import appStyles from './styles/app.css?url';
-import tailwindStyles from './styles/tailwind.css?url';
 import {PageLayout} from '~/components/PageLayout';
 import {
   PRODUCT_FRAGMENT,
@@ -69,7 +68,6 @@ export function links() {
     },
     {rel: 'stylesheet', href: resetStyles},
     {rel: 'stylesheet', href: appStyles},
-    {rel: 'stylesheet', href: tailwindStyles},
     {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',

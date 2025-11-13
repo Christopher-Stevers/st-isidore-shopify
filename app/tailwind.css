@@ -11,6 +11,12 @@
   --color-primary-700: hsl(137 58% 5%);
   --color-backdrop-500: hsl(36 62% 94%);
   --color-backdrop-700: hsl(36 62% 94%);
+  /* Explicitly define breakpoints for Tailwind v4 */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
 }
 
 @layer utilities {
