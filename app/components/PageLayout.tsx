@@ -1,19 +1,18 @@
 import {Await, useRouteLoaderData} from 'react-router';
-import {Suspense, useEffect, useMemo} from 'react';
+import {Suspense, useMemo, useEffect, useRef} from 'react';
+import React from 'react';
 import {CartForm} from '@shopify/hydrogen';
-
-import type {LayoutQuery} from 'storefrontapi.generated';
-import {Cart} from '~/components/Cart';
-import {CartLoading} from '~/components/CartLoading';
-import {Drawer, useDrawer} from '~/components/Drawer';
+import type {CartApiQueryFragment, LayoutQuery} from 'storefrontapi.generated';
 import {Header} from '~/components/Header';
 import {type EnhancedMenu} from '~/lib/utils';
-import {useCartFetchers} from '~/hooks/useCartFetchers';
 import type {RootLoader} from '~/root';
 import {Footer} from './shared/Footer';
 import {useIsHydrated} from '~/hooks/useIsHydrated';
 import {Link} from '~/components/Link';
 import {useRootLoaderData} from '~/root';
+import { Aside, useAside } from './Aside';
+import { CartMain } from './CartMain';
+import {useCartFetchers} from '~/hooks/useCartFetchers';
 
 export type LayoutProps = {
   children: React.ReactNode;
@@ -24,28 +23,85 @@ export type LayoutProps = {
 };
 export function PageLayout({children, layout}: LayoutProps) {
   const {headerMenu} = layout || {};
-  const {header} = useRootLoaderData();
+  const {header, cart} = useRootLoaderData();
 
-  const {
-    isOpen: isCartOpen,
-    openDrawer: openCart,
-    closeDrawer: closeCart,
-  } = useDrawer();
+  // Component to auto-open cart when items are added (skeleton template pattern)
+  function CartAutoOpen() {
+    const {open, type} = useAside();
+    const addToCartFetchers = useCartFetchers(CartForm.ACTIONS.LinesAdd);
+    const prevFetchersRef = useRef(addToCartFetchers);
+    const openedFetcherIdsRef = useRef<Set<string>>(new Set());
 
-  const addToCartFetchers = useCartFetchers(CartForm.ACTIONS.LinesAdd);
+    useEffect(() => {
+      // Check if any fetcher just completed successfully
+      addToCartFetchers.forEach((fetcher) => {
+        const fetcherKey = fetcher.key || String(fetcher.formData?.get('action') || Math.random());
+        const state = fetcher.state as string;
+        const prevFetcher = prevFetchersRef.current.find(
+          (prev) => (prev.key || String(prev.formData?.get('action') || '')) === fetcherKey
+        );
+        const prevState = prevFetcher?.state as string;
+        
+        const wasActive = prevState === 'submitting' || prevState === 'loading';
+        const isNowIdle = state === 'idle';
+        const hasData = !!(fetcher as any).data;
+        const alreadyOpened = openedFetcherIdsRef.current.has(fetcherKey);
+        
+        // Debug logging (remove in production)
+        if (process.env.NODE_ENV === 'development') {
+          if (wasActive && isNowIdle) {
+            console.log('[CartAutoOpen] Fetcher completed:', {
+              fetcherKey,
+              state,
+              prevState,
+              hasData,
+              alreadyOpened,
+              type,
+            });
+          }
+        }
+        
+        // Open cart if fetcher just completed successfully and we haven't opened for this fetcher yet
+        // Always try to open if we have successful data (calling open('cart') when already open is safe)
+        if (wasActive && isNowIdle && hasData && !alreadyOpened) {
+          console.log('[CartAutoOpen] Opening cart for fetcher:', fetcherKey);
+          // Use setTimeout to ensure React has updated the DOM
+          setTimeout(() => {
+            open('cart');
+          }, 0);
+          openedFetcherIdsRef.current.add(fetcherKey);
+        }
+      });
 
-  // toggle cart drawer when adding to cart
-  useEffect(() => {
-    if (isCartOpen || !addToCartFetchers.length) return;
-    openCart();
-  }, [addToCartFetchers, isCartOpen, openCart]);
+      // Clean up old fetcher IDs that are no longer in the list
+      const currentFetcherKeys = new Set(
+        addToCartFetchers.map(f => f.key || String(f.formData?.get('action') || ''))
+      );
+      openedFetcherIdsRef.current.forEach((key) => {
+        if (!currentFetcherKeys.has(key)) {
+          openedFetcherIdsRef.current.delete(key);
+        }
+      });
+
+      prevFetchersRef.current = addToCartFetchers;
+    }, [addToCartFetchers, open, type]);
+
+    return null;
+  }
+
+  function CartCountButton() {
+    const {open} = useAside();
+    return <CartCount openCart={() => open('cart')} />;
+  }
 
   return (
     <>
+    <Aside.Provider>
+      <CartAutoOpen />
+      <CartAside cart={cart} />
       <div
         className={`inset-0 pointer-events-none fixed opacity-[0.075] bg-[url('https://cdn.shopify.com/s/files/1/0626/1991/0197/files/4002470.jpg?v=1720557749')]`}
       ></div>
-      <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
       <div className="flex flex-col min-h-screen">
         <div className="">
           <a href="#mainContent" className="sr-only">
@@ -67,9 +123,10 @@ export function PageLayout({children, layout}: LayoutProps) {
           {children}
         </main>
       </div>
-      <CartCount openCart={openCart} />
+      <CartCountButton />
       <Footer />
       {/*<EmailGrabber />*/}
+    </Aside.Provider>
     </>
   );
 }
@@ -122,36 +179,30 @@ function Badge({openCart, count}: {count: number; openCart: () => void}) {
   return isHydrated ? (
     <button
       onClick={openCart}
-      className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
+      className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5 cursor-pointer"
     >
       {BadgeCounter}
     </button>
   ) : (
     <Link
       to="/cart"
-      className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
+      className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5 cursor-pointer"
     >
       {BadgeCounter}
     </Link>
   );
 }
 
-function CartDrawer({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) {
-  const rootData = useRouteLoaderData<RootLoader>('root');
-
-  if (!rootData) return null;
-
+function CartAside({cart}: {cart:  Promise<CartApiQueryFragment | null>}) {
   return (
-    <Drawer open={isOpen} onClose={onClose} heading="Cart" openFrom="right">
-      <div className="grid">
-        <Suspense fallback={<CartLoading />}>
-          <Await resolve={rootData?.cart}>
-            {(cart) => {
-              return <Cart layout="drawer" onClose={onClose} cart={cart} />;
-            }}
-          </Await>
-        </Suspense>
-      </div>
-    </Drawer>
+    <Aside type="cart" heading="Cart">
+      <Suspense fallback={<p>Loading cart ...</p>}>
+        <Await resolve={cart}>
+          {(cart) => {
+            return <CartMain cart={cart} layout="aside" />;
+          }}
+        </Await>
+      </Suspense>
+    </Aside>
   );
 }

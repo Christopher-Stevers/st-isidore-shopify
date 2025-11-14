@@ -73,6 +73,11 @@ export const CART_QUERY_FRAGMENT = `#graphql
             }
           }
         }
+        sellingPlanAllocation {
+          sellingPlan {
+            name
+          }
+        }
       }
     }
     cost {
@@ -97,6 +102,18 @@ export const CART_QUERY_FRAGMENT = `#graphql
     discountCodes {
       code
       applicable
+    }
+    appliedGiftCards {
+    id,
+    lastCharacters,
+    amountUsed {
+      amount
+      currencyCode
+    }
+      balance {
+        amount
+        currencyCode
+      }
     }
   }
 `;

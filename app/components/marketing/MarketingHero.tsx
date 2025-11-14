@@ -1,6 +1,7 @@
 import {Image} from '@shopify/hydrogen';
 import type {MarketingConfig} from '~/lib/marketingConfig';
 import {AddToCartButton} from '~/components/AddToCartButton';
+import { useAside } from '../Aside';
 
 interface MarketingHeroProps {
   readonly offer: any;
@@ -8,6 +9,7 @@ interface MarketingHeroProps {
 }
 
 export function MarketingHero({offer, config}: MarketingHeroProps) {
+  const { open } = useAside();
   const price = Number.parseFloat(offer.priceRange.minVariantPrice.amount);
   const compareAtPrice = offer.variants.nodes[0]?.compareAtPrice
     ? Number.parseFloat(offer.variants.nodes[0].compareAtPrice.amount)
@@ -84,15 +86,18 @@ export function MarketingHero({offer, config}: MarketingHeroProps) {
 
             {/* CTA Button */}
             {offer.variants?.nodes?.[0]?.id ? (
-              <AddToCartButton
+              <AddToCartButton onClick={() => {
+                open('cart');
+              }}
                 lines={[
                   {
                     merchandiseId: offer.variants.nodes[0].id,
                     quantity: 1,
+                    selectedVariant: offer.variants.nodes[0],
                   },
                 ]}
-                className="inline-block bg-black text-white px-8 py-4 rounded-2xl text-lg font-semibold hover:bg-neutral-800 transition-colors duration-200"
-                width="auto"
+                className="inline-block cursor-pointer bg-black text-white px-8 py-4 rounded-2xl text-lg font-semibold hover:bg-neutral-800 transition-colors duration-200"
+           
               >
                 {config?.ctaText || 'Get yours →'}
               </AddToCartButton>

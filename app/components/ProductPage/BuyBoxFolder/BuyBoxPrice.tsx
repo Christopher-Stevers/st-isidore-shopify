@@ -1,46 +1,22 @@
-import {Money} from '@shopify/hydrogen';
+import {ProductPrice} from '~/components/ProductPrice';
 import type {ProductVariant} from '@shopify/hydrogen/storefront-api-types';
-const BuyBoxPrice = ({selectedVariant}: {selectedVariant: ProductVariant}) => {
+import type {SellingPlanFragment} from 'storefrontapi.generated';
+
+const BuyBoxPrice = ({
+  selectedVariant,
+  selectedSellingPlan,
+}: {
+  selectedVariant: ProductVariant;
+  selectedSellingPlan?: SellingPlanFragment | null;
+}) => {
   return (
     <div className="text-2xl font-bold">
-      {selectedVariant?.compareAtPrice &&
-      (selectedVariant?.compareAtPrice?.amount ?? 0) >
-        (selectedVariant?.price?.amount ?? 0) ? (
-        <>
-          <p>Sale!</p>
-          <div className="product-price-on-sale">
-            {selectedVariant ? (
-              <>
-                $
-                <Money
-                  data={selectedVariant.price}
-                  as="span"
-                  withoutCurrency={true}
-                />
-              </>
-            ) : null}
-            <s>
-              $
-              <Money
-                data={selectedVariant.compareAtPrice}
-                withoutCurrency={true}
-                as="span"
-              />
-            </s>
-          </div>
-        </>
-      ) : (
-        selectedVariant?.price && (
-          <span>
-            $
-            <Money
-              withoutCurrency={true}
-              data={selectedVariant?.price}
-              as="span"
-            />
-          </span>
-        )
-      )}
+      <ProductPrice
+        price={selectedVariant?.price}
+        compareAtPrice={selectedVariant?.compareAtPrice}
+        selectedSellingPlan={selectedSellingPlan}
+        selectedVariant={selectedVariant}
+      />
     </div>
   );
 };

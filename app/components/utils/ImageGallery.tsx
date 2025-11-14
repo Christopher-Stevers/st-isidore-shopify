@@ -42,7 +42,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
   return (
     <div className={className}>
       {/* Large Image Display */}
-      <div className="mb-3 md:mb-4 aspect-square w-full overflow-hidden rounded-lg border border-border bg-muted">
+      <div className="mb-3 md:mb-4 aspect-square w-full overflow-hidden rounded-lg border border-border bg-muted relative z-0">
         {selectedImageUrl ? (
           <img
             key={selectedIndex} // Re-render img element on change if needed for transitions

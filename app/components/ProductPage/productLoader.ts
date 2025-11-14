@@ -73,7 +73,81 @@ export const PRODUCT_VARIANT_FRAGMENT = `#graphql
       amount
       currencyCode
     }
+    sellingPlanAllocations(first: 10) {
+      nodes {
+        sellingPlan {
+          id
+        }
+      }
+    }
   }
+` as const;
+
+const SELLING_PLAN_FRAGMENT = `#graphql
+  fragment SellingPlanMoney on MoneyV2 {
+    amount
+    currencyCode
+  }
+  fragment SellingPlan on SellingPlan {
+    id
+    options {
+      name
+      value
+    }
+    priceAdjustments {
+      adjustmentValue {
+        ... on SellingPlanFixedAmountPriceAdjustment {
+          __typename
+          adjustmentAmount {
+            ... on MoneyV2 {
+               ...SellingPlanMoney
+            }
+          }
+        }
+        ... on SellingPlanFixedPriceAdjustment {
+          __typename
+          price {
+            ... on MoneyV2 {
+              ...SellingPlanMoney
+            }
+          }
+        }
+        ... on SellingPlanPercentagePriceAdjustment {
+          __typename
+          adjustmentPercentage
+        }
+      }
+      orderCount
+    }
+    recurringDeliveries
+    checkoutCharge {
+      type
+      value {
+        ... on MoneyV2 {
+          ...SellingPlanMoney
+        }
+        ... on SellingPlanCheckoutChargePercentageValue {
+          percentage
+        }
+      }
+    }
+  }
+` as const;
+
+const SELLING_PLAN_GROUP_FRAGMENT = `#graphql
+  fragment SellingPlanGroup on SellingPlanGroup {
+    name
+    options {
+      name
+      values
+    }
+    sellingPlans(first:10) {
+      nodes {
+        ...SellingPlan
+      }
+    }
+  }
+  ${SELLING_PLAN_FRAGMENT}
 ` as const;
 
 export const PRODUCT_FRAGMENT = `#graphql
@@ -105,6 +179,11 @@ export const PRODUCT_FRAGMENT = `#graphql
       name
       values
     }
+    sellingPlanGroups(first:10) {
+      nodes {
+        ...SellingPlanGroup
+      }
+    }
     selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {
       ...ProductVariant
     }
@@ -118,6 +197,7 @@ export const PRODUCT_FRAGMENT = `#graphql
       title
     }
   }
+  ${SELLING_PLAN_GROUP_FRAGMENT}
   ${PRODUCT_VARIANT_FRAGMENT}
 ` as const;
 
@@ -183,6 +263,13 @@ export const productLoader = async ({
     throw new Error('Expected product handle to be defined');
   }
 
+  // Initialize the selectedSellingPlan to null
+  let selectedSellingPlan = null;
+
+  // Get the selected selling plan id from the request url
+  const selectedSellingPlanId =
+    new URL(request.url).searchParams.get('selling_plan') ?? null;
+
   // await the query for the critical product data
   const {product} = await storefront.query(PRODUCT_QUERY, {
     variables: {handle, selectedOptions},
@@ -190,6 +277,24 @@ export const productLoader = async ({
 
   if (!product?.id) {
     throw new Response(null, {status: 404});
+  }
+
+  // Get the selected selling plan based on the selectedSellingPlanId
+  if (selectedSellingPlanId) {
+    const selectedSellingPlanGroup =
+      product.sellingPlanGroups.nodes?.find((sellingPlanGroup) => {
+        return sellingPlanGroup.sellingPlans.nodes?.find(
+          (sellingPlan: any) =>
+            sellingPlan.id === selectedSellingPlanId,
+        );
+      }) ?? null;
+
+    if (selectedSellingPlanGroup) {
+      selectedSellingPlan =
+        selectedSellingPlanGroup.sellingPlans.nodes.find((sellingPlan: any) => {
+          return sellingPlan.id === selectedSellingPlanId;
+        }) ?? null;
+    }
   }
 
   const firstVariant = product.variants.nodes[0];
@@ -217,7 +322,7 @@ export const productLoader = async ({
   // where variant options might show as available when they're not, but after
   // this deffered query resolves, the UI will update.
 
-  return {product, variants};
+  return {product, variants, selectedSellingPlan};
 };
 
 export type ProductLoaderType = typeof productLoader;

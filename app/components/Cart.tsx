@@ -6,12 +6,12 @@ import {
   type CartReturn,
   useOptimisticData,
   OptimisticInput,
+  type OptimisticCartLine,
 } from '@shopify/hydrogen';
 import type {
   CartLineUpdateInput,
   Cart as CartType,
   CartCost,
-  CartLine,
 } from '@shopify/hydrogen/storefront-api-types';
 import {Link} from 'react-router';
 import {Button} from '~/components/Button';
@@ -19,9 +19,15 @@ import {IconRemove} from '~/components/Icon';
 import {getInputStyleClasses} from '~/lib/utils';
 import {useRef, useState, useEffect} from 'react';
 import clsx from 'clsx';
+import {ProductPrice} from '~/components/ProductPrice';
+import {useAside} from '~/components/Aside';
+import { useVariantUrl } from '~/lib/variants';
+import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
-type Layouts = 'page' | 'drawer';
 
+
+export type CartLayout = 'page' | 'aside';
+type CartLine = OptimisticCartLine<CartApiQueryFragment>;
 // Simple hook to track scroll position
 function useScroll(ref: React.RefObject<HTMLElement>) {
   const [y, setY] = useState(0);
@@ -48,7 +54,7 @@ export function Cart({
   onClose,
   cart,
 }: {
-  layout: Layouts;
+  layout: CartLayout;
   onClose?: () => void;
   cart: CartReturn | null;
 }) {
@@ -65,13 +71,13 @@ export function CartDetails({
   layout,
   cart,
 }: {
-  layout: Layouts;
+  layout: CartLayout;
   cart: CartType | null;
 }) {
   // @todo: get optimistic cart cost
   const cartHasItems = !!cart && cart.totalQuantity > 0;
   const container = {
-    drawer:
+    aside:
       'flex flex-col gap-4 justify-between h-full h-screen-no-nav grid-rows-[1fr_auto]  ',
     page: 'w-full pb-12 grid md:grid-cols-2 md:items-start gap-8 md:gap-8 lg:gap-12 overflow-auto',
   };
@@ -168,10 +174,10 @@ function UpdateDiscountForm({
 }
 
 function CartLines({
-  layout = 'drawer',
-  lines: cartLines,
+  layout = "aside" as CartLayout,
+  lines: cartLines, 
 }: {
-  layout: Layouts;
+  layout: CartLayout;
   lines: CartReturn['lines'] | undefined;
 }) {
   const currentLines = cartLines ? flattenConnection(cartLines) : [];
@@ -181,8 +187,8 @@ function CartLines({
   const className = clsx([
     y > 0 ? 'border-t' : '',
     layout === 'page'
-      ? 'flex-grow md:translate-y-4 max-h-full'
-      : 'px-6 pb-6 sm-max:pt-2 overflow-auto transition md:px-12 max-h-[calc(100vh-270px)]',
+ ? 'flex-grow md:translate-y-4 max-h-full'
+      : 'px-6 pb-6 sm-max:pt-2 overflow-auto transition md:px-12 max-h-[calc(100vh-270px)] bg-red-500'
   ]);
 
   return (
@@ -193,7 +199,7 @@ function CartLines({
     >
       <ul className="grid gap-6 md:gap-10">
         {currentLines.map((line) => (
-          <CartLineItem key={line.id} line={line as CartLine} />
+          <CartLineItem layout={layout} key={line.id} line={line as CartLine} />
         ))}
       </ul>
     </section>
@@ -222,10 +228,10 @@ function CartSummary({
 }: {
   children?: React.ReactNode;
   cost: CartCost;
-  layout: Layouts;
+  layout: CartLayout;
 }) {
   const summary = {
-    drawer: 'grid gap-4 p-6 border-t md:px-12',
+    aside: 'grid gap-4 p-6 border-t md:px-12',
     page: 'sticky top-nav grid gap-6 p-4 md:px-6 md:translate-y-4 bg-primary/5 rounded w-full',
   };
 
@@ -256,170 +262,149 @@ type OptimisticData = {
   quantity?: number;
 };
 
-function CartLineItem({line}: {line: CartLine}) {
-  const optimisticData = useOptimisticData<OptimisticData>(line?.id);
-
-  if (!line?.id) return null;
-
-  const {id, quantity, merchandise} = line;
-
-  if (typeof quantity === 'undefined' || !merchandise?.product) return null;
+export function CartLineItem({
+  layout,
+  line,
+}: {
+  layout: CartLayout;
+  line: CartLine;
+}) {
+  const {id, merchandise} = line;
+  const {product, title, image, selectedOptions} = merchandise;
+  const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
+  const {close} = useAside();
 
   return (
-    <li
-      key={id}
-      className="flex gap-4"
-      style={{
-        // Hide the line item if the optimistic data action is remove
-        // Do not remove the form from the DOM
-        display: optimisticData?.action === 'remove' ? 'none' : 'flex',
-      }}
-    >
-      <div className="flex-shrink">
-        {merchandise.image && (
-          <Image
-            width={110}
-            height={110}
-            data={merchandise.image}
-            className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-28"
-            alt={merchandise.title}
-          />
-        )}
-      </div>
+    <li key={id} className="cart-line">
+      {image && (
+        <Image
+          alt={title}
+          aspectRatio="1/1"
+          data={image}
+          height={100}
+          loading="lazy"
+          width={100}
+        />
+      )}
 
-      <div className="flex justify-between flex-grow">
-        <div className="grid gap-2">
-          <h3 className="font-medium text-copy">
-            {merchandise?.product?.handle ? (
-              <Link to={`/products/${merchandise.product.handle}`}>
-                {merchandise?.product?.title || ''}
-              </Link>
-            ) : (
-              <span>{merchandise?.product?.title || ''}</span>
-            )}
-          </h3>
-
-          <div className="grid pb-2">
-            {(merchandise?.selectedOptions || [])
-              .filter((option: any) => option.name !== 'Title')
-              .map((option: any) => (
-                <div className="text-copy" key={option.name}>
-                  {option.name}: {option.value}
-                </div>
-              ))}
-          </div>
-
-          <div className="flex items-center gap-2">
-            <div className="flex justify-start text-copy">
-              <CartLineQuantityAdjust line={line} />
-            </div>
-            <ItemRemoveButton lineId={id} />
-          </div>
-        </div>
-        <div>
-          <CartLinePrice line={line} as="span" />
-        </div>
+      <div>
+        <Link
+          prefetch="intent"
+          to={lineItemUrl}
+          onClick={() => {
+            if (layout === 'aside') {
+              close();
+            }
+          }}
+        >
+          <p>
+            <strong>{product.title}</strong>
+          </p>
+        </Link>
+        <ProductPrice price={line?.cost?.totalAmount} />
+        <ul>
+          {selectedOptions.map((option) => (
+            <li key={option.name}>
+              <small>
+                {option.name}: {option.value}
+              </small>
+            </li>
+          ))}
+        </ul>
+        <CartLineQuantity line={line} />
       </div>
     </li>
   );
 }
 
-function ItemRemoveButton({lineId}: Readonly<{lineId: CartLine['id']}>) {
+function CartLineQuantity({line}: {line: 
+  CartLine
+}) {
+  if (!line || typeof line?.quantity === 'undefined') return null;
+  const {id: lineId, quantity, isOptimistic} = line;
+  const prevQuantity = Number(Math.max(0, quantity - 1).toFixed(0));
+  const nextQuantity = Number((quantity + 1).toFixed(0));
+
+  return (
+    <div className="cart-line-quantity">
+      <small>Quantity: {quantity} &nbsp;&nbsp;</small>
+      <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
+        <button
+          aria-label="Decrease quantity"
+          disabled={quantity <= 1 || !!isOptimistic}
+          name="decrease-quantity"
+          value={prevQuantity}
+        >
+          <span>&#8722; </span>
+        </button>
+      </CartLineUpdateButton>
+      &nbsp;
+      <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
+        <button
+          aria-label="Increase quantity"
+          name="increase-quantity"
+          value={nextQuantity}
+          disabled={!!isOptimistic}
+        >
+          <span>&#43;</span>
+        </button>
+      </CartLineUpdateButton>
+      &nbsp;
+      <CartLineRemoveButton lineIds={[lineId]} disabled={!!isOptimistic} />
+    </div>
+  );
+}
+
+function CartLineRemoveButton({
+  lineIds,
+  disabled,
+}: {
+  lineIds: string[];
+  disabled: boolean;
+}) {
   return (
     <CartForm
+      fetcherKey={getUpdateKey(lineIds)}
       route="/cart"
       action={CartForm.ACTIONS.LinesRemove}
-      inputs={{
-        lineIds: [lineId],
-      }}
+      inputs={{lineIds}}
     >
-      <button
-        className="flex items-center justify-center w-10 h-10 border rounded"
-        type="submit"
-      >
-        <span className="sr-only">Remove</span>
-        <IconRemove aria-hidden="true" />
+      <button disabled={disabled} type="submit">
+        Remove
       </button>
-      <OptimisticInput id={lineId} data={{action: 'remove'}} />
     </CartForm>
   );
 }
 
-function CartLineQuantityAdjust({line}: {line: CartLine}) {
-  const optimisticId = line?.id;
-  const optimisticData = useOptimisticData<OptimisticData>(optimisticId);
-
-  if (!line || typeof line?.quantity === 'undefined') return null;
-
-  const optimisticQuantity = optimisticData?.quantity || line.quantity;
-
-  const {id: lineId} = line;
-  const prevQuantity = Number(Math.max(0, optimisticQuantity - 1).toFixed(0));
-  const nextQuantity = Number((optimisticQuantity + 1).toFixed(0));
-
-  return (
-    <>
-      <label htmlFor={`quantity-${lineId}`} className="sr-only">
-        Quantity, {optimisticQuantity}
-      </label>
-      <div className="flex items-center border rounded">
-        <UpdateCartButton lines={[{id: lineId, quantity: prevQuantity}]}>
-          <button
-            name="decrease-quantity"
-            aria-label="Decrease quantity"
-            className="w-10 h-10 transition text-primary/50 hover:text-primary disabled:text-primary/10"
-            value={prevQuantity}
-            disabled={optimisticQuantity <= 1}
-          >
-            <span>&#8722;</span>
-            <OptimisticInput
-              id={optimisticId}
-              data={{quantity: prevQuantity}}
-            />
-          </button>
-        </UpdateCartButton>
-
-        <div className="px-2 text-center" data-test="item-quantity">
-          {optimisticQuantity}
-        </div>
-
-        <UpdateCartButton lines={[{id: lineId, quantity: nextQuantity}]}>
-          <button
-            className="w-10 h-10 transition text-primary/50 hover:text-primary"
-            name="increase-quantity"
-            value={nextQuantity}
-            aria-label="Increase quantity"
-          >
-            <span>&#43;</span>
-            <OptimisticInput
-              id={optimisticId}
-              data={{quantity: nextQuantity}}
-            />
-          </button>
-        </UpdateCartButton>
-      </div>
-    </>
-  );
-}
-
-function UpdateCartButton({
+function CartLineUpdateButton({
   children,
   lines,
 }: {
   children: React.ReactNode;
   lines: CartLineUpdateInput[];
 }) {
+  const lineIds = lines.map((line) => line.id);
+
   return (
     <CartForm
+      fetcherKey={getUpdateKey(lineIds)}
       route="/cart"
       action={CartForm.ACTIONS.LinesUpdate}
-      inputs={{
-        lines,
-      }}
+      inputs={{lines}}
     >
       {children}
     </CartForm>
   );
+}
+/**
+ * Returns a unique key for the update action. This is used to make sure actions modifying the same line
+ * items are not run concurrently, but cancel each other. For example, if the user clicks "Increase quantity"
+ * and "Decrease quantity" in rapid succession, the actions will cancel each other and only the last one will run.
+ * @param lineIds - line ids affected by the update
+ * @returns
+ */
+function getUpdateKey(lineIds: string[]) {
+  return [CartForm.ACTIONS.LinesUpdate, ...lineIds].join('-');
 }
 
 function CartLinePrice({
@@ -447,17 +432,17 @@ function CartLinePrice({
 
 export function CartEmpty({
   hidden = false,
-  layout = 'drawer',
+  layout = 'aside',
   onClose,
 }: {
   hidden: boolean;
-  layout?: Layouts;
+  layout?: CartLayout;
   onClose?: () => void;
 }) {
   const scrollRef = useRef(null);
   const {y} = useScroll(scrollRef);
   const container = {
-    drawer: clsx([
+    aside: clsx([
       'content-start gap-4 px-6 pb-8 transition overflow-y-scroll md:gap-12 md:px-12 h-screen-no-nav md:pb-12',
       y > 0 ? 'border-t' : '',
     ]),

@@ -1,50 +1,78 @@
 import { CartForm, type OptimisticCartLineInput } from "@shopify/hydrogen";
+import clsx from "clsx";
 import type { FetcherWithComponents } from "react-router";
 
 import { Button } from "~/components/Button";
 
 export function AddToCartButton({
+  analytics,
   children,
-  lines,
-  className = "",
-  variant = "primary",
-  width = "full",
   disabled,
-  ...props
+  lines,
+  onClick,
+  className,
 }: {
-  children: React.ReactNode;
-  lines: Array<OptimisticCartLineInput>;
   className?: string;
-  variant?: "primary" | "secondary" | "inline";
-  width?: "auto" | "full";
+  analytics?: unknown;
+  children: React.ReactNode;
   disabled?: boolean;
-  [key: string]: any;
+  lines: Array<OptimisticCartLineInput>;
+  onClick?: () => void;
 }) {
   return (
-    <CartForm
-      route="/cart"
-      inputs={{
-        lines,
-      }}
-      action={CartForm.ACTIONS.LinesAdd}
-    >
-      {(fetcher: FetcherWithComponents<any>) => {
-        return (
-          <>
-            <Button
-              as="button"
-              type="submit"
-              width={width}
-              variant={variant}
-              className={className}
-              disabled={disabled ?? fetcher.state !== "idle"}
-              {...props}
-            >
-              {children}
-            </Button>
-          </>
-        );
-      }}
+    <CartForm route="/cart" inputs={{lines}} action={CartForm.ACTIONS.LinesAdd}>
+      {(fetcher: FetcherWithComponents<any>) => (
+        <AddToCartButtonContent
+          fetcher={fetcher}
+          disabled={disabled}
+          className={className}
+          onClick={onClick}
+          analytics={analytics}
+        >
+          {children}
+        </AddToCartButtonContent>
+      )}
     </CartForm>
+  );
+}
+
+function AddToCartButtonContent({
+  fetcher,
+  disabled,
+  className,
+  onClick,
+  analytics,
+  children,
+}: {
+  fetcher: FetcherWithComponents<any>;
+  disabled?: boolean;
+  className?: string;
+  onClick?: () => void;
+  analytics?: unknown;
+  children: React.ReactNode;
+}) {
+  // Cart opening is handled globally in PageLayout via useCartFetchers
+  // This matches the skeleton template pattern
+  const isDisabled = disabled ?? fetcher.state !== 'idle';
+  const classNameWithCursor = clsx([
+    className, 
+    isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'
+  ]);
+  return (
+    <>
+      <input
+        name="analytics"
+        type="hidden"
+        value={JSON.stringify(analytics)}
+      />
+      <button
+        className={classNameWithCursor}
+        type="submit"
+        onClick={onClick}
+        disabled={isDisabled}
+      >
+        {children}
+      </button>
+    </>
   );
 }

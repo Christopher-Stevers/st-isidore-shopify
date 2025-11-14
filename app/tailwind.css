@@ -86,7 +86,6 @@ aside {
 
 aside header {
   align-items: center;
-  border-bottom: 1px solid var(--color-dark);
   display: flex;
   height: var(--header-height);
   justify-content: space-between;
@@ -95,6 +94,8 @@ aside header {
 
 aside header h3 {
   margin: 0;
+  font-size: 4rem;
+  font-weight: 400;
 }
 
 aside header .close {

@@ -1,5 +1,6 @@
 import {Image} from '@shopify/hydrogen';
 import {AddToCartButton} from '~/components/AddToCartButton';
+import { useAside } from '../Aside';
 
 interface OfferHeroProps {
   offer: {
@@ -51,7 +52,7 @@ export function OfferHero({offer}: Readonly<OfferHeroProps>) {
   const savingsPercent = compareAtPrice
     ? Math.round(((compareAtPrice - price) / compareAtPrice) * 100)
     : null;
-
+  const { open } = useAside();
   // Format dates
   const formatDate = (dateString?: string) => {
     if (!dateString) return '';
@@ -175,13 +176,17 @@ export function OfferHero({offer}: Readonly<OfferHeroProps>) {
             )}
 
             {/* CTA Button */}
-            <div className="pt-6">
+            <div className="pt-6 cursor-pointer">
               {offer.variants.nodes[0] && (
                 <AddToCartButton
+                onClick={() => {
+                  open('cart');
+                }}
                   lines={[
                     {
                       merchandiseId: offer.variants.nodes[0].id,
                       quantity: 1,
+                      selectedVariant: offer.variants.nodes[0],
                     },
                   ]}
                   disabled={!offer.variants.nodes[0].availableForSale}

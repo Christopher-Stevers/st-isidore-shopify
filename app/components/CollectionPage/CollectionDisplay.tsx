@@ -25,7 +25,7 @@ const CollectionDisplay = ({
     <div key={collection.id} className="container mx-auto px-8">
       <div className="flex items-center justify-between">
         <Seperator />
-        <h2 id={`#${collection.title}`} className="text-2xl font-bold">
+        <h2 id={`${collection.title}`} className="text-2xl font-bold">
           {collection.title}
         </h2>
         <Seperator />

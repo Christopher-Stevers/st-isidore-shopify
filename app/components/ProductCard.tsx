@@ -87,16 +87,13 @@ export function ProductCard({
       </Link>
       {quickAdd && firstVariant.availableForSale && (
         <AddToCartButton
-          lines={[
-            {
-              quantity: 1,
-              merchandiseId: firstVariant.id,
-            },
-          ]}
-          variant="secondary"
-          className="mt-2"
+          lines={firstVariant ? [{
+            quantity: 1,
+            merchandiseId: firstVariant.id,
+            selectedVariant: firstVariant,
+          }] : []}
         >
-          <span className="flex items-center justify-center gap-2">
+          <span className="flex items-center justify-center gap-2 cursor-pointer">
             Add to Cart
           </span>
         </AddToCartButton>
