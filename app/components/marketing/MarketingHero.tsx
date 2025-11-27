@@ -1,7 +1,7 @@
 import {Image} from '@shopify/hydrogen';
 import type {MarketingConfig} from '~/lib/marketingConfig';
 import {AddToCartButton} from '~/components/AddToCartButton';
-import { useAside } from '../Aside';
+import {useAside} from '../Aside';
 
 interface MarketingHeroProps {
   readonly offer: any;
@@ -9,7 +9,7 @@ interface MarketingHeroProps {
 }
 
 export function MarketingHero({offer, config}: MarketingHeroProps) {
-  const { open } = useAside();
+  const {open} = useAside();
   const price = Number.parseFloat(offer.priceRange.minVariantPrice.amount);
   const compareAtPrice = offer.variants.nodes[0]?.compareAtPrice
     ? Number.parseFloat(offer.variants.nodes[0].compareAtPrice.amount)
@@ -71,24 +71,25 @@ export function MarketingHero({offer, config}: MarketingHeroProps) {
                 <span className="text-4xl font-bold text-red-600">
                   ${price.toFixed(2)}
                 </span>
-                {compareAtPrice && (
+                {compareAtPrice && compareAtPrice > price ? (
                   <span className="text-2xl text-gray-500 line-through">
                     ${compareAtPrice.toFixed(2)}
                   </span>
-                )}
+                ) : null}
               </div>
-              {savings && savingsPercent && (
+              {savings && savingsPercent ? (
                 <p className="text-lg text-green-600 font-semibold">
                   Save ${savings.toFixed(2)} ({savingsPercent}% OFF)
                 </p>
-              )}
+              ) : null}
             </div>
 
             {/* CTA Button */}
             {offer.variants?.nodes?.[0]?.id ? (
-              <AddToCartButton onClick={() => {
-                open('cart');
-              }}
+              <AddToCartButton
+                onClick={() => {
+                  open('cart');
+                }}
                 lines={[
                   {
                     merchandiseId: offer.variants.nodes[0].id,
@@ -97,7 +98,6 @@ export function MarketingHero({offer, config}: MarketingHeroProps) {
                   },
                 ]}
                 className="inline-block cursor-pointer bg-black text-white px-8 py-4 rounded-2xl text-lg font-semibold hover:bg-neutral-800 transition-colors duration-200"
-           
               >
                 {config?.ctaText || 'Get yours →'}
               </AddToCartButton>

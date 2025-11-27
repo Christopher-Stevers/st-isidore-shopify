@@ -1,9 +1,10 @@
 import type {CurrencyCode} from '@shopify/hydrogen/customer-account-api-types';
-import type {
-  SellingPlanFragment,
-} from 'storefrontapi.generated';
+import type {SellingPlanFragment} from 'storefrontapi.generated';
 import {Money} from '@shopify/hydrogen';
-import type {MoneyV2, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
+import type {
+  MoneyV2,
+  ProductVariant,
+} from '@shopify/hydrogen/storefront-api-types';
 
 export function ProductPrice({
   price,
@@ -27,7 +28,7 @@ export function ProductPrice({
 
   return (
     <div className="product-price">
-      {compareAtPrice ? (
+      {compareAtPrice && price && compareAtPrice > price ? (
         <div className="product-price-on-sale">
           {price ? <Money data={price} /> : null}
           <s>

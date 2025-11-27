@@ -50,13 +50,24 @@ export async function loader({params, context}: LoaderFunctionArgs) {
   }
 
   // Extract offer data from product
+  const allVariantsWithProduct = {
+    nodes: product.variants.nodes.map((variant) => ({
+      ...variant,
+      product: {
+        title: product.title,
+        handle: product.handle,
+        featuredImage: product.featuredImage,
+        priceRange: product.priceRange,
+      },
+    })),
+  };
   const offerData = {
     handle: product.handle,
     title: product.title,
     description: product.description,
     featuredImage: product.featuredImage,
     priceRange: product.priceRange,
-    variants: product.variants,
+    variants: allVariantsWithProduct,
     images: product.images,
   };
 
