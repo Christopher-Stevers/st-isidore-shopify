@@ -59,18 +59,18 @@ export default async function handleRequest(
 
   let csp = header;
   const nonceToken = `'nonce-${nonce}'`;
-  // Scripts - add Matomo domain and inline script hash
-  csp = addOrAppend(csp, 'script-src', `'self' ${nonceToken} 'sha256-YX4iJw93x5SU0ple+RI+95HNdNBZSA60gR8a5v7HfOA=' 'unsafe-inline' 'unsafe-eval' https://cdn.shopify.com https://shopify.com https://connect.facebook.net https://metrics.nixc.us http://localhost:*`);
-  csp = addOrAppend(csp, 'script-src-elem', `'self' ${nonceToken} 'sha256-YX4iJw93x5SU0ple+RI+95HNdNBZSA60gR8a5v7HfOA=' 'unsafe-inline' 'unsafe-eval' https://cdn.shopify.com https://shopify.com https://connect.facebook.net https://metrics.nixc.us http://localhost:*`);
+  // Scripts - add Matomo domain, PostHog domains, and inline script hash
+  csp = addOrAppend(csp, 'script-src', `'self' ${nonceToken} 'sha256-YX4iJw93x5SU0ple+RI+95HNdNBZSA60gR8a5v7HfOA=' 'unsafe-inline' 'unsafe-eval' https://cdn.shopify.com https://shopify.com https://connect.facebook.net https://metrics.nixc.us https://eu.i.posthog.com https://eu-assets.i.posthog.com http://localhost:*`);
+  csp = addOrAppend(csp, 'script-src-elem', `'self' ${nonceToken} 'sha256-YX4iJw93x5SU0ple+RI+95HNdNBZSA60gR8a5v7HfOA=' 'unsafe-inline' 'unsafe-eval' https://cdn.shopify.com https://shopify.com https://connect.facebook.net https://metrics.nixc.us https://eu.i.posthog.com https://eu-assets.i.posthog.com http://localhost:*`);
   // Styles
   csp = addOrAppend(csp, 'style-src', `'self' 'unsafe-inline' https://cdn.shopify.com https://fonts.googleapis.com http://localhost:*`);
   csp = addOrAppend(csp, 'style-src-elem', `'self' 'unsafe-inline' https://cdn.shopify.com https://fonts.googleapis.com http://localhost:*`);
   // Fonts
   csp = addOrAppend(csp, 'font-src', `'self' https://fonts.gstatic.com data:`);
-  // Images - add Facebook Pixel tracking pixel and Matomo tracking pixel
-  csp = addOrAppend(csp, 'img-src', `'self' https://cdn.shopify.com https://www.facebook.com https://metrics.nixc.us data: http://localhost:*`);
-  // Connect - add Facebook Pixel domains and Matomo for tracking
-  csp = addOrAppend(csp, 'connect-src', `'self' https://api.emailjs.com https://connect.facebook.net https://www.facebook.com https://metrics.nixc.us http://localhost:* ws://localhost:*`);
+  // Images - add Facebook Pixel tracking pixel, Matomo tracking pixel, and PostHog
+  csp = addOrAppend(csp, 'img-src', `'self' https://cdn.shopify.com https://www.facebook.com https://metrics.nixc.us https://eu.i.posthog.com https://eu-assets.i.posthog.com data: http://localhost:*`);
+  // Connect - add Facebook Pixel domains, Matomo, and PostHog for tracking
+  csp = addOrAppend(csp, 'connect-src', `'self' https://api.emailjs.com https://connect.facebook.net https://www.facebook.com https://metrics.nixc.us https://eu.i.posthog.com https://eu-assets.i.posthog.com http://localhost:* ws://localhost:*`);
 
   responseHeaders.set('Content-Security-Policy', csp);
 
