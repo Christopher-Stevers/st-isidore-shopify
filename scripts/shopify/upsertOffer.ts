@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * Script to create or update an offer product in Shopify with metafields
- * 
+ *
  * Usage:
  *   npm run shopify:upsert-offer -- --handle=fall-family-beef-sampler --title="Fall Family Beef Sampler"
- * 
+ *
  * Or create a .env file with SHOPIFY_ADMIN_API_TOKEN and SHOPIFY_STORE_DOMAIN
  */
 
@@ -93,7 +93,12 @@ const SHOPIFY_STORE_DOMAIN = process.env.PUBLIC_STORE_DOMAIN;
 const SHOPIFY_API_VERSION = process.env.PRIVATE_ADMIN_API_VERSION || '2024-10';
 
 // Helper function to create metafields with proper access settings
-function createMetafield(namespace: string, key: string, value: string, type: string) {
+function createMetafield(
+  namespace: string,
+  key: string,
+  value: string,
+  type: string,
+) {
   return {
     namespace,
     key,
@@ -105,8 +110,21 @@ function createMetafield(namespace: string, key: string, value: string, type: st
 async function upsertOffer(config: OfferConfig) {
   if (!SHOPIFY_ADMIN_API_TOKEN || !SHOPIFY_STORE_DOMAIN) {
     throw new Error(
-      'Missing required environment variables: PRIVATE_ADMIN_API_TOKEN and PUBLIC_STORE_DOMAIN'
+      'Missing required environment variables: PRIVATE_ADMIN_API_TOKEN and PUBLIC_STORE_DOMAIN',
     );
+  }
+
+  // Validate price
+  if (!config.price || config.price === '0.00' || config.price === '0') {
+    console.warn(
+      '⚠️  Warning: Price is missing or zero. Price value:',
+      config.price,
+    );
+  } else {
+    const compareAtText = config.compareAtPrice
+      ? ` (compare at: ${config.compareAtPrice})`
+      : '';
+    console.log(`💰 Setting price: ${config.price}${compareAtText}`);
   }
 
   const shopifyGraphQLUrl = `https://${SHOPIFY_STORE_DOMAIN}/admin/api/${SHOPIFY_API_VERSION}/graphql.json`;
@@ -137,79 +155,351 @@ async function upsertOffer(config: OfferConfig) {
 
   // Prepare metafields - always set core offer metafields
   const metafields = [
-    createMetafield('$app:custom', 'offer_type', 'tier1', 'single_line_text_field'),
+    createMetafield(
+      '$app:custom',
+      'offer_type',
+      'tier1',
+      'single_line_text_field',
+    ),
   ];
 
   // Always set campaign metafields (use provided values or defaults)
-  metafields.push(createMetafield('$app:custom', 'campaign_name', config.campaignName || '', 'single_line_text_field'));
-  metafields.push(createMetafield('$app:custom', 'start_date', config.startDate || '', 'date'));
-  metafields.push(createMetafield('$app:custom', 'end_date', config.endDate || '', 'date'));
-  metafields.push(createMetafield('$app:custom', 'target_audience', config.targetAudience || '', 'multi_line_text_field'));
-  metafields.push(createMetafield('$app:custom', 'highlights', config.highlights ? JSON.stringify(config.highlights) : '[]', 'multi_line_text_field'));
+  metafields.push(
+    createMetafield(
+      '$app:custom',
+      'campaign_name',
+      config.campaignName || '',
+      'single_line_text_field',
+    ),
+  );
+  metafields.push(
+    createMetafield(
+      '$app:custom',
+      'start_date',
+      config.startDate || '',
+      'date',
+    ),
+  );
+  metafields.push(
+    createMetafield('$app:custom', 'end_date', config.endDate || '', 'date'),
+  );
+  metafields.push(
+    createMetafield(
+      '$app:custom',
+      'target_audience',
+      config.targetAudience || '',
+      'multi_line_text_field',
+    ),
+  );
+  metafields.push(
+    createMetafield(
+      '$app:custom',
+      'highlights',
+      config.highlights ? JSON.stringify(config.highlights) : '[]',
+      'multi_line_text_field',
+    ),
+  );
 
   // Marketing configuration metafields - always set all marketing metafields
   if (config.marketingConfig) {
     const marketing = config.marketingConfig;
 
     // Hero section - always set all hero metafields
-    metafields.push(createMetafield('$app:custom', 'hero_title', marketing.hero?.title || '', 'single_line_text_field'));
-    metafields.push(createMetafield('$app:custom', 'hero_subtitle', marketing.hero?.subtitle || '', 'multi_line_text_field'));
-    metafields.push(createMetafield('$app:custom', 'hero_cta_text', marketing.hero?.ctaText || '', 'single_line_text_field'));
-    metafields.push(createMetafield('$app:custom', 'hero_cta_url', marketing.hero?.ctaUrl ? (marketing.hero.ctaUrl.startsWith('http') ? marketing.hero.ctaUrl : `https://${process.env.PUBLIC_STORE_DOMAIN}${marketing.hero.ctaUrl}`) : 'https://example.com', 'url'));
-    metafields.push(createMetafield('$app:custom', 'hero_bullets', marketing.hero?.bullets ? JSON.stringify(marketing.hero.bullets) : '[]', 'multi_line_text_field'));
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'hero_title',
+        marketing.hero?.title || '',
+        'single_line_text_field',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'hero_subtitle',
+        marketing.hero?.subtitle || '',
+        'multi_line_text_field',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'hero_cta_text',
+        marketing.hero?.ctaText || '',
+        'single_line_text_field',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'hero_cta_url',
+        marketing.hero?.ctaUrl
+          ? marketing.hero.ctaUrl.startsWith('http')
+            ? marketing.hero.ctaUrl
+            : `https://${process.env.PUBLIC_STORE_DOMAIN}${marketing.hero.ctaUrl}`
+          : 'https://example.com',
+        'url',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'hero_bullets',
+        marketing.hero?.bullets ? JSON.stringify(marketing.hero.bullets) : '[]',
+        'multi_line_text_field',
+      ),
+    );
 
     // Cuts section - always set all cuts metafields
-    metafields.push(createMetafield('$app:custom', 'cuts_title', marketing.cuts?.title || '', 'single_line_text_field'));
-    metafields.push(createMetafield('$app:custom', 'cuts_items', marketing.cuts?.items ? JSON.stringify(marketing.cuts.items) : '[]', 'multi_line_text_field'));
-    metafields.push(createMetafield('$app:custom', 'cuts_show_images', marketing.cuts?.showImages ? 'true' : 'false', 'boolean'));
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'cuts_title',
+        marketing.cuts?.title || '',
+        'single_line_text_field',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'cuts_items',
+        marketing.cuts?.items ? JSON.stringify(marketing.cuts.items) : '[]',
+        'multi_line_text_field',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'cuts_show_images',
+        marketing.cuts?.showImages ? 'true' : 'false',
+        'boolean',
+      ),
+    );
 
     // Delivery section - always set all delivery metafields
-    metafields.push(createMetafield('$app:custom', 'delivery_title', marketing.delivery?.title || '', 'single_line_text_field'));
-    metafields.push(createMetafield('$app:custom', 'delivery_content', marketing.delivery?.content || '', 'multi_line_text_field'));
-    metafields.push(createMetafield('$app:custom', 'delivery_icon', marketing.delivery?.icon || '', 'single_line_text_field'));
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'delivery_title',
+        marketing.delivery?.title || '',
+        'single_line_text_field',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'delivery_content',
+        marketing.delivery?.content || '',
+        'multi_line_text_field',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'delivery_icon',
+        marketing.delivery?.icon || '',
+        'single_line_text_field',
+      ),
+    );
 
     // Promise section - always set all promise metafields
-    metafields.push(createMetafield('$app:custom', 'promise_title', marketing.promise?.title || '', 'single_line_text_field'));
-    metafields.push(createMetafield('$app:custom', 'promise_content', marketing.promise?.content || '', 'multi_line_text_field'));
-    metafields.push(createMetafield('$app:custom', 'promise_guarantee', marketing.promise?.guarantee || '', 'multi_line_text_field'));
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'promise_title',
+        marketing.promise?.title || '',
+        'single_line_text_field',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'promise_content',
+        marketing.promise?.content || '',
+        'multi_line_text_field',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'promise_guarantee',
+        marketing.promise?.guarantee || '',
+        'multi_line_text_field',
+      ),
+    );
 
     // How It Works section - always set all how it works metafields
-    metafields.push(createMetafield('$app:custom', 'how_it_works_title', marketing.howItWorks?.title || '', 'single_line_text_field'));
-    metafields.push(createMetafield('$app:custom', 'how_it_works_steps', marketing.howItWorks?.steps ? JSON.stringify(marketing.howItWorks.steps) : '[]', 'multi_line_text_field'));
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'how_it_works_title',
+        marketing.howItWorks?.title || '',
+        'single_line_text_field',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'how_it_works_steps',
+        marketing.howItWorks?.steps
+          ? JSON.stringify(marketing.howItWorks.steps)
+          : '[]',
+        'multi_line_text_field',
+      ),
+    );
 
     // Testimonials section - always set all testimonials metafields
-    metafields.push(createMetafield('$app:custom', 'testimonials_enabled', marketing.testimonials?.enabled ? 'true' : 'false', 'boolean'));
-    metafields.push(createMetafield('$app:custom', 'testimonials_title', marketing.testimonials?.title || '', 'single_line_text_field'));
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'testimonials_enabled',
+        marketing.testimonials?.enabled ? 'true' : 'false',
+        'boolean',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'testimonials_title',
+        marketing.testimonials?.title || '',
+        'single_line_text_field',
+      ),
+    );
 
     // Story section - always set all story metafields
-    metafields.push(createMetafield('$app:custom', 'story_enabled', marketing.story?.enabled ? 'true' : 'false', 'boolean'));
-    metafields.push(createMetafield('$app:custom', 'story_title', marketing.story?.title || '', 'single_line_text_field'));
-    metafields.push(createMetafield('$app:custom', 'story_content', marketing.story?.content || '', 'multi_line_text_field'));
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'story_enabled',
+        marketing.story?.enabled ? 'true' : 'false',
+        'boolean',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'story_title',
+        marketing.story?.title || '',
+        'single_line_text_field',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'story_content',
+        marketing.story?.content || '',
+        'multi_line_text_field',
+      ),
+    );
 
     // Newsletter section - always set all newsletter metafields
-    metafields.push(createMetafield('$app:custom', 'newsletter_enabled', marketing.newsletter?.enabled ? 'true' : 'false', 'boolean'));
-    metafields.push(createMetafield('$app:custom', 'newsletter_title', marketing.newsletter?.title || '', 'single_line_text_field'));
-    metafields.push(createMetafield('$app:custom', 'newsletter_subtitle', marketing.newsletter?.subtitle || '', 'multi_line_text_field'));
-    metafields.push(createMetafield('$app:custom', 'newsletter_cta_text', marketing.newsletter?.ctaText || '', 'single_line_text_field'));
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'newsletter_enabled',
+        marketing.newsletter?.enabled ? 'true' : 'false',
+        'boolean',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'newsletter_title',
+        marketing.newsletter?.title || '',
+        'single_line_text_field',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'newsletter_subtitle',
+        marketing.newsletter?.subtitle || '',
+        'multi_line_text_field',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'newsletter_cta_text',
+        marketing.newsletter?.ctaText || '',
+        'single_line_text_field',
+      ),
+    );
 
     // Section configuration - always set section metafields
     if (marketing.sections) {
       // Set individual section enabled/position metafields
       for (const section of marketing.sections) {
-        metafields.push(createMetafield('$app:custom', `section_${section.id}_enabled`, section.enabled ? 'true' : 'false', 'boolean'));
-        metafields.push(createMetafield('$app:custom', `section_${section.id}_position`, section.position.toString(), 'number_integer'));
+        metafields.push(
+          createMetafield(
+            '$app:custom',
+            `section_${section.id}_enabled`,
+            section.enabled ? 'true' : 'false',
+            'boolean',
+          ),
+        );
+        metafields.push(
+          createMetafield(
+            '$app:custom',
+            `section_${section.id}_position`,
+            section.position.toString(),
+            'number_integer',
+          ),
+        );
       }
     }
 
     // Always set claims, FAQ, and whyChooseUs metafields
-    metafields.push(createMetafield('$app:custom', 'claims_enabled', marketing.claims?.enabled ? 'true' : 'false', 'boolean'));
-    metafields.push(createMetafield('$app:custom', 'claims_title', marketing.claims?.title || '', 'single_line_text_field'));
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'claims_enabled',
+        marketing.claims?.enabled ? 'true' : 'false',
+        'boolean',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'claims_title',
+        marketing.claims?.title || '',
+        'single_line_text_field',
+      ),
+    );
 
-    metafields.push(createMetafield('$app:custom', 'faq_enabled', marketing.faq?.enabled ? 'true' : 'false', 'boolean'));
-    metafields.push(createMetafield('$app:custom', 'faq_title', marketing.faq?.title || '', 'single_line_text_field'));
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'faq_enabled',
+        marketing.faq?.enabled ? 'true' : 'false',
+        'boolean',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'faq_title',
+        marketing.faq?.title || '',
+        'single_line_text_field',
+      ),
+    );
 
-    metafields.push(createMetafield('$app:custom', 'why_choose_us_enabled', marketing.whyChooseUs?.enabled ? 'true' : 'false', 'boolean'));
-    metafields.push(createMetafield('$app:custom', 'why_choose_us_title', marketing.whyChooseUs?.title || '', 'single_line_text_field'));
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'why_choose_us_enabled',
+        marketing.whyChooseUs?.enabled ? 'true' : 'false',
+        'boolean',
+      ),
+    );
+    metafields.push(
+      createMetafield(
+        '$app:custom',
+        'why_choose_us_title',
+        marketing.whyChooseUs?.title || '',
+        'single_line_text_field',
+      ),
+    );
   }
 
   if (existingProductId) {
@@ -288,7 +578,10 @@ async function upsertOffer(config: OfferConfig) {
       throw new Error('Failed to update product');
     }
 
-    console.log('Product updated successfully:', updateData.data?.productUpdate?.product);
+    console.log(
+      'Product updated successfully:',
+      updateData.data?.productUpdate?.product,
+    );
 
     // Update metafields separately using metafieldsSet (batched in chunks of 25)
     if (metafields.length > 0) {
@@ -312,13 +605,17 @@ async function upsertOffer(config: OfferConfig) {
       // Filter out metafields with empty values (Shopify rejects them)
       // But allow 'false' for boolean types
       const metafieldsInput = metafields
-        .filter(mf => {
+        .filter((mf) => {
           if (mf.type === 'boolean') {
             return mf.value === 'true' || mf.value === 'false';
           }
-          return mf.value !== null && mf.value !== undefined && String(mf.value).trim() !== '';
+          return (
+            mf.value !== null &&
+            mf.value !== undefined &&
+            String(mf.value).trim() !== ''
+          );
         })
-        .map(mf => ({
+        .map((mf) => ({
           ownerId: existingProductId,
           namespace: mf.namespace.replace('$app:', ''),
           key: mf.key,
@@ -331,7 +628,9 @@ async function upsertOffer(config: OfferConfig) {
       let totalSet = 0;
       for (let i = 0; i < metafieldsInput.length; i += batchSize) {
         const batch = metafieldsInput.slice(i, i + batchSize);
-        console.log(`Setting batch ${Math.floor(i / batchSize) + 1} (${batch.length} metafields)...`);
+        console.log(
+          `Setting batch ${Math.floor(i / batchSize) + 1} (${batch.length} metafields)...`,
+        );
 
         const metafieldsResponse = await fetch(shopifyGraphQLUrl, {
           method: 'POST',
@@ -348,22 +647,28 @@ async function upsertOffer(config: OfferConfig) {
         });
 
         const metafieldsData = await metafieldsResponse.json();
-        
+
         if (metafieldsData.errors) {
           console.error('Metafields GraphQL Errors:', metafieldsData.errors);
         }
-        
+
         if (metafieldsData.data?.metafieldsSet?.userErrors?.length > 0) {
-          console.error('Metafields User Errors:', metafieldsData.data.metafieldsSet.userErrors);
+          console.error(
+            'Metafields User Errors:',
+            metafieldsData.data.metafieldsSet.userErrors,
+          );
         } else {
-          const setCount = metafieldsData.data?.metafieldsSet?.metafields?.length || 0;
+          const setCount =
+            metafieldsData.data?.metafieldsSet?.metafields?.length || 0;
           totalSet += setCount;
-          console.log(`✅ Batch ${Math.floor(i / batchSize) + 1}: Set ${setCount} metafields`);
+          console.log(
+            `✅ Batch ${Math.floor(i / batchSize) + 1}: Set ${setCount} metafields`,
+          );
         }
       }
       console.log(`✅ Successfully set ${totalSet} metafields total`);
       // Debug: log cuts_items specifically
-      const cutsItemsMf = metafieldsInput.find(mf => mf.key === 'cuts_items');
+      const cutsItemsMf = metafieldsInput.find((mf) => mf.key === 'cuts_items');
       if (cutsItemsMf) {
         console.log('📦 cuts_items value:', cutsItemsMf.value);
       }
@@ -397,13 +702,24 @@ async function upsertOffer(config: OfferConfig) {
       const variantUpdateData = await variantUpdateResponse.json();
 
       if (variantUpdateResponse.ok) {
-        console.log('Variant pricing updated successfully:', variantUpdateData.variant);
+        console.log(
+          '✅ Variant pricing updated successfully:',
+          variantUpdateData.variant,
+        );
+        console.log(
+          `   Price: ${variantUpdateData.variant?.price}, Compare at: ${variantUpdateData.variant?.compare_at_price || 'N/A'}`,
+        );
       } else {
-        console.error('Variant Update Errors:', variantUpdateData);
+        console.error('❌ Variant Update Errors:', variantUpdateData);
+        if (variantUpdateData.errors) {
+          console.error(
+            '   API Errors:',
+            JSON.stringify(variantUpdateData.errors, null, 2),
+          );
+        }
       }
     }
   } else {
-
     const createMutation = `
       mutation CreateProduct($input: ProductInput!) {
         productCreate(input: $input) {
@@ -483,13 +799,17 @@ async function upsertOffer(config: OfferConfig) {
       // Filter out metafields with empty values (Shopify rejects them)
       // But allow 'false' for boolean types
       const metafieldsInput = metafields
-        .filter(mf => {
+        .filter((mf) => {
           if (mf.type === 'boolean') {
             return mf.value === 'true' || mf.value === 'false';
           }
-          return mf.value !== null && mf.value !== undefined && String(mf.value).trim() !== '';
+          return (
+            mf.value !== null &&
+            mf.value !== undefined &&
+            String(mf.value).trim() !== ''
+          );
         })
-        .map(mf => ({
+        .map((mf) => ({
           ownerId: createdProduct.id,
           namespace: mf.namespace.replace('$app:', ''),
           key: mf.key,
@@ -502,7 +822,9 @@ async function upsertOffer(config: OfferConfig) {
       let totalSet = 0;
       for (let i = 0; i < metafieldsInput.length; i += batchSize) {
         const batch = metafieldsInput.slice(i, i + batchSize);
-        console.log(`Setting batch ${Math.floor(i / batchSize) + 1} (${batch.length} metafields)...`);
+        console.log(
+          `Setting batch ${Math.floor(i / batchSize) + 1} (${batch.length} metafields)...`,
+        );
 
         const metafieldsResponse = await fetch(shopifyGraphQLUrl, {
           method: 'POST',
@@ -519,22 +841,28 @@ async function upsertOffer(config: OfferConfig) {
         });
 
         const metafieldsData = await metafieldsResponse.json();
-        
+
         if (metafieldsData.errors) {
           console.error('Metafields GraphQL Errors:', metafieldsData.errors);
         }
-        
+
         if (metafieldsData.data?.metafieldsSet?.userErrors?.length > 0) {
-          console.error('Metafields User Errors:', metafieldsData.data.metafieldsSet.userErrors);
+          console.error(
+            'Metafields User Errors:',
+            metafieldsData.data.metafieldsSet.userErrors,
+          );
         } else {
-          const setCount = metafieldsData.data?.metafieldsSet?.metafields?.length || 0;
+          const setCount =
+            metafieldsData.data?.metafieldsSet?.metafields?.length || 0;
           totalSet += setCount;
-          console.log(`✅ Batch ${Math.floor(i / batchSize) + 1}: Set ${setCount} metafields`);
+          console.log(
+            `✅ Batch ${Math.floor(i / batchSize) + 1}: Set ${setCount} metafields`,
+          );
         }
       }
       console.log(`✅ Successfully set ${totalSet} metafields total`);
       // Debug: log cuts_items specifically
-      const cutsItemsMf = metafieldsInput.find(mf => mf.key === 'cuts_items');
+      const cutsItemsMf = metafieldsInput.find((mf) => mf.key === 'cuts_items');
       if (cutsItemsMf) {
         console.log('📦 cuts_items value:', cutsItemsMf.value);
       }
@@ -583,17 +911,23 @@ async function upsertOffer(config: OfferConfig) {
       const variantData = await variantResponse.json();
 
       if (variantData.data?.productVariantUpdate?.userErrors?.length > 0) {
-        console.error('Variant Update Errors:', variantData.data.productVariantUpdate.userErrors);
+        console.error(
+          '❌ Variant Update Errors:',
+          variantData.data.productVariantUpdate.userErrors,
+        );
       } else {
-        console.log('Variant updated successfully with pricing');
+        const updatedVariant =
+          variantData.data?.productVariantUpdate?.productVariant;
+        console.log('✅ Variant updated successfully with pricing');
+        console.log(
+          `   Price: ${updatedVariant?.price}, Compare at: ${updatedVariant?.compareAtPrice || 'N/A'}`,
+        );
       }
     }
   }
 }
 
-
 // Auto-run when executed directly
 // no auto-run; invoked by runOffer.ts with --json
 
 export {upsertOffer, type OfferConfig};
-

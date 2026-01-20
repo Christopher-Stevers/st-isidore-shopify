@@ -1,0 +1,158 @@
+{
+  "campaign": {
+    "name": "Christmas Budget Beef Box",
+    "tier": "T1",
+    "objective": "CONVERSIONS",
+    "dailyBudget": null,
+    "startTime": "2025-11-15",
+    "stopTime": "2025-12-23",
+    "pageId": "",
+    "pixelId": "",
+    "tags": ["winter", "christmas", "budget", "tier1", "stisidoreranch"]
+  },
+  "adsets": [
+    {
+      "name": "",
+      "dailyBudget": null,
+      "optimizationGoal": "",
+      "billingEvent": "",
+      "attributionSpec": "",
+      "audience": {
+        "countries": ["CA"],
+        "customAudiences": [],
+        "interests": [],
+        "genders": [],
+        "ageMin": null,
+        "ageMax": null
+      },
+      "placements": {
+        "publisherPlatforms": [],
+        "facebookPositions": [],
+        "instagramPositions": [],
+        "devicePlatforms": []
+      }
+    }
+  ],
+  "ads": [
+    {
+      "name": "ChristmasBudgetBeefBox_Primary",
+      "primaryText": "Stock your freezer for winter with grass-fed Ontario beef. Roasts, shanks, stew, ground beef, and a few steaks—built for slow cooking and feeding families well without premium prices.",
+      "headline": "Christmas Budget Beef Box – $250",
+      "description": "High-yield winter cuts for roasts, stews, and cozy meals. Limited Christmas boxes available.",
+      "link": "https://stisidoreranch.com/offers/christmas-budget-beef-box",
+      "displayLink": "stisidoreranch.com",
+      "callToAction": "SHOP_NOW",
+      "urlTags": "utm_source=meta&utm_medium=paid&utm_campaign=christmas_budget_beef_box",
+      "image": {"source": "./assets/christmas_budget_beef_box.jpg"}
+    }
+  ],
+  "shopify": {
+    "landingUrl": "https://stisidoreranch.com/offers/christmas-budget-beef-box",
+    "productHandle": "christmas-budget-beef-box",
+    "price": "250.00"
+  },
+  "utm": {
+    "source": "meta",
+    "medium": "paid",
+    "campaign": "christmas_budget_beef_box",
+    "content": ""
+  },
+  "offerConfig": {
+    "handle": "christmas-budget-beef-box",
+    "title": "Christmas Budget Beef Box",
+    "description": "<p>The <strong>Christmas Budget Beef Box</strong> is a winter-ready freezer box designed for real family meals. Built around slow-cook, high-yield cuts, this box helps you stretch your food budget while still enjoying clean, grass-fed Ontario beef.</p><p>Instead of premium steak cuts, we focus on roasts, shanks, stew meat, and ground beef—with just enough steak for flexibility. It’s practical, honest beef meant to be cooked, shared, and enjoyed all winter long.</p>",
+    "price": "250.00",
+    "compareAtPrice": "325.00",
+    "campaignName": "Christmas Budget Beef Box",
+    "startDate": "2025-11-15",
+    "endDate": "2025-12-23",
+    "targetAudience": "Ontario families looking for affordable, freezer-friendly beef for winter meals.",
+    "highlights": [
+      "Approximately 21 lb of grass-fed Ontario beef",
+      "High-yield roasts, shanks, stew meat, ground beef & select steaks",
+      "Designed for slow cooking, stews, and winter meals",
+      "Vacuum-sealed, frozen, and freezer ready",
+      "Save significantly vs buying cuts individually"
+    ],
+    "marketingConfig": {
+      "hero": {
+        "title": "Winter-Ready Beef for Real Family Meals",
+        "subtitle": "A freezer-filling box of grass-fed Ontario beef built for slow cooking, hearty dinners, and stretching your food budget through winter.",
+        "ctaText": "Reserve Your Christmas Box",
+        "ctaUrl": "/cart",
+        "bullets": [
+          "Built for slow cookers and roasts",
+          "High-yield cuts that stretch further",
+          "Limited Christmas availability"
+        ]
+      },
+      "cuts": {
+        "title": "What’s Inside (~21 lb)",
+        "items": [
+          "Blade Roasts (2 × 2.5 lb)",
+          "Round Roasts (2 × 2.5 lb)",
+          "Beef Shanks (3 × ~1 lb)",
+          "Tri-Tip (~1.25 lb)",
+          "Sirloin Steaks (2 × 0.75–1 lb)",
+          "Stew Beef (2 × 1 lb)",
+          "Ground Beef (3 × 1 lb)"
+        ],
+        "showImages": true
+      },
+      "delivery": {
+        "title": "Delivery",
+        "content": "Delivered frozen and vacuum-sealed, ready to go straight into your freezer. Local processing and careful packing ensure quality you can trust.",
+        "icon": "truck"
+      },
+      "promise": {
+        "title": "Our Promise",
+        "content": "We raise our cattle slowly on pasture and work with trusted local butchers. If you’re not happy with your beef, we’ll make it right.",
+        "guarantee": "Satisfaction guaranteed"
+      },
+      "howItWorks": {
+        "title": "How It Works",
+        "steps": [
+          {
+            "icon": "shopping-cart",
+            "title": "Reserve Online",
+            "description": "Order your Christmas box before we sell out."
+          },
+          {
+            "icon": "package",
+            "title": "We Pack Your Beef",
+            "description": "Cuts are vacuum-sealed and frozen for freshness."
+          },
+          {
+            "icon": "truck",
+            "title": "Delivered Frozen",
+            "description": "Arrives freezer-ready for winter cooking."
+          }
+        ]
+      },
+      "testimonials": {"enabled": true, "title": "What Families Are Saying"},
+      "story": {
+        "enabled": true,
+        "title": "From Our Family Ranch",
+        "content": ""
+      },
+      "newsletter": {
+        "enabled": false,
+        "title": "",
+        "subtitle": "",
+        "ctaText": ""
+      },
+      "claims": {"enabled": false, "title": ""},
+      "faq": {"enabled": true, "title": "Common Questions"},
+      "whyChooseUs": {"enabled": false, "title": ""},
+      "sections": [
+        {"id": "hero", "enabled": true, "position": 1},
+        {"id": "cuts", "enabled": true, "position": 2},
+        {"id": "how_it_works", "enabled": true, "position": 3},
+        {"id": "delivery", "enabled": true, "position": 4},
+        {"id": "promise", "enabled": true, "position": 5},
+        {"id": "testimonials", "enabled": true, "position": 6},
+        {"id": "faq", "enabled": true, "position": 7}
+      ]
+    }
+  }
+}

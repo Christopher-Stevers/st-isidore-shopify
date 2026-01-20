@@ -15,10 +15,12 @@ export default defineConfig({
   ],
   build: {
     // Allow a strict Content-Security-Policy
-    // withtout inlining assets as base64:
+    // without inlining assets as base64:
     assetsInlineLimit: 0,
   },
   ssr: {
+    // Force these packages to be bundled during SSR
+    noExternal: ['posthog-js', 'posthog-js/react'],
     optimizeDeps: {
       /**
        * Include dependencies here if they throw CJS<>ESM errors.

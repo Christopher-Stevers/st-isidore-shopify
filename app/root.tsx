@@ -19,6 +19,7 @@ import {
 } from 'react-router';
 import '~/tailwind.css';
 import favicon from './assets/favicon.svg';
+import tailwindStyles from './tailwind.css?url';
 import resetStyles from './styles/reset.css?url';
 import appStyles from './styles/app.css?url';
 import {PageLayout} from '~/components/PageLayout';
@@ -66,6 +67,7 @@ export function links() {
       rel: 'stylesheet',
       href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Rye&family=Cantarell&family=Tangerine&display=swap',
     },
+    {rel: 'stylesheet', href: tailwindStyles},
     {rel: 'stylesheet', href: resetStyles},
     {rel: 'stylesheet', href: appStyles},
     {
@@ -192,6 +194,26 @@ export function Layout({children}: {readonly children?: React.ReactNode}) {
             suppressHydrationWarning
           />
         ) : null}
+        {typeof document === 'undefined' ? (
+          <script
+            nonce={nonce}
+            dangerouslySetInnerHTML={{
+              __html: `var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//metrics.nixc.us/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '10']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();`,
+            }}
+            suppressHydrationWarning
+          />
+        ) : null}
+
       </head>
       <body>
         {data ? (
