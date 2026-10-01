@@ -36,7 +36,7 @@ const Index = ({
     init({
       publicKey: "TGRpFqeZKFbGA6xs6",
     });
-    send("service_m4c8dsf", "template_50o5top", templateParams).finally(() => {
+    send("service_bbf5o0p", "template_50o5top", templateParams).finally(() => {
       setName("");
       setEmail("");
       setMessage("");
