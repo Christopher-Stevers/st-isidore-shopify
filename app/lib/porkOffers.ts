@@ -7,8 +7,8 @@ export function porkOfferConfig(handle: string): MarketingConfig | undefined {
     ...DEFAULT_MARKETING_CONFIG,
     sections: (half ? ['hero', 'cuts', 'promise', 'delivery'] : ['hero', 'delivery']).map((id, position) => ({id, position, enabled: true})),
     hero: {
-      title: half ? 'Stock up on pork!' : 'My personal favourite (aside from steak)',
-      subtitle: half ? 'Sausage and bacon for breakfast, chops for dinner AND roasts for the weekend. Get a half pig with approximately 86 lbs of pork from certified organic pigs.' : 'Garlic pork sausage. Great with breakfast, in a bun, or with potatoes for dinner. Also makes a great casserole. 1 lb pack, made with pork from certified organic pigs.',
+      title: half ? 'Stock up on pork!' : 'Garlic sausage',
+      subtitle: half ? 'Sausage and bacon for breakfast, chops for dinner AND roasts for the weekend. Get a half pig with approximately 86 lbs of pork from certified organic pigs.' : 'My personal favourite (aside from steak). Great with breakfast, in a bun, or with potatoes for dinner. Also makes a great casserole. 1 lb pack of garlic pork sausage, made with pork from certified organic pigs.',
       ctaText: 'Get yours →',
       bullets: half ? ['From certified organic pigs', 'Approx. 86 lbs of pork', 'Half pig — $650'] : ['From certified organic pigs', '1 lb pack', '$6.87 per pack'],
     },

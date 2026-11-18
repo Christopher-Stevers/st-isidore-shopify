@@ -68,7 +68,7 @@ export function MarketingHero({offer, config}: MarketingHeroProps) {
             {/* Price Display */}
             <div className="space-y-2">
               <div className="flex items-baseline gap-3">
-                <span className="text-4xl font-bold text-red-600">
+                <span className={`text-4xl font-bold ${compareAtPrice && compareAtPrice > price ? 'text-red-600' : 'text-gray-900'}`}>
                   ${price.toFixed(2)}
                 </span>
                 {compareAtPrice && compareAtPrice > price ? (
