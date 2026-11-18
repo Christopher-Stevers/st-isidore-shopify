@@ -5,7 +5,7 @@ export function porkOfferConfig(handle: string): MarketingConfig | undefined {
   if (!half && handle !== 'garlic-pork-sausage-1-lb') return undefined;
   return {
     ...DEFAULT_MARKETING_CONFIG,
-    sections: (half ? ['hero', 'cuts', 'promise', 'delivery', 'howItWorks', 'faq', 'story', 'questions', 'order'] : ['hero', 'cuts', 'delivery', 'howItWorks', 'faq', 'story', 'questions', 'order']).map((id, position) => ({id, position, enabled: true})),
+    sections: ['hero', 'cuts', 'delivery', 'howItWorks', 'faq', 'story', 'questions', 'order'].map((id, position) => ({id, position, enabled: true})),
     hero: {
       title: half ? 'Organic raised half pig' : 'Organic raised garlic sausage',
       subtitle: half ? 'Stock up on pork! Get sausage, bacon, ham, roasts, ribs and chops in one order. Approximately 86 lbs of pork from certified organic pigs.' : 'My personal favourite (aside from steak). 1 lb pack of garlic pork sausage, made with pork from certified organic pigs.',
@@ -16,11 +16,6 @@ export function porkOfferConfig(handle: string): MarketingConfig | undefined {
       title: half ? 'Your half pig includes' : 'What’s in a pack?',
       showImages: false,
       items: half ? ['Sausage — approx. 43 lb', 'Bacon — approx. 13 lb', 'Ham — approx. 9.6 lb', 'Shoulder roast — approx. 6.6 lb', 'Spare ribs — approx. 5 lb', 'Fresh pork chops — approx. 4.4 lb', 'Smoked pork chops — approx. 4.4 lb'] : ['1 lb of garlic pork sausage', 'Made with pork from certified organic pigs', 'Order one pack or add a few to your beef order'],
-    },
-    promise: {
-      title: 'A note on the weights',
-      content: 'Expect about 86 lbs of packaged pork from a 120 lb hanging half. The amounts above are estimates. They will vary with cutting, trimming and curing.',
-      guarantee: 'The picture is a butcher’s diagram. Your order includes the cuts listed above, not every part shown in the picture.',
     },
     howItWorks: {
       title: 'How ordering works',
@@ -38,7 +33,6 @@ export function porkOfferConfig(handle: string): MarketingConfig | undefined {
         ...(half ? [
           {question: 'How much pork will I get?', answer: 'Approximately 86 lbs of packaged pork from a 120 lb hanging half. The cut weights above are estimates and vary with cutting, trimming and curing.'},
           {question: 'Is the $650 a deposit?', answer: 'No. $650 CAD is the price for the half pig.'},
-          {question: 'Does the picture show everything included?', answer: 'The picture shows where cuts come from on a pig. Your half pig includes the seven cuts listed above; head and other unlisted parts are not included.'},
         ] : [
           {question: 'How much is in a pack?', answer: 'Each pack is 1 lb of garlic pork sausage and costs $6.87 CAD.'},
           {question: 'Do I have to buy a box?', answer: 'No. You can order one 1 lb pack or add more packs to your order.'},
