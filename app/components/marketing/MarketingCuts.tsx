@@ -17,7 +17,7 @@ export function MarketingCuts({offer, config}: MarketingCutsProps) {
           {config?.title || "What's Inside Your Box"}
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className={showImages ? "grid md:grid-cols-2 gap-12 items-center" : "max-w-3xl mx-auto"}>
           {/* Left: Cuts List */}
           <div className="space-y-4">
             {cuts.map((cut: string, index: number) => (

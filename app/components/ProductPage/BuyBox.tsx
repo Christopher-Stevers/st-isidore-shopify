@@ -50,6 +50,7 @@ const BuyBox = ({product, variants, selectedSellingPlan}: BuyBoxProps) => {
     variants.product?.variants.nodes[0]?.selectedOptions.find(
       (option) => option.name === 'Title' && option.value === 'Default Title',
     );
+  const hideHalfPigSelector = product.handle === 'half-pig-pork-from-certified-organic-pigs' && variants.product?.variants.nodes.length === 1;
   const hasSellingPlans = product.sellingPlanGroups?.nodes && product.sellingPlanGroups.nodes.length > 0;
   
   return (
@@ -69,7 +70,7 @@ const BuyBox = ({product, variants, selectedSellingPlan}: BuyBoxProps) => {
             selectedSellingPlan={selectedSellingPlan}
           />
 
-          {!onlyDefaultVariant && (
+          {!onlyDefaultVariant && !hideHalfPigSelector && (
             <VariantSelector
               handle={product.handle}
               selectedVariant={product.selectedVariant}

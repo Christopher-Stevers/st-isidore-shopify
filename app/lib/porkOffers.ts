@@ -5,17 +5,17 @@ export function porkOfferConfig(handle: string): MarketingConfig | undefined {
   if (!half && handle !== 'garlic-pork-sausage-1-lb') return undefined;
   return {
     ...DEFAULT_MARKETING_CONFIG,
-    sections: (half ? ['hero', 'cuts', 'promise', 'howItWorks', 'delivery', 'faq', 'questions', 'order'] : ['hero', 'howItWorks', 'delivery', 'faq', 'questions', 'order']).map((id, position) => ({id, position, enabled: true})),
+    sections: (half ? ['hero', 'cuts', 'promise', 'delivery', 'howItWorks', 'faq', 'story', 'questions', 'order'] : ['hero', 'cuts', 'delivery', 'howItWorks', 'faq', 'story', 'questions', 'order']).map((id, position) => ({id, position, enabled: true})),
     hero: {
       title: half ? 'Organic raised half pig' : 'Organic raised garlic sausage',
-      subtitle: half ? 'Sausage and bacon for breakfast, chops for dinner AND roasts for the weekend. Get a half pig with approximately 86 lbs of pork from certified organic pigs.' : 'My personal favourite (aside from steak). 1 lb pack of garlic pork sausage, made with pork from certified organic pigs.',
+      subtitle: half ? 'Stock up on pork! Get sausage, bacon, ham, roasts, ribs and chops in one order. Approximately 86 lbs of pork from certified organic pigs.' : 'My personal favourite (aside from steak). 1 lb pack of garlic pork sausage, made with pork from certified organic pigs.',
       ctaText: 'Get yours →',
-      bullets: half ? ['From certified organic pigs', 'Approx. 86 lbs of pork', 'Half pig — $650'] : ['From certified organic pigs', '1 lb pack', '$6.87 per pack'],
+      bullets: half ? ['From certified organic pigs', 'Approx. 86 lbs of pork', 'Delivered to your door'] : ['From certified organic pigs', '1 lb pack', 'Delivered to your door'],
     },
     cuts: {
-      title: half ? 'Your half pig includes' : 'How to eat it',
+      title: half ? 'Your half pig includes' : 'What’s in a pack?',
       showImages: false,
-      items: half ? ['Sausage — approx. 43 lb', 'Bacon — approx. 13 lb', 'Ham — approx. 9.6 lb', 'Shoulder roast — approx. 6.6 lb', 'Spare ribs — approx. 5 lb', 'Fresh pork chops — approx. 4.4 lb', 'Smoked pork chops — approx. 4.4 lb'] : ['Breakfast — with eggs and toast', 'Lunch — in a bun with mustard or your favourite toppings', 'Dinner — with potatoes and vegetables', 'Casserole — cut it up and mix it in'],
+      items: half ? ['Sausage — approx. 43 lb', 'Bacon — approx. 13 lb', 'Ham — approx. 9.6 lb', 'Shoulder roast — approx. 6.6 lb', 'Spare ribs — approx. 5 lb', 'Fresh pork chops — approx. 4.4 lb', 'Smoked pork chops — approx. 4.4 lb'] : ['1 lb of garlic pork sausage', 'Made with pork from certified organic pigs', 'Order one pack or add a few to your beef order'],
     },
     promise: {
       title: 'A note on the weights',
@@ -45,6 +45,11 @@ export function porkOfferConfig(handle: string): MarketingConfig | undefined {
         ]),
         {question: 'When will my order be delivered?', answer: 'Indie Food delivers on Thursdays or Fridays, depending on your location. They will send you your estimated arrival time (ETA) on Wednesday before your delivery.'},
       ],
+    },
+    story: {
+      enabled: true,
+      title: half ? 'Pork is back!' : 'My personal favourite (aside from steak)',
+      content: half ? '<p>We have pork available again, alongside our beef. If you like to stock up, a half pig gives you a mix of the cuts listed above in one order.</p><p>Want to try the pork first? You can also order our garlic sausage by the 1 lb pack.</p>' : '<p>I’m glad to have pork available again. Garlic sausage is my personal favourite (aside from steak), so this is a good place to start.</p><p>Try a 1 lb pack, add it to your beef order, or get a few for the freezer.</p>',
     },
     delivery: {title: 'How delivery works', content: 'Our delivery partner, Indie Food, delivers on Thursdays or Fridays, depending on where you live. They will send you an estimated arrival time (ETA) on Wednesday before your delivery, so you know when to expect your order. Questions? Email us at info@stisidoreranch.com.'},
   };
