@@ -5,6 +5,7 @@ function BuyBoxImages({
   className,
 }: {
   product: {
+    title?: string;
     images: {
       nodes: {
         url: string;
@@ -19,7 +20,7 @@ function BuyBoxImages({
 
   return (
     <div className={`flex-1 ${className}`}>
-      <ImageGallery images={productImages} altText="Placeholder product" />
+      <ImageGallery images={productImages} altText={product.title ?? 'Product'} />
     </div>
   );
 }

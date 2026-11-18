@@ -1,3 +1,4 @@
+import {porkOfferConfig} from '~/lib/porkOffers';
 import Claims from "../SharedMarketing/Claims";
 import BuyBox, { type BuyBoxProps } from "./BuyBox";
 import Testimonials from "../SharedMarketing/Testimonials";
@@ -12,8 +13,10 @@ const Product = () => {
         variants={variants as unknown as BuyBoxProps["variants"]}
         selectedSellingPlan={selectedSellingPlan as BuyBoxProps["selectedSellingPlan"]}
       />
-      <Claims />
-      <Testimonials />
+      {!porkOfferConfig(product.handle) && <>
+        <Claims />
+        <Testimonials />
+      </>}
     </div>
   );
 };
