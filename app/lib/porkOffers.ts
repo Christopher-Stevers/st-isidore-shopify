@@ -7,15 +7,15 @@ export function porkOfferConfig(handle: string): MarketingConfig | undefined {
     ...DEFAULT_MARKETING_CONFIG,
     sections: ['hero', 'cuts', 'promise', 'delivery'].map((id, position) => ({id, position, enabled: true})),
     hero: {
-      title: half ? 'A freezer full of possibilities.' : 'Garlic sausage. Supper sorted.',
-      subtitle: half ? 'A half-pig share for roasts, sizzling chops and easy sausage suppers. Pork from certified organic pigs.' : 'Big garlic flavour in a convenient 1 lb pack. Made with pork from certified organic pigs. Ready for your next family supper.',
+      title: half ? 'A freezer full of possibilities.' : 'My personal favourite (aside from steak)',
+      subtitle: half ? 'A half-pig share for roasts, sizzling chops and easy sausage suppers. Pork from certified organic pigs.' : 'With eggs at breakfast, tucked into a bun, served with your favourite dinner sides, or sliced into a hearty casserole. A versatile 1 lb pack made with pork from certified organic pigs.',
       ctaText: half ? 'Add a half pig →' : 'Add a 1 lb pack →',
       bullets: half ? ['From certified organic pigs', 'Approx. 86 lb packaged pork', 'One-time purchase'] : ['From certified organic pigs', '1 lb pack', 'One-time purchase'],
     },
     cuts: {
       title: half ? 'Your half-pig share' : 'One pack. Plenty of possibilities.',
       showImages: false,
-      items: half ? ['Sausage — approx. 43 lb', 'Bacon — approx. 13 lb', 'Ham — approx. 9.6 lb', 'Shoulder roast — approx. 6.6 lb', 'Spare ribs — approx. 5 lb', 'Fresh pork chops — approx. 4.4 lb', 'Smoked pork chops — approx. 4.4 lb'] : ['One 1 lb pack of garlic pork sausage', 'Serve with roasted vegetables for a simple supper', 'Enjoy in a bun or alongside your favourite sides'],
+      items: half ? ['Sausage — approx. 43 lb', 'Bacon — approx. 13 lb', 'Ham — approx. 9.6 lb', 'Shoulder roast — approx. 6.6 lb', 'Spare ribs — approx. 5 lb', 'Fresh pork chops — approx. 4.4 lb', 'Smoked pork chops — approx. 4.4 lb'] : ['Breakfast — serve alongside eggs and toast', 'In a bun — add your favourite toppings', 'Dinner — pair with potatoes and roasted vegetables', 'Casserole — slice into a hearty family bake'],
     },
     promise: {
       title: half ? 'Know what you’re ordering' : 'Good food starts with the source',
