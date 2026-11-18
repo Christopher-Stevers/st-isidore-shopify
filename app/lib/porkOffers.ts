@@ -47,9 +47,9 @@ export function porkOfferConfig(handle: string): MarketingConfig | undefined {
           {question: 'How much is in a pack?', answer: 'Each pack is 1 lb of garlic pork sausage and costs $6.87 CAD.'},
           {question: 'Do I have to buy a box?', answer: 'No. You can order one 1 lb pack or add more packs to your order.'},
         ]),
-        {question: 'How do I arrange pickup or delivery?', answer: 'Email info@stisidoreranch.com before ordering to confirm availability and pickup or delivery arrangements.'},
+        {question: 'When will my order be delivered?', answer: 'Indie Food delivers on Thursdays or Fridays, depending on your location. They will send you your estimated arrival time (ETA) on Wednesday before your delivery.'},
       ],
     },
-    delivery: {title: 'Pickup & Delivery', content: 'Have a question about pickup, delivery or availability? Email us at info@stisidoreranch.com before ordering.'},
+    delivery: {title: 'How delivery works', content: 'Our delivery partner, Indie Food, delivers on Thursdays or Fridays, depending on where you live. They will send you an estimated arrival time (ETA) on Wednesday before your delivery, so you know when to expect your order. Questions? Email us at info@stisidoreranch.com.'},
   };
 }
