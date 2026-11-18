@@ -160,12 +160,29 @@ export function MarketingSystem({offer, metafields}: MarketingSystemProps) {
           </section>
         ) : null;
 
+      case 'questions':
+        return (
+          <section key="questions" className="w-full px-4 py-8">
+            <div className="bg-white rounded-2xl p-8 shadow-lg text-center space-y-5">
+              <h2 className="text-3xl font-display">Got questions?</h2>
+              <p className="max-w-3xl mx-auto text-lg text-gray-700 leading-relaxed">
+                Have a question about the pork or your order? Call me at{' '}
+                <a href="tel:+15197036780" className="underline">519-703-6780</a>{' '}
+                or email{' '}
+                <a href="mailto:info@stisidoreranch.com" className="underline">info@stisidoreranch.com</a>.
+                {' '}I’m happy to help.
+              </p>
+              <p className="font-semibold">Chris Stevers</p>
+            </div>
+          </section>
+        );
+
       case 'order':
         return (
           <section key="order" className="w-full px-4 py-8">
             <div className="bg-white rounded-2xl p-8 shadow-lg text-center space-y-5">
               <h2 className="text-3xl font-display">{offer.title}</h2>
-              <p className="text-lg text-gray-700">{offer.handle === 'garlic-pork-sausage-1-lb' ? 'Try a 1 lb pack, or get a few for the freezer.' : 'Ready to stock up? Get your half-pig share.'}</p>
+              <p className="text-lg text-gray-700">{offer.handle === 'garlic-pork-sausage-1-lb' ? 'Try a 1 lb pack, or get a few for the freezer.' : 'Ready to stock up? Order your half pig.'}</p>
               <a href={`/products/${offer.handle}`} className="inline-block bg-black text-white px-8 py-4 rounded-2xl text-lg font-semibold hover:bg-neutral-800">Get yours →</a>
             </div>
           </section>
