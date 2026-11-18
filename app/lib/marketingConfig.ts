@@ -51,6 +51,7 @@ export interface MarketingConfig {
   faq: {
     enabled: boolean;
     title?: string;
+    items?: Array<{question: string; answer: string}>;
   };
   whyChooseUs: {
     enabled: boolean;

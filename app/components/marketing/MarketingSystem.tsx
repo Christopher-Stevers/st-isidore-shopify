@@ -84,7 +84,19 @@ export function MarketingSystem({offer, metafields}: MarketingSystemProps) {
         return config.faq.enabled ? (
           <section key="faq" className="w-full px-4 py-8">
             <div className="bg-white rounded-2xl p-8 shadow-lg">
-              <Faq />
+              {config.faq.items ? (
+                <>
+                  <h2 className="text-3xl font-display text-center mb-8">{config.faq.title}</h2>
+                  <div className="max-w-3xl mx-auto divide-y divide-gray-200">
+                    {config.faq.items.map(({question, answer}) => (
+                      <details key={question} className="py-5">
+                        <summary className="cursor-pointer text-lg font-semibold">{question}</summary>
+                        <p className="mt-3 text-gray-700 leading-relaxed">{answer}</p>
+                      </details>
+                    ))}
+                  </div>
+                </>
+              ) : <Faq />}
             </div>
           </section>
         ) : null;
@@ -147,6 +159,17 @@ export function MarketingSystem({offer, metafields}: MarketingSystemProps) {
             </div>
           </section>
         ) : null;
+
+      case 'order':
+        return (
+          <section key="order" className="w-full px-4 py-8">
+            <div className="bg-white rounded-2xl p-8 shadow-lg text-center space-y-5">
+              <h2 className="text-3xl font-display">{offer.title}</h2>
+              <p className="text-lg text-gray-700">{offer.handle === 'garlic-pork-sausage-1-lb' ? 'Try a 1 lb pack, or get a few for the freezer.' : 'Ready to stock up? Get your half-pig share.'}</p>
+              <a href={`/products/${offer.handle}`} className="inline-block bg-black text-white px-8 py-4 rounded-2xl text-lg font-semibold hover:bg-neutral-800">Get yours →</a>
+            </div>
+          </section>
+        );
 
       case 'newsletter':
         return config.newsletter.enabled ? (
