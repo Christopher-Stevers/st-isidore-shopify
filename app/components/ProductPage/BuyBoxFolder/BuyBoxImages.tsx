@@ -6,6 +6,7 @@ function BuyBoxImages({
 }: {
   product: {
     title?: string;
+    handle?: string;
     images: {
       nodes: {
         url: string;
@@ -20,7 +21,7 @@ function BuyBoxImages({
 
   return (
     <div className={`flex-1 ${className}`}>
-      <ImageGallery images={productImages} altText={product.title ?? 'Product'} />
+      <ImageGallery images={productImages} altText={product.title ?? 'Product'} imageFit={product.handle === 'half-pig-pork-from-certified-organic-pigs' ? 'contain' : 'cover'} />
     </div>
   );
 }

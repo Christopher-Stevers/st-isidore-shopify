@@ -4,6 +4,7 @@ import {clsx} from 'clsx';
 interface ImageGalleryProps {
   /** Array of image URLs */
   images: string[];
+  imageFit?: 'cover' | 'contain';
   /** Base alt text for images (will be appended with index) */
   altText?: string;
   /** Tailwind classes for the main container */
@@ -12,6 +13,7 @@ interface ImageGalleryProps {
 
 const ImageGallery: React.FC<ImageGalleryProps> = ({
   images,
+  imageFit = 'cover',
   altText = 'Product image',
   className,
 }) => {
@@ -48,7 +50,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
             key={selectedIndex} // Re-render img element on change if needed for transitions
             src={selectedImageUrl}
             alt={`${altText} ${selectedIndex + 1}`}
-            className="h-full w-full object-cover" // Use object-cover to fill the square area
+            className={clsx("h-full w-full", imageFit === "contain" ? "object-contain" : "object-cover")}
           />
         ) : (
           <div className="h-full w-full flex items-center justify-center text-muted-foreground">
