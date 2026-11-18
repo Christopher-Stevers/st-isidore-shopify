@@ -1,3 +1,4 @@
+import {porkOfferConfig} from '~/lib/porkOffers';
 import {MarketingHero} from './MarketingHero';
 import {MarketingCuts} from './MarketingCuts';
 import {MarketingDelivery} from './MarketingDelivery';
@@ -24,7 +25,7 @@ interface MarketingSystemProps {
 
 export function MarketingSystem({offer, metafields}: MarketingSystemProps) {
   // Parse metafields into MarketingConfig format
-  const config = parseMarketingMetafields(metafields);
+  const config = porkOfferConfig(offer.handle) ?? parseMarketingMetafields(metafields);
   // Sort sections by position
   const sortedSections = [...config.sections].sort(
     (a, b) => a.position - b.position,

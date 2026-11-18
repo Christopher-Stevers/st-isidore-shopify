@@ -30,7 +30,7 @@ export function MarketingHero({offer, config}: MarketingHeroProps) {
                 <Image
                   data={offer.featuredImage}
                   sizes="(min-width: 768px) 50vw, 100vw"
-                  className="w-full h-auto"
+                  className={offer.handle === 'garlic-pork-sausage-1-lb' ? 'w-full aspect-square object-cover object-[center_65%]' : offer.handle === 'half-pig-pork-from-certified-organic-pigs' ? 'w-full aspect-square object-contain bg-[#eee9df]' : 'w-full h-auto'}
                 />
               </div>
             )}
